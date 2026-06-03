@@ -7,11 +7,11 @@
 
 ---
 
-## 📝 1. 引言与学术背景 (Introduction & Background)
+##  1. 引言与学术背景 (Introduction & Background)
 
 在现代数字化取证与网络情报审计中，通过自然语言处理（NLP）和计算机视觉（CV）算法自发从非结构化开源数据中提取信息、构建知识图谱（如本赛题中的 **CatchNet**）已成为主流手段。然而，由于复杂多模态环境下的信号衰减及算法固有的混淆偏见，自动化模型极易产生大量的**假阳性虚警（False Positives）与认知噪声**。
 
-本可视分析系统专为 **IEEE VAST Challenge 2020 Mini-Challenge 2 (MC2)** 设计。针对虚拟城市 Oceanus 安全峰会期间潜在的白帽黑客团伙密谋事件，本系统基于**“人在回路（Human-in-the-Loop, HITL）”**和**“协同质证（Cross-Validation）”的分析哲学，构建了一套五层级联式可视分析审查流水线。系统摒弃了单调的硬编码文本话术，全面采用异构多图表平铺排开的纯数据驱动底盘（Multi-Chart Unified Dashboard），旨在帮助分析师高效截断算法不确定性，定位高危罪证。
+本可视分析系统专为 **IEEE VAST Challenge 2020 Mini-Challenge 2 (MC2)** 设计。针对虚拟城市 Oceanus 安全峰会期间潜在的白帽黑客团伙密谋事件，本系统基于 **“人在回路（Human-in-the-Loop, HITL）”** 和 **“协同质证（Cross-Validation）”** 的分析哲学，构建了一套五层级联式可视分析审查流水线。系统摒弃了单调的硬编码文本话术，全面采用异构多图表平铺排开的纯数据驱动底盘（Multi-Chart Unified Dashboard），旨在帮助分析师高效截断算法不确定性，定位高危罪证。
 
 ---
 
@@ -29,17 +29,17 @@
   * **算法性能雷达图 (Radar Chart)**：实时重算并呈现全局准确率（Accuracy）、F1-Score、查全率（Recall）与查准率（Precision）的演变，展示模型收敛过程。
   * **FP 噪声波形消融折线图 (Line Chart)**：绘制假阳性虚警率随阈值爬升而陡峭坍塌的消融数学曲线。
 
-### 🎨 LAYER 02 & 03: 人在回路真值校准与冲突优先级重排 (`CorrectionCanvas.vue` / `ConflictPriorityQueue.vue`)
+### LAYER 02 & 03: 人在回路真值校准与冲突优先级重排 (`CorrectionCanvas.vue` / `ConflictPriorityQueue.vue`)
 * **学术内涵**：响应 **Task 2 & 3**。当自动化图谱提取的“图像语义”与“发帖文本”发生深度对立冲突时，系统基于不一致性熵值计算对冲突进行优先级风险排序，引导分析师通过交互画布实施人在回路的物理坐标重订与标签重绑定（真值倒灌）。
 
-### 🔮 LAYER 04: 全员泛滥物资特征削波与反向排除中枢 (`TotemFilterView.vue`)
+###  LAYER 04: 全员泛滥物资特征削波与反向排除中枢 (`TotemFilterView.vue`)
 * **学术内涵**：响应 **Task 4**。通过全局社会覆盖率削波，反向逼迫低共现率的特异性犯罪图腾显现。
 * **异构图表群设计**：
   * **大众物资反向放逐控制台 (`TotemEliminationPanel.vue`)**：提供高持率物资复选矩阵（散装骰子 60%、通用发夹 47%、泛滥红哨子 45%）。
   * **社会覆盖率削波柱状图 (`TotemBarChart.vue`)**：直观展示资产占有率，点击放逐时相关物资柱体发生逆向波形塌陷。
   * **多维资产交叉平行坐标空间 (`TotemSankeyTunnel.vue`)**：经典的高维多特征穿透图表。当大众礼品被剔除后，全场 40 人的多维持有线在其他坐标轴强制归零，最终你会清晰观察到<b>有 8 条高危数据线，在【🎒 秘密黄色提袋】那一轴上展现出 100% 绝对垄断的高度凝聚收敛</b>。
 
-### 🛡️ LAYER 05: 隐形社交网络疏离审计与骨干终审定案大厅 (`CyberForensicsView.vue`)
+###  LAYER 05: 隐形社交网络疏离审计与骨干终审定案大厅 (`CyberForensicsView.vue`)
 * **学术内涵**：响应 **Task 5** 最核心的多模态叙事还原诉求（Text Narratives），将线上行为伪装与线下真实物理轨迹实施互锁合拢。
 * **异构图表群设计**：
   * **隐形社交零提及真空热力图 (`SocialIsolationMatrix.vue`)**：展现 40 名目标的两两线上互动频次。核心组织交汇处呈现大面积死黑的“零提及冷点盲区”，揭露其特意规避线上通讯的情报规避行为。
@@ -47,7 +47,7 @@
   * **全案证据四维特征偏离度雷达判定图 (`ProvenanceNarrative.vue` - 组件12)**：整合多模态图像矛盾度、物资特异垄断率、线上社交隔离度、独立纯文本契合率 4 维严谨科学指标，输出清晰的几何偏离度面积。
 
 
-## 🚨 3. 最终学术发现与定案宣判 (Key Findings & Verdict)
+##  3. 最终结果 (Key Findings & Verdict)
 
 经过平台全链路可视分析证据链的交叉质证与双向物理互锁，得出最终毫无争议的学术裁决：
 
@@ -60,7 +60,7 @@
 
 ---
 
-## 📁 4. 项目关键工程目录树结构 (Directory Structure)
+##  4. 项目关键工程目录树结构 (Directory Structure)
 
 项目工程各组件各司其职，模块边界清晰，杜绝多图表挂载死锁及实例冲突：
 
@@ -109,7 +109,7 @@ vast-2020-mc2-platform
 
 ---
 
-## 🏃‍♂️ 5. 项目部署与运行指南 (Deployment & Usage)
+##  5. 项目部署与运行指南 (Deployment & Usage)
 
 ### 5.1 环境前置要求
 
@@ -122,25 +122,30 @@ vast-2020-mc2-platform
 
 ```bash
 cd "./vast-2020-mc2-platform/backend_service"
-
+pyhton app.py
 ```
 
 
-1. 打开终端或命令提示符，单兵深入并定位到你本地的前端客户端物理目录中：
+2. 打开终端或命令提示符，单兵深入并定位到你本地的前端客户端物理目录中：
 ```bash
 cd "./vast-2020-mc2-platform/frontend_client"
-
 ```
 
 
-2. 执行依赖项全量本地下载与安装（此过程将无缝构建本地 PostCSS 与数据依赖骨架）：
+3. 执行依赖项全量本地下载与安装（此过程将无缝构建本地 PostCSS 与数据依赖骨架）：
 ```bash
-npm install
+#报错时候选择执行
+#清楚原有依赖
+git rm -r --cached frontend_client/node_modules
+rd /s /q frontend_client\node_modules
+del frontend_client\package-lock.json
 
+#重新拉取安装
+npm install
 ```
 
 
-3. 启动基于 Vite 的高性能毫秒级开发者本地服务器：
+4. 启动基于 Vite 的开发者本地服务器：
 ```bash
 npm run dev
 
