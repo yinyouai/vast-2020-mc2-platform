@@ -1,0 +1,118 @@
+/* ============================================================
+   VAST 2020 MC2 · QQ Music 清新风格设计令牌系统
+   Design Tokens — 全局 CSS 自定义属性
+   ============================================================ */
+
+:root {
+  /* ═══ 背景色系 ═══ */
+  --bg-primary: #F5F6FA;
+  --bg-secondary: #EEEEF2;
+  --bg-card: rgba(255, 255, 255, 0.72);
+  --bg-card-hover: rgba(255, 255, 255, 0.88);
+  --bg-overlay: rgba(245, 246, 250, 0.92);
+  --bg-canvas: #FAFBFC;
+
+  /* ═══ 文字色系 ═══ */
+  --text-primary: #1A1A2E;
+  --text-secondary: #636378;
+  --text-tertiary: #9E9EB0;
+  --text-inverse: #FFFFFF;
+
+  /* ═══ 品牌强调色 (QQ Music 绿) ═══ */
+  --accent-primary: #31C27C;
+  --accent-primary-light: #5EDBA0;
+  --accent-primary-dark: #1DA85C;
+  --accent-primary-glow: rgba(49, 194, 124, 0.25);
+
+  /* ═══ 语义色 ═══ */
+  --accent-danger: #FF5A5F;
+  --accent-danger-light: rgba(255, 90, 95, 0.1);
+  --accent-danger-glow: rgba(255, 90, 95, 0.3);
+  --accent-warning: #FF9F0A;
+  --accent-purple: #BF5AF2;
+  --accent-purple-light: rgba(191, 90, 242, 0.1);
+  --accent-blue: #007AFF;
+  --accent-blue-light: rgba(0, 122, 255, 0.08);
+
+  /* ═══ 渐变色 ═══ */
+  --gradient-hero: linear-gradient(135deg, #31C27C 0%, #1DB954 40%, #667eea 100%);
+  --gradient-hero-alt: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-card: linear-gradient(135deg, rgba(49, 194, 124, 0.06) 0%, rgba(102, 126, 234, 0.04) 100%);
+  --gradient-danger: linear-gradient(135deg, rgba(255, 90, 95, 0.08) 0%, rgba(191, 90, 242, 0.06) 100%);
+
+  /* ═══ 圆角 ═══ */
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  /* ═══ 阴影 ═══ */
+  --shadow-xs: 0 1px 3px rgba(0, 0, 0, 0.04);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.06);
+  --shadow-card-hover: 0 8px 32px rgba(0, 0, 0, 0.10);
+  --shadow-dropdown: 0 12px 40px rgba(0, 0, 0, 0.12);
+  --shadow-glow-green: 0 0 16px rgba(49, 194, 124, 0.2);
+  --shadow-glow-purple: 0 0 16px rgba(191, 90, 242, 0.2);
+
+  /* ═══ 间距 ═══ */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 20px;
+  --space-2xl: 24px;
+  --space-3xl: 32px;
+  --space-4xl: 48px;
+
+  /* ═══ 排版 ═══ */
+  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Helvetica Neue", sans-serif;
+  --font-body: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Helvetica Neue", sans-serif;
+  --font-mono: "SF Mono", "Fira Code", "Consolas", monospace;
+
+  --text-xs: 11px;
+  --text-sm: 12px;
+  --text-base: 13px;
+  --text-md: 15px;
+  --text-lg: 18px;
+  --text-xl: 22px;
+  --text-2xl: 28px;
+
+  --leading-tight: 1.25;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.65;
+
+  --weight-normal: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* ═══ 过渡动画 ═══ */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --duration-fast: 0.18s;
+  --duration-normal: 0.35s;
+  --duration-slow: 0.5s;
+  --duration-page: 0.45s;
+
+  /* ═══ 布局 ═══ */
+  --header-height: 48px;
+  --bottom-bar-height: 64px;
+  --viewport-padding: 20px;
+  --content-max-width: 1440px;
+
+  /* ═══ 毛玻璃 ═══ */
+  --glass-blur: 25px;
+  --glass-border: 1px solid rgba(255, 255, 255, 0.6);
+  --glass-border-subtle: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+/* ═══ 暗色模式覆盖 (保留未来扩展能力) ═══ */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* 可选的暗色主题，当前优先使用清新浅色主题 */
+  }
+}
