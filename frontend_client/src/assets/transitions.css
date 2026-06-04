@@ -1,116 +1,114 @@
 /* ============================================================
-   VAST 2020 MC2 · Vue 过渡动画系统
-   Transitions — 页面切换、卡片出现、交错动画
+   VAST 2020 MC2 · Elegant Transitions System
+   Smooth · Subtle · Spring-Based
    ============================================================ */
 
-/* ═══ 页面切换: 前进 (层级加深) ═══ */
+/* ═══ Page Transition: Forward ═══ */
 .slide-left-enter-active,
 .slide-left-leave-active {
-  transition: all var(--duration-page) var(--ease-out-expo);
+  transition: all var(--duration-page) var(--ease-out);
 }
 .slide-left-enter-from {
-  transform: translateX(30px);
+  transform: translateX(24px);
   opacity: 0;
 }
 .slide-left-leave-to {
-  transform: translateX(-30px);
+  transform: translateX(-24px);
   opacity: 0;
 }
 
-/* ═══ 页面切换: 后退 (层级变浅) ═══ */
+/* ═══ Page Transition: Backward ═══ */
 .slide-right-enter-active,
 .slide-right-leave-active {
-  transition: all var(--duration-page) var(--ease-out-expo);
+  transition: all var(--duration-page) var(--ease-out);
 }
 .slide-right-enter-from {
-  transform: translateX(-30px);
+  transform: translateX(-24px);
   opacity: 0;
 }
 .slide-right-leave-to {
-  transform: translateX(30px);
+  transform: translateX(24px);
   opacity: 0;
 }
 
-/* ═══ 卡片弹出动画 ═══ */
+/* ═══ Card Pop In ═══ */
 .card-pop-enter-active {
-  transition: all 0.4s var(--ease-spring);
+  transition: all 0.35s var(--ease-spring);
 }
 .card-pop-leave-active {
-  transition: all 0.25s var(--ease-in-out);
+  transition: all 0.2s var(--ease-in-out);
 }
 .card-pop-enter-from {
-  transform: scale(0.92);
+  transform: scale(0.94);
   opacity: 0;
 }
 .card-pop-leave-to {
-  transform: scale(0.95);
+  transform: scale(0.96);
   opacity: 0;
 }
 
-/* ═══ 淡入缩放 (弹窗/覆盖层) ═══ */
+/* ═══ Fade Scale (Modal/Overlay) ═══ */
 .fade-scale-enter-active {
-  transition: all 0.35s var(--ease-out-expo);
+  transition: all 0.3s var(--ease-out);
 }
 .fade-scale-leave-active {
-  transition: all 0.25s var(--ease-in-out);
+  transition: all 0.2s var(--ease-in-out);
 }
 .fade-scale-enter-from {
   opacity: 0;
   transform: scale(0.96);
-  filter: blur(4px);
 }
 .fade-scale-leave-to {
   opacity: 0;
   transform: scale(0.96);
 }
 
-/* ═══ 列表交错动画 (配合 TransitionGroup) ═══ */
+/* ═══ List Stagger ═══ */
 .list-stagger-enter-active {
-  transition: all 0.4s var(--ease-out-expo);
+  transition: all 0.35s var(--ease-out);
 }
 .list-stagger-leave-active {
-  transition: all 0.25s var(--ease-in-out);
+  transition: all 0.2s var(--ease-in-out);
   position: absolute;
 }
 .list-stagger-enter-from {
   opacity: 0;
-  transform: translateY(16px);
+  transform: translateY(12px);
 }
 .list-stagger-leave-to {
   opacity: 0;
-  transform: translateY(-8px);
+  transform: translateY(-6px);
 }
 .list-stagger-move {
-  transition: transform 0.35s var(--ease-out-expo);
+  transition: transform 0.3s var(--ease-out);
 }
 
-/* ═══ 文本淡入 ═══ */
+/* ═══ Text Dive ═══ */
 .text-dive-enter-active {
-  transition: all 0.35s var(--ease-out-expo);
+  transition: all 0.3s var(--ease-out);
 }
 .text-dive-leave-active {
-  transition: all 0.25s var(--ease-in-out);
+  transition: all 0.2s var(--ease-in-out);
 }
 .text-dive-enter-from {
   opacity: 0;
   transform: translateY(6px);
-  filter: blur(2px);
 }
 .text-dive-leave-to {
   opacity: 0;
   transform: translateY(-4px);
 }
 
-/* ═══ 悬停浮起 (通用工具类) ═══ */
+/* ═══ Hover Lift (Utility) ═══ */
 .hover-lift {
-  transition: transform 0.3s var(--ease-out-expo), box-shadow 0.3s var(--ease-out-expo);
+  transition: transform 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out);
 }
 .hover-lift:hover {
   transform: translateY(-3px);
   box-shadow: var(--shadow-card-hover);
 }
 
-/* ═══ 玻璃微光扫过 (悬停触发) ═══ */
+/* ═══ Glass Shimmer (hover glow sweep) ═══ */
 .glass-shimmer {
   position: relative;
   overflow: hidden;
@@ -124,7 +122,7 @@
   height: 100%;
   background: linear-gradient(90deg,
     transparent 0%,
-    rgba(255, 255, 255, 0.25) 50%,
+    rgba(255, 255, 255, 0.15) 50%,
     transparent 100%);
   transition: left 0.6s ease;
   pointer-events: none;
@@ -134,36 +132,45 @@
   left: 200%;
 }
 
-/* ═══ 脉冲动画 (指示器) ═══ */
+/* ═══ Pulse Indicator ═══ */
 @keyframes pulse-indicator {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(0.85); }
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
 }
 .animate-pulse {
   animation: pulse-indicator 2s infinite;
 }
 
-/* ═══ 呼吸发光 (高亮边框) ═══ */
+/* ═══ Subtle Breathing Glow ═══ */
 @keyframes breath-glow {
-  0%, 100% { box-shadow: 0 0 8px var(--accent-primary-glow); }
-  50% { box-shadow: 0 0 20px var(--accent-primary-glow); }
+  0%, 100% { box-shadow: 0 0 0 rgba(99, 102, 241, 0); }
+  50% { box-shadow: 0 0 20px rgba(99, 102, 241, 0.1); }
 }
 .breath-glow {
   animation: breath-glow 3s infinite;
 }
 
-/* ═══ 骨架加载 ═══ */
+/* ═══ Skeleton Loading ═══ */
 @keyframes shimmer {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
 }
 .skeleton {
   background: linear-gradient(90deg,
-    rgba(0,0,0,0.04) 25%,
-    rgba(0,0,0,0.08) 50%,
-    rgba(0,0,0,0.04) 75%
+    rgba(0, 0, 0, 0.03) 25%,
+    rgba(0, 0, 0, 0.06) 50%,
+    rgba(0, 0, 0, 0.03) 75%
   );
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
   border-radius: var(--radius-sm);
+}
+
+/* ═══ Reduced Motion ═══ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

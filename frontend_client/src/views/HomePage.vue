@@ -1,18 +1,9 @@
 <template>
   <div class="home-root">
-    <!-- 气泡层: 纯CSS动画 -->
-    <div class="bubble-layer">
-      <div
-        v-for="b in bubbles"
-        :key="b.id"
-        class="bubble"
-        :class="{ popping: b.popping }"
-        :style="b.style"
-        @click.stop="popBubble(b)"
-      ></div>
-    </div>
+    <!-- Decorative subtle background gradient -->
+    <div class="bg-glow"></div>
 
-    <!-- 照片漂浮层: 纯CSS动画，无JS拖动 -->
+    <!-- Floating photos as gentle background decoration -->
     <div class="photos-layer">
       <div
         v-for="p in photos"
@@ -22,206 +13,382 @@
         :style="p.style"
       >
         <img :src="p.url" :alt="p.id" draggable="false" @error="onImgErr" />
-        <span class="fp-label">{{ p.id.replace('Person','P') }}</span>
-        <span v-if="hackerSet.has(p.id)" class="fp-badge">⚠</span>
       </div>
     </div>
 
-    <!-- 中心卡片 -->
-    <div class="hero-center">
-      <div class="hero-glass">
-        <div class="hero-badge">🔍 IEEE VAST 2020 · Mini-Challenge 2</div>
-        <h1 class="hero-title">数字取证<span class="hl">可视化分析</span>平台</h1>
-        <p class="hero-desc">基于多模态全景数据，通过人在回路交互式可视分析，从 <strong>40</strong> 名参会者中精准锁定 <strong>8 人</strong> 秘密黑客组织。</p>
-        <div class="task-cards">
-          <div v-for="t in tasks" :key="t.id" class="task-entry" :style="{'--tc':t.color}" @click="$router.push(t.path)">
-            <span class="te-num">{{t.num}}</span><div class="te-info"><strong>{{t.title}}</strong><span>{{t.sub}}</span></div>
-            <div class="te-arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+    <!-- Main content -->
+    <div class="content-center">
+      <div class="hero-card">
+        <!-- Brand badge -->
+        <div class="brand-badge">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          IEEE VAST 2020 · Mini-Challenge 2
+        </div>
+
+        <!-- Title -->
+        <h1 class="hero-title">
+          Digital Forensics
+          <span class="hl">Visual Analytics</span>
+          Platform
+        </h1>
+        <p class="hero-desc">
+          Multi-modal panoramic data investigation with human-in-the-loop interactive visual analytics.
+          From <strong>40</strong> conference attendees, precisely identify an
+          <strong class="text-accent">8-person</strong> covert hacker cell.
+        </p>
+
+        <!-- Stats row -->
+        <div class="stats-row">
+          <div class="stat-item">
+            <span class="stat-num">40</span>
+            <span class="stat-label">Suspects</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <span class="stat-num">7</span>
+            <span class="stat-label">Materials</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <span class="stat-num">5</span>
+            <span class="stat-label">Analysis Layers</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item accent">
+            <span class="stat-num">8</span>
+            <span class="stat-label">Confirmed</span>
           </div>
         </div>
-        <div class="hero-stats"><div class="hs"><b>40</b><span>嫌疑人</span></div><div class="hs"><b>7</b><span>物资品类</span></div><div class="hs"><b>5</b><span>分析层级</span></div><div class="hs accent"><b>8</b><span>确认为黑客</span></div></div>
-      </div>
-    </div>
 
-    <!-- 静态光点粒子: 纯CSS -->
-    <div class="sparkle-layer">
-      <div v-for="n in 30" :key="'s'+n" class="sparkle" :style="sparkleStyle(n)"></div>
+        <!-- Task mission cards -->
+        <div class="task-grid">
+          <div
+            v-for="(t, idx) in tasks"
+            :key="t.id"
+            class="task-card"
+            :class="'task-' + t.id"
+            :style="{'--delay': idx * 0.06 + 's'}"
+            @click="$router.push(t.path)"
+          >
+            <div class="tc-icon" :style="{background: t.bg}">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" v-html="t.iconPath"></svg>
+            </div>
+            <div class="tc-body">
+              <div class="tc-num">{{ t.num }}</div>
+              <div class="tc-title">{{ t.title }}</div>
+              <div class="tc-sub">{{ t.sub }}</div>
+            </div>
+            <div class="tc-arrow">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { reactive, onBeforeUnmount } from 'vue'
+import { reactive } from 'vue'
 import { HACKER_LIST } from '../constants/forensics'
 
 const hackerSet = new Set(HACKER_LIST)
 
-/* 气泡: 25个，所有动画用CSS keyframes驱动（GPU加速），零JS reflow */
-const BUBBLE_COUNT = 25
-const bubbles = reactive(
-  Array.from({ length: BUBBLE_COUNT }, () => {
-    const id = Math.random().toString(36).slice(2)
-    const size = 20 + Math.random() * 140
-    const dur = 18 + Math.random() * 30
-    const delay = Math.random() * -30
-    return {
-      id, popping: false,
-      style: {
-        left: (Math.random() * 100) + '%',
-        top: (Math.random() * 100) + '%',
-        width: size + 'px', height: size + 'px',
-        opacity: 0.04 + Math.random() * 0.07,
-        '--drift-x': ((Math.random() - 0.5) * 300) + 'px',
-        '--drift-y': ((Math.random() - 0.5) * 200) + 'px',
-        '--bubble-dur': dur + 's',
-        animationDelay: delay + 's'
-      }
-    }
-  })
-)
-function popBubble(b) {
-  b.popping = true
-  setTimeout(() => {
-    const idx = bubbles.findIndex(x => x.id === b.id)
-    if (idx >= 0) {
-      const s = 20 + Math.random() * 140
-      const dur = 18 + Math.random() * 30
-      bubbles.splice(idx, 1, {
-        id: Math.random().toString(36).slice(2), popping: false,
-        style: {
-          left: (Math.random() * 100) + '%', top: (Math.random() * 100) + '%',
-          width: s + 'px', height: s + 'px',
-          opacity: 0.04 + Math.random() * 0.07,
-          '--drift-x': ((Math.random() - 0.5) * 300) + 'px',
-          '--drift-y': ((Math.random() - 0.5) * 200) + 'px',
-          '--bubble-dur': dur + 's',
-          animationDelay: '0s'
-        }
-      })
-    }
-  }, 500)
-}
-
-/* 照片: 40张，纯CSS漂浮 */
 const photos = reactive(
-  Array.from({ length: 40 }, (_, i) => {
-    const id = 'Person' + (i + 1)
+  Array.from({ length: 30 }, (_, i) => {
+    const idx = (i * 7 % 40) + 1
+    const id = 'Person' + idx
     const isH = hackerSet.has(id)
-    const size = isH ? 70 + Math.random() * 45 : 38 + Math.random() * 50
-    const dur = 22 + Math.random() * 35
     return {
       id,
       url: `http://localhost:5000/static/MC2-Image-Data/${id}/${id}_1.jpg`,
       style: {
-        left: (2 + Math.random() * 93) + '%',
-        top: (2 + Math.random() * 93) + '%',
-        width: size + 'px', height: size + 'px',
-        zIndex: isH ? 10 : 1 + Math.floor(Math.random() * 5),
-        '--drift-x': ((Math.random() - 0.5) * 180) + 'px',
-        '--drift-y': ((Math.random() - 0.5) * 140) + 'px',
-        '--photo-dur': dur + 's',
-        animationDelay: (Math.random() * -dur) + 's'
+        left: (2 + Math.random() * 94) + '%',
+        top: (2 + Math.random() * 94) + '%',
+        width: (isH ? 56 : 32 + Math.random() * 24) + 'px',
+        height: (isH ? 56 : 32 + Math.random() * 24) + 'px',
+        zIndex: isH ? 2 : 1,
+        opacity: isH ? 0.15 : 0.06,
+        filter: isH ? 'saturate(0.8) hue-rotate(240deg)' : 'none',
+        animationDelay: (Math.random() * -30) + 's',
+        '--float-dur': (20 + Math.random() * 25) + 's'
       }
     }
   })
 )
+
 function onImgErr(e) { e.target.style.display = 'none' }
 
-/* 光点粒子 */
-function sparkleStyle(n) {
-  const x = (n * 17 + 3) % 100, y = (n * 13 + 7) % 100
-  const dur = 3 + (n % 5)
-  return { left: x + '%', top: y + '%', animationDuration: dur + 's', animationDelay: (n * 0.3) + 's' }
-}
-
 const tasks = [
-  { id: 1, num: '01', title: '算法模型不确定性审计', sub: 'YOLO v2 鲁棒性评估 · 假阳性噪声动态消融', color: '#31C27C', path: '/task1_auditing' },
-  { id: 2, num: '02', title: '多模态语义真值校准', sub: '人在回路 · 图文交叉比对 · 机器纠偏', color: '#007AFF', path: '/task2_correction' },
-  { id: 3, num: '03', title: '嫌疑社群特征聚类', sub: 'Ward 层次聚类 · 人-物矩阵双向重排', color: '#FF9F0A', path: '/task3_clustering' },
-  { id: 4, num: '04', title: '秘密图腾反向排除', sub: '噪声削波 · 力导向网络图 · 桑基流向', color: '#BF5AF2', path: '/task4_totem' },
-  { id: 5, num: '05', title: '黑客组织终极定案', sub: '社交网络隔离审计 · 全案证据收网', color: '#FF5A5F', path: '/task5_verdict' }
+  { id: 1, num: '01', title: 'Model Uncertainty Audit', sub: 'YOLO v2 robustness · False positive ablation', color: '#6366F1', bg: 'rgba(99,102,241,0.1)', iconPath: '<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>', path: '/task1_auditing' },
+  { id: 2, num: '02', title: 'Multi-Modal Ground Truth Calibration', sub: 'Human-in-the-loop · Image-text cross validation', color: '#06B6D4', bg: 'rgba(6,182,212,0.1)', iconPath: '<path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>', path: '/task2_correction' },
+  { id: 3, num: '03', title: 'Community Feature Clustering', sub: 'Ward hierarchical · Person-item matrix reorder', color: '#F59E0B', bg: 'rgba(245,158,11,0.1)', iconPath: '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>', path: '/task3_clustering' },
+  { id: 4, num: '04', title: 'Secret Totem Elimination', sub: 'Noise clipping · Force-directed network · Sankey flow', color: '#8B5CF6', bg: 'rgba(139,92,246,0.1)', iconPath: '<polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/><line x1="12" y1="22" x2="12" y2="15.5"/><polyline points="22 8.5 12 15.5 2 8.5"/>', path: '/task4_totem' },
+  { id: 5, num: '05', title: 'Hacker Cell Final Verdict', sub: 'Social network isolation · Evidence chain convergence', color: '#EF4444', bg: 'rgba(239,68,68,0.1)', iconPath: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/>', path: '/task5_verdict' }
 ]
 </script>
 
 <style scoped>
 .home-root {
-  width: 100vw; height: 100vh; position: relative; overflow: hidden;
-  background: linear-gradient(135deg, #c8f0d8 0%, #dce8ff 28%, #f0e6ff 52%, #fde4ec 76%, #c8f0d8 100%);
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  background: var(--bg-primary);
   user-select: none;
 }
 
-/* ═══ 气泡 (纯CSS动画，GPU加速) ═══ */
-.bubble-layer { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
-.bubble {
-  position: absolute; border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.5), rgba(49,194,124,0.07) 50%, transparent 85%);
-  transform: translate(-50%, -50%);
-  pointer-events: auto; cursor: pointer;
-  transition: transform 0.5s ease-out, opacity 0.5s ease-out;
-  will-change: transform;
-  animation: bubble-float var(--bubble-dur, 25s) ease-in-out infinite;
-}
-.bubble:hover { transform: translate(-50%, -50%) scale(1.2); }
-.bubble.popping { transform: translate(-50%, -50%) scale(3); opacity: 0 !important; }
-
-@keyframes bubble-float {
-  0%, 100% { transform: translate(-50%, -50%) translate(0, 0) scale(1); }
-  25%  { transform: translate(-50%, -50%) translate(calc(var(--drift-x)*0.6), calc(var(--drift-y)*0.8)) scale(1.1); }
-  50%  { transform: translate(-50%, -50%) translate(calc(var(--drift-x)*0.9), calc(var(--drift-y)*0.3)) scale(0.9); }
-  75%  { transform: translate(-50%, -50%) translate(calc(var(--drift-x)*0.4), calc(var(--drift-y)*0.7)) scale(1.05); }
+/* Decorative background */
+.bg-glow {
+  position: absolute;
+  top: -30%;
+  left: -10%;
+  width: 80%;
+  height: 80%;
+  background: radial-gradient(ellipse at center, rgba(99, 102, 241, 0.03) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
 }
 
-/* ═══ 照片 (纯CSS动画，GPU加速) ═══ */
-.photos-layer { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+/* Photos layer — gentle decoration */
+.photos-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
 .float-photo {
-  position: absolute; border-radius: 10px; overflow: hidden;
+  position: absolute;
+  border-radius: 8px;
+  overflow: hidden;
   transform: translate(-50%, -50%);
-  border: 2px solid rgba(255,255,255,0.7);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-  cursor: default; pointer-events: auto;
+  border: 1px solid rgba(0, 0, 0, 0.03);
+  opacity: 0.08;
   will-change: transform;
-  animation: photo-float var(--photo-dur, 30s) ease-in-out infinite;
-  transition: transform 0.3s ease-out, box-shadow 0.3s;
-}
-.float-photo:hover {
-  transform: translate(-50%, -50%) scale(1.35) !important;
-  z-index: 300 !important;
-  border-color: #31C27C;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-  transition: transform 0.2s ease-out, box-shadow 0.2s;
+  animation: gentle-float var(--float-dur, 30s) ease-in-out infinite;
+  transition: opacity 0.3s;
 }
 .float-photo.hacker {
-  border-color: rgba(191,90,242,0.5);
-  box-shadow: 0 4px 20px rgba(191,90,242,0.12), 0 0 0 3px rgba(191,90,242,0.08);
+  border-color: rgba(139, 92, 246, 0.08);
+  z-index: 2;
 }
-.float-photo img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
-.fp-label { position: absolute; bottom: 0; left: 0; right: 0; padding: 3px 5px; background: linear-gradient(transparent, rgba(0,0,0,0.6)); color: #fff; font-size: 9px; font-weight: 700; text-align: center; pointer-events: none; }
-.fp-badge { position: absolute; top: 3px; right: 3px; font-size: 10px; pointer-events: none; }
-
-@keyframes photo-float {
-  0%, 100% { transform: translate(-50%, -50%) translate(0, 0) rotate(0deg); }
-  25%  { transform: translate(-50%, -50%) translate(calc(var(--drift-x)*0.5), calc(var(--drift-y)*1.0)) rotate(1deg); }
-  50%  { transform: translate(-50%, -50%) translate(calc(var(--drift-x)*1.0), calc(var(--drift-y)*0.3)) rotate(-0.5deg); }
-  75%  { transform: translate(-50%, -50%) translate(calc(var(--drift-x)*0.4), calc(var(--drift-y)*0.7)) rotate(0.5deg); }
+.float-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-/* ═══ 光点粒子 (纯CSS) ═══ */
-.sparkle-layer { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
-.sparkle { position: absolute; width: 4px; height: 4px; border-radius: 50%; background: rgba(49,194,124,0.35); animation: sparkle-blink linear infinite; }
-@keyframes sparkle-blink { 0%,100%{opacity:0.2;transform:scale(1)} 50%{opacity:0.7;transform:scale(2)} }
+@keyframes gentle-float {
+  0%, 100% { transform: translate(-50%, -50%) translate(0, 0); }
+  33% { transform: translate(-50%, -50%) translate(calc(var(--drift-x, 30px) * 0.6), calc(var(--drift-y, 20px) * -0.8)); }
+  66% { transform: translate(-50%, -50%) translate(calc(var(--drift-x, 30px) * -0.4), calc(var(--drift-y, 20px) * 0.6)); }
+}
 
-/* ═══ 中心卡片 ═══ */
-.hero-center { position: relative; z-index: 10; display: flex; align-items: center; justify-content: center; height: 100%; padding: 32px; pointer-events: none; }
-.hero-center > * { pointer-events: auto; }
-.hero-glass { background: rgba(255,255,255,0.58); backdrop-filter: blur(40px) saturate(200%); -webkit-backdrop-filter: blur(40px) saturate(200%); border-radius: 28px; border: 1px solid rgba(255,255,255,0.7); box-shadow: 0 10px 60px rgba(0,0,0,0.07); padding: 38px 44px 30px; max-width: 640px; width: 100%; text-align: center; }
-.hero-badge { display: inline-block; padding: 6px 16px; border-radius: 20px; background: rgba(49,194,124,0.1); color: #1DA85C; font-size: 14px; font-weight: 600; margin-bottom: 16px; }
-.hero-title { font-size: 44px; font-weight: 800; color: #1A1A2E; margin: 0 0 10px; line-height: 1.2; }
-.hero-title .hl { background: linear-gradient(135deg,#31C27C,#1DB954); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
-.hero-desc { font-size: 16px; color: #636378; line-height: 1.7; margin: 0 0 26px; } .hero-desc strong { color: #1A1A2E; }
-.task-cards { display: flex; flex-direction: column; gap: 8px; margin-bottom: 22px; }
-.task-entry { display: flex; align-items: center; gap: 14px; padding: 14px 18px; border-radius: 16px; background: rgba(255,255,255,0.5); border: 1px solid rgba(0,0,0,0.04); cursor: pointer; transition: all 0.35s cubic-bezier(0.16,1,0.3,1); text-align: left; }
-.task-entry:hover { background: #fff; border-color: var(--tc); box-shadow: 0 8px 28px rgba(0,0,0,0.07); transform: translateX(6px); }
-.te-num { font-size: 32px; font-weight: 900; color: var(--tc); opacity: 0.28; min-width: 42px; text-align: center; } .te-info { flex: 1; } .te-info strong { display: block; font-size: 16px; color: #1A1A2E; font-weight: 600; margin-bottom: 2px; } .te-info span { font-size: 13px; color: #8E8E93; }
-.te-arrow { color: #C7C7CC; transition: all 0.3s; } .task-entry:hover .te-arrow { color: var(--tc); transform: translateX(4px); }
-.hero-stats { display: flex; justify-content: center; gap: 48px; } .hs { display: flex; flex-direction: column; align-items: center; gap: 3px; } .hs b { font-size: 28px; font-weight: 800; color: #1A1A2E; } .hs span { font-size: 12px; color: #9E9EB0; } .hs.accent b { color: #31C27C; }
+/* ═══ Center Content ═══ */
+.content-center {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 32px;
+  pointer-events: none;
+}
+.content-center > * { pointer-events: auto; }
+
+/* ═══ Hero Card ═══ */
+.hero-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(30px) saturate(200%);
+  -webkit-backdrop-filter: blur(30px) saturate(200%);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.04), 0 0 1px rgba(0, 0, 0, 0.06);
+  padding: 40px 48px 36px;
+  max-width: 680px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Brand badge */
+.brand-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  border-radius: 20px;
+  background: var(--accent-primary-subtle);
+  color: var(--accent-primary);
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  letter-spacing: 0.2px;
+}
+
+/* Title */
+.hero-title {
+  font-size: 40px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0 0 12px;
+  line-height: 1.15;
+  letter-spacing: -0.5px;
+}
+.hero-title .hl {
+  background: linear-gradient(135deg, #6366F1, #8B5CF6, #06B6D4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-desc {
+  font-size: 16px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin: 0 0 28px;
+  max-width: 540px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.hero-desc strong { color: var(--text-primary); font-weight: 600; }
+
+/* Stats row */
+.stats-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 28px;
+  padding: 16px 24px;
+  background: rgba(0, 0, 0, 0.015);
+  border-radius: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.03);
+}
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 0 24px;
+}
+.stat-num {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.3px;
+}
+.stat-label {
+  font-size: 11px;
+  color: var(--text-tertiary);
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+.stat-divider {
+  width: 1px;
+  height: 32px;
+  background: rgba(0, 0, 0, 0.06);
+}
+.stat-item.accent .stat-num {
+  color: var(--accent-primary);
+}
+
+/* ═══ Task Cards Grid ═══ */
+.task-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.task-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(0, 0, 0, 0.03);
+  cursor: pointer;
+  transition: all 0.3s var(--ease-out);
+  text-align: left;
+  animation: card-enter 0.5s var(--ease-out) both;
+  animation-delay: var(--delay, 0s);
+}
+.task-card:hover {
+  background: #fff;
+  border-color: rgba(0, 0, 0, 0.06);
+  box-shadow: var(--shadow-card-hover);
+  transform: translateX(4px);
+}
+
+@keyframes card-enter {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.tc-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  flex-shrink: 0;
+  color: var(--text-primary);
+}
+.task-card:hover .tc-icon {
+  color: var(--text-primary);
+}
+
+.tc-body { flex: 1; }
+.tc-num {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-tertiary);
+  margin-bottom: 2px;
+  letter-spacing: 0.5px;
+}
+.tc-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 1px;
+}
+.tc-sub {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  line-height: 1.4;
+}
+.tc-arrow {
+  color: #D1D5DB;
+  transition: all 0.3s;
+}
+.task-card:hover .tc-arrow {
+  color: var(--accent-primary);
+  transform: translateX(3px);
+}
+
+/* ═══ Responsive ═══ */
+@media (max-width: 640px) {
+  .hero-card {
+    padding: 28px 20px 24px;
+  }
+  .hero-title {
+    font-size: 28px;
+  }
+  .hero-desc {
+    font-size: 14px;
+  }
+  .stats-row {
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 12px 8px;
+  }
+  .stat-item {
+    padding: 0 10px;
+  }
+  .stat-num {
+    font-size: 20px;
+  }
+}
 </style>
