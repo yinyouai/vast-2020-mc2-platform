@@ -1,32 +1,45 @@
 <template>
-  <div class="apple-glass-card panel-root">
-    <h4 class="舱室标题">⚙️ 组件 10 : 大众参会普及物资/泛滥礼品反向排除漏斗控制台</h4>
-    <div class="checkbox-row-flow">
-      <label v-for="item in filterItems" :key="item.id"
-             class="neon-checkbox-label"
-             :class="{ 'is-checked': store.excludedItems.includes(item.id) }">
-        <input type="checkbox"
-               :value="item.id"
-               :checked="store.excludedItems.includes(item.id)"
-               @change="handleToggle(item.id)">
-        <span class="custom-indicator"></span>
-        <span class="label-txt">{{ item.cnName }} <span class="coverage-txt">(社会覆盖率: {{ item.coverage }}%)</span></span>
+  <div class="glass-card panel-root">
+    <h4 class="舱室标题">⚙️ 大众普及物资反向排除漏斗控制台</h4>
+    <p class="panel-desc">勾选放逐会场免费分发物资，强行逼迫核心黑客组织接头暗号图腾在流向图中显现</p>
+    <div class="checkbox-flow">
+      <label
+        v-for="item in filterItems"
+        :key="item.id"
+        class="filter-checkbox"
+        :class="{ checked: store.excludedItems.includes(item.id) }"
+      >
+        <input
+          type="checkbox"
+          :value="item.id"
+          :checked="store.excludedItems.includes(item.id)"
+          @change="handleToggle(item.id)"
+        />
+        <span class="check-indicator">
+          <span class="check-mark" v-if="store.excludedItems.includes(item.id)">✕</span>
+        </span>
+        <span class="label-txt">
+          {{ item.cnName }}
+          <span class="coverage">覆盖率 {{ item.coverage }}%</span>
+        </span>
       </label>
+    </div>
+    <div class="panel-status">
+      已排除 <strong>{{ store.excludedItems.length }}</strong> / {{ filterItems.length }} 项 —
+      <span v-if="store.excludedItems.length >= 3" class="text-accent">去噪纯度已达标 ✓</span>
+      <span v-else class="text-danger">请继续放逐普及物资</span>
     </div>
   </div>
 </template>
 
 <script setup>
 import { useDashboardStore } from '../../store/dashboard'
+import { EXCLUDABLE_ITEMS } from '../../constants/forensics'
+
 const store = useDashboardStore()
 
-// 💡 彻底消灭乱码！将英文键映射为无懈可击的中文判定
-const filterItems = [
-  { id: 'lavenderDie', cnName: '🔮 薰衣草散装骰子', coverage: 60 },
-  { id: 'sign', cnName: '🚩 现场标志性标牌', coverage: 60 },
-  { id: 'hairClip', cnName: '发夹普及物资', coverage: 47 },
-  { id: 'redWhistle', cnName: '📢 会场泛滥红哨子', coverage: 45 }
-]
+// use centralized constants
+const filterItems = EXCLUDABLE_ITEMS
 
 const handleToggle = (id) => {
   const currentExcludes = [...store.excludedItems]
@@ -36,37 +49,89 @@ const handleToggle = (id) => {
   } else {
     currentExcludes.push(id)
   }
-  // 强力驱动 Pinia 状态管理层
   store.excludedItems = currentExcludes
-  store.fetchHeatmapMatrix() // 动态通知后端重排引擎更新
+  store.fetchHeatmapMatrix()
 }
 </script>
 
 <style scoped>
-.panel-root { padding: 14px 18px; }
-.checkbox-row-flow { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 10px; }
+.panel-root { padding: var(--space-md) var(--space-lg); }
+.panel-desc { margin: 0 0 var(--space-md); font-size: var(--text-xs); color: var(--text-tertiary); }
 
-/* Apple 风格高灵敏复选胶囊样式 */
-.neon-checkbox-label {
-  display: flex; align-items: center; gap: 8px; background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.05); padding: 8px 14px; border-radius: 20px;
-  cursor: pointer; font-size: 11.5px; color: #8E8E93; transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+.checkbox-flow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.filter-checkbox {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  transition: all 0.3s var(--ease-out-expo);
   user-select: none;
-}
-.neon-checkbox-label input { display: none; }
-.custom-indicator {
-  width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.15);
-  transition: all 0.3s; display: inline-block;
+  background: rgba(255,255,255,0.5);
 }
 
-/* 激活态时产生利落的荧光红削波警示色 */
-.neon-checkbox-label.is-checked {
-  background: rgba(255, 90, 95, 0.05); border-color: rgba(255, 90, 95, 0.25); color: #FF5A5F;
-  box-shadow: 0 4px 12px rgba(255, 90, 95, 0.05);
-  .custom-indicator { background: #FF5A5F; box-shadow: 0 0 8px #FF5A5F; }
+.filter-checkbox input { display: none; }
+
+.check-indicator {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid rgba(0,0,0,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s var(--ease-out-expo);
+  flex-shrink: 0;
 }
-.neon-checkbox-label:hover {
-  background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.1);
+
+.check-mark {
+  font-size: 11px;
+  font-weight: var(--weight-bold);
+  color: #fff;
 }
-.coverage-txt { font-size: 10px; opacity: 0.7; font-family: monospace; }
+
+.filter-checkbox:hover {
+  border-color: rgba(0,0,0,0.15);
+  background: rgba(0,0,0,0.02);
+}
+
+.filter-checkbox.checked {
+  background: rgba(255, 90, 95, 0.06);
+  border-color: rgba(255, 90, 95, 0.3);
+  color: var(--accent-danger);
+}
+
+.filter-checkbox.checked .check-indicator {
+  background: var(--accent-danger);
+  border-color: var(--accent-danger);
+}
+
+.coverage {
+  font-size: 10px;
+  opacity: 0.6;
+  font-family: var(--font-mono);
+  margin-left: 2px;
+}
+
+.panel-status {
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  padding: var(--space-sm) var(--space-md);
+  background: rgba(0,0,0,0.02);
+  border-radius: var(--radius-sm);
+}
+
+.panel-status strong {
+  color: var(--text-primary);
+}
 </style>
