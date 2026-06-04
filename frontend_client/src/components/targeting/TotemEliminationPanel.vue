@@ -3,7 +3,7 @@
     <div class="panel-header">
       <div>
         <h4 class="panel-title">公共物品剔除</h4>
-        <p class="panel-subtitle">勾选高覆盖率物品，将它们从共现证据中排除。</p>
+        <p class="panel-subtitle">勾选高覆盖物品，将其从共现基线中移除。</p>
       </div>
     </div>
 
@@ -21,7 +21,7 @@
       </label>
     </div>
 
-    <button class="primary-btn full" @click="store.isFourthLayerActive = true">查看暗号物证</button>
+    <button class="primary-btn full" @click="store.isFourthLayerActive = true">查看候选暗号物证</button>
   </div>
 </template>
 
@@ -55,8 +55,8 @@ const items = [
   min-height: 56px;
   padding: 10px;
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: rgba(255, 255, 255, 0.035);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.82);
 }
 
 .filter-row input {

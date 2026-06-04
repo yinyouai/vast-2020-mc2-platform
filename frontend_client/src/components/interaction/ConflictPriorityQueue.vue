@@ -3,7 +3,7 @@
     <div class="panel-header">
       <div>
         <h4 class="panel-title">冲突优先队列</h4>
-        <p class="panel-subtitle">按风险、语义冲突和物证特异性排序。</p>
+        <p class="panel-subtitle">按照风险等级、语义冲突强度和物证特异性进行排序。</p>
       </div>
     </div>
 
@@ -31,10 +31,10 @@ import { useDashboardStore } from '../../store/dashboard'
 const store = useDashboardStore()
 
 const queue = [
-  { rank: 'A', id: 'Person3', score: '高', risk: 'high', summary: '机器标为普通红帽，文本指向黄色接头包。' },
-  { rank: 'B', id: 'Person27', score: '中', risk: 'high', summary: '机器框和文本标签不一致，需要人工排除。' },
-  { rank: 'C', id: 'Person21', score: '低', risk: 'low', summary: '典型会场背景样本，用作安全参照。' },
-  { rank: 'D', id: 'Person12', score: '高', risk: 'high', summary: '核心组候选，物证出现频次异常。' }
+  { rank: 'A', id: 'Person3', score: '高', risk: 'high', summary: '模型倾向于识别成红帽，但文本明确指向黄色提袋，属于高优先级图文冲突样本。' },
+  { rank: 'B', id: 'Person27', score: '高', risk: 'high', summary: '机器框选结果与文本叙事不一致，更适合作为误报清洗的重要对照。' },
+  { rank: 'C', id: 'Person21', score: '低', risk: 'low', summary: '更像普通会场参与者，可作为背景样本辅助判断公共物品分布。' },
+  { rank: 'D', id: 'Person12', score: '高', risk: 'high', summary: '与核心组特征高度接近，且在物证层面反复出现异常共现。' }
 ]
 </script>
 
@@ -57,23 +57,23 @@ const queue = [
   border-radius: var(--radius);
   color: var(--text);
   text-align: left;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.82);
 }
 
 .queue-card:hover,
 .queue-card.is-active {
-  border-color: rgba(66, 214, 194, 0.45);
-  background: rgba(66, 214, 194, 0.08);
+  border-color: rgba(47, 125, 246, 0.24);
+  background: rgba(47, 125, 246, 0.08);
 }
 
-.queue-rank {
+  .queue-rank {
   display: grid;
   place-items: center;
   width: 42px;
   height: 42px;
-  border-radius: 6px;
+  border-radius: 10px;
   color: var(--accent);
-  background: rgba(66, 214, 194, 0.09);
+  background: rgba(47, 125, 246, 0.09);
   font-weight: 900;
 }
 
@@ -85,6 +85,6 @@ const queue = [
 .queue-main small {
   margin-top: 5px;
   color: var(--muted);
-  line-height: 1.4;
+  line-height: 1.5;
 }
 </style>

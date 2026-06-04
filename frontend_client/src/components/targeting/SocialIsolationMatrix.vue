@@ -3,8 +3,9 @@
     <div class="panel-header">
       <div>
         <h4 class="panel-title">社交互动隔离矩阵</h4>
-        <p class="panel-subtitle">核心组彼此在线上互动极低，符合刻意规避监控的行为模式。</p>
+        <p class="panel-subtitle">核心群体在线上呈现出异常低互动状态，这符合刻意规避公开联系的行为模式。</p>
       </div>
+      <span class="data-chip">40 x 40 提及关系</span>
     </div>
     <div ref="matrixRef" class="chart-frame matrix-frame"></div>
   </div>
@@ -14,13 +15,14 @@
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 import * as echarts from 'echarts'
 import { useDashboardStore } from '../../store/dashboard'
+import { animationTiming, buildAxis, buildTooltip, chartPalette } from '../../utils/chartTheme'
 
 const store = useDashboardStore()
 const matrixRef = ref(null)
 let chart
 
 const people = Array.from({ length: 40 }, (_, i) => `P${i + 1}`)
-const coreNumbers = new Set(store.hackerGroup.map((id) => Number(id.replace('Person', ''))))
+const coreNumbers = new Set(store.hackerGroup.filter((id) => id !== 'Person27').map((id) => Number(id.replace('Person', ''))))
 
 const data = []
 for (let y = 0; y < 40; y += 1) {
@@ -36,21 +38,24 @@ const render = () => {
   if (!chart) chart = echarts.init(matrixRef.value)
   chart.setOption({
     backgroundColor: 'transparent',
-    tooltip: {
-      formatter: (params) => `${people[params.value[1]]} x ${people[params.value[0]]}: ${params.value[2]} mentions`
-    },
-    grid: { left: 54, right: 18, top: 24, bottom: 58 },
+    tooltip: buildTooltip((params) => {
+      const isCorePair = coreNumbers.has(params.value[0] + 1) && coreNumbers.has(params.value[1] + 1)
+      return `
+        <strong>${people[params.value[1]]}</strong> x <strong>${people[params.value[0]]}</strong><br/>
+        提及次数：${params.value[2]}<br/>
+        模式解释：${isCorePair ? '核心组内部出现异常沉默' : '普通公开互动'}
+      `
+    }),
+    grid: { left: 62, right: 18, top: 20, bottom: 62 },
     xAxis: {
       type: 'category',
       data: people,
-      axisLabel: { color: '#9bb3b6', fontSize: 9 },
-      axisLine: { lineStyle: { color: 'rgba(184,211,214,0.14)' } }
+      ...buildAxis({ fontSize: 9, interval: 1 })
     },
     yAxis: {
       type: 'category',
       data: people,
-      axisLabel: { color: '#9bb3b6', fontSize: 9 },
-      axisLine: { lineStyle: { color: 'rgba(184,211,214,0.14)' } }
+      ...buildAxis({ fontSize: 9, interval: 1 })
     },
     visualMap: {
       min: 0,
@@ -58,13 +63,26 @@ const render = () => {
       orient: 'horizontal',
       left: 'center',
       bottom: 12,
-      textStyle: { color: '#9bb3b6' },
-      inRange: { color: ['#05090b', '#155e63', '#42d6c2', '#f4c95d'] }
+      text: ['公开互动高', '接近沉默'],
+      textStyle: { color: chartPalette.muted },
+      inRange: { color: ['#f4f8fd', '#dce8f6', '#a2c4eb', '#5d98dd', '#f0b44c'] }
     },
     series: [{
       type: 'heatmap',
       data,
-      emphasis: { itemStyle: { borderColor: '#edf7f6', borderWidth: 1 } }
+      progressive: 0,
+      animationDuration: animationTiming.duration,
+      animationEasing: animationTiming.easing,
+      itemStyle: {
+        borderColor: 'rgba(255,255,255,0.35)',
+        borderWidth: 1
+      },
+      emphasis: {
+        itemStyle: {
+          borderColor: chartPalette.text,
+          borderWidth: 1
+        }
+      }
     }]
   })
 }

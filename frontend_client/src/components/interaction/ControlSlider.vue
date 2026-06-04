@@ -3,7 +3,7 @@
     <div class="panel-header">
       <div>
         <h4 class="panel-title">复核阈值</h4>
-        <p class="panel-subtitle">提高阈值会隐藏低置信机器框，帮助分析员聚焦真正冲突。</p>
+        <p class="panel-subtitle">提高阈值会隐藏低置信框，帮助分析者把注意力集中到真正值得复核的冲突样本上。</p>
       </div>
       <span class="threshold-chip">{{ store.scoreThreshold.toFixed(2) }}</span>
     </div>
