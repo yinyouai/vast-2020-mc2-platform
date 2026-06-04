@@ -13,31 +13,31 @@ const router = createRouter({
       path: '/task1_auditing',
       name: 'task1_auditing',
       component: ModelAuditingView,
-      meta: { depth: 1, title: '层级一: 算法不确定性审计' }
+      meta: { depth: 1, kicker: 'Layer 01', title: '模型不确定性审计' }
     },
     {
       path: '/task2_correction',
       name: 'task2_correction',
       component: DataExplorationView,
-      meta: { depth: 2, title: '层级二: 多模态语义真值校准' }
+      meta: { depth: 2, kicker: 'Layer 02', title: '人工复核与图文校准' }
     },
     {
       path: '/task3_clustering',
       name: 'task3_clustering',
       component: CommunityClusteringView,
-      meta: { depth: 3, title: '层级三: 嫌疑社群特征聚类' }
+      meta: { depth: 3, kicker: 'Layer 03', title: '嫌疑群体共现聚类' }
     },
     {
       path: '/task4_totem',
       name: 'task4_totem',
       component: TotemFilterView,
-      meta: { depth: 4, title: '层级四: 秘密图腾反向排除' }
+      meta: { depth: 4, kicker: 'Layer 04', title: '公共物证过滤与暗号锁定' }
     },
     {
       path: '/task5_verdict',
       name: 'task5_verdict',
       component: CyberForensicsView,
-      meta: { depth: 5, title: '层级五: 黑客组织终极定案' }
+      meta: { depth: 5, kicker: 'Layer 05', title: '社交隔离验证与最终定案' }
     }
   ]
 })

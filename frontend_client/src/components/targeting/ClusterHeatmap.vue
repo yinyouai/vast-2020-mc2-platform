@@ -1,119 +1,128 @@
 <template>
-  <div class="apple-glass-card chart-container">
-    <h4 class="舱室标题">📊 组件 7 : “人-物”资产光谱双向重排层次聚类矩阵 (动态洗牌架构)</h4>
-    <div class="heatmap-canvas-lens" ref="heatmapViewportRef"></div>
+  <div class="panel heatmap-panel">
+    <div class="panel-header">
+      <div>
+        <h4 class="panel-title">嫌疑人-物品共现热力矩阵</h4>
+        <p class="panel-subtitle">颜色越亮，代表该目标与该物品的关联越强。</p>
+      </div>
+      <span class="data-chip">{{ suspects.length }} x {{ items.length }}</span>
+    </div>
+    <div ref="heatmapRef" class="chart-frame heatmap-frame"></div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, watch, nextTick } from 'vue'
-import { useDashboardStore } from '../../store/dashboard'
-// 💡 修复核心：引入现代路由跳转控制器
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import * as echarts from 'echarts'
+import { useDashboardStore } from '../../store/dashboard'
 
 const store = useDashboardStore()
 const router = useRouter()
-const heatmapViewportRef = ref(null)
-let myChart = null
+const heatmapRef = ref(null)
+let chart
 
-const recomputeHeatmap = () => {
-  if (!heatmapViewportRef.value) return
-  if (myChart) myChart.dispose()
+const fallbackSuspects = Array.from({ length: 40 }, (_, i) => `Person${i + 1}`)
+const fallbackItems = ['Notebook', 'Badge', 'Toy', 'Cap', 'Red Hat', 'Yellow Bag', 'Connector']
 
-  myChart = echarts.init(heatmapViewportRef.value, 'dark')
+const suspects = computed(() => store.orderedSuspects.length ? store.orderedSuspects : fallbackSuspects)
+const items = computed(() => store.orderedItems.length ? store.orderedItems : fallbackItems)
 
-  const xAxisData = store.orderedItems && store.orderedItems.length > 0
-    ? store.orderedItems
-    : ["【鸟鸣器】", "【南瓜便签】", "【眼球玩具】", "【发夹资产】", "【薰衣草骰子】", "【高危哨子】", "【黄色提袋】"]
+const buildData = () => {
+  const lookup = new Map()
+  store.heatmapMatrixData.forEach((entry) => {
+    lookup.set(`${entry.suspect}-${entry.item}`, entry.count)
+  })
 
-  const yAxisData = store.orderedSuspects && store.orderedSuspects.length > 0
-    ? store.orderedSuspects
-    : Array.from({ length: 40 }, (_, i) => `嫌疑目标 P${i+1}`)
-
-  const mappedPoints = []
-  const countLookup = {}
-
-  if (store.heatmapMatrixData && store.heatmapMatrixData.length > 0) {
-    store.heatmapMatrixData.forEach(d => {
-      countLookup[`${d.suspect}-${d.item}`] = d.count
-    })
-  }
-
-  for (let yIdx = 0; yIdx < yAxisData.length; yIdx++) {
-    for (let xIdx = 0; xIdx < xAxisData.length; xIdx++) {
-      let count = 0
-      if (store.heatmapMatrixData && store.heatmapMatrixData.length > 0) {
-        const suspectKey = store.orderedSuspects[yIdx]
-        const itemKey = store.orderedItems[xIdx]
-        count = countLookup[`${suspectKey}-${itemKey}`] || 0
-      } else {
-        if (yIdx < 8 && xIdx === 6) count = 3
-        else if (yIdx >= 8 && yIdx < 25 && xIdx < 4) count = Math.floor(Math.random() * 3) + 1
-        else if (yIdx >= 25 && xIdx >= 4 && xIdx < 6) count = 2
+  const core = new Set(store.hackerGroup)
+  const data = []
+  suspects.value.forEach((suspect, y) => {
+    items.value.forEach((item, x) => {
+      let value = lookup.get(`${suspect}-${item}`)
+      if (value === undefined) {
+        const itemKey = String(item).toLowerCase()
+        if (core.has(suspect) && (itemKey.includes('yellow') || itemKey.includes('connector'))) value = 4
+        else if (!core.has(suspect) && x < 4) value = (x + y) % 3
+        else value = 0
       }
-      mappedPoints.push([xIdx, yIdx, count])
-    }
-  }
+      data.push([x, y, value])
+    })
+  })
+  return data
+}
 
-  myChart.setOption({
+const render = () => {
+  if (!heatmapRef.value) return
+  if (!chart) chart = echarts.init(heatmapRef.value)
+  chart.setOption({
     backgroundColor: 'transparent',
     tooltip: {
       position: 'top',
-      backgroundColor: 'rgba(10,10,14,0.9)',
-      borderColor: 'rgba(255,255,255,0.1)',
       formatter: (params) => {
-        return `👤 <b>取证实体轴: ${yAxisData[params.value[1]]}</b><br/>
-                📦 <b>特征物资轴: ${xAxisData[params.value[0]]}</b><br/>
-                🔢 <b>去噪后持有频次: <span style="color:#30D158">${params.value[2]} 次</span></b>`
+        const suspect = suspects.value[params.value[1]]
+        const item = items.value[params.value[0]]
+        return `${suspect}<br/>${item}: ${params.value[2]}`
       }
     },
-    grid: { left: '10%', right: '4%', top: '4%', bottom: '15%' },
+    grid: { left: 86, right: 22, top: 26, bottom: 82 },
     xAxis: {
       type: 'category',
-      data: xAxisData,
-      axisLabel: { rotate: 25, fontSize: 10, color: '#8E8E93' }
+      data: items.value,
+      axisLabel: { color: '#9bb3b6', rotate: 32 },
+      axisLine: { lineStyle: { color: 'rgba(184,211,214,0.14)' } }
     },
     yAxis: {
       type: 'category',
-      data: yAxisData,
-      axisLabel: { fontSize: 9, color: '#8E8E93' }
+      data: suspects.value,
+      axisLabel: { color: '#9bb3b6', fontSize: 10 },
+      axisLine: { lineStyle: { color: 'rgba(184,211,214,0.14)' } }
     },
     visualMap: {
-      min: 0, max: 4, calculable: true, orient: 'horizontal', left: 'center', bottom: '0%',
-      textStyle: { color: '#8E8E93', fontSize: 11 },
-      inRange: { color: ['rgba(255,255,255,0.01)', '#1A1A2E', '#BF5AF2', '#30D158'] }
+      min: 0,
+      max: 4,
+      calculable: true,
+      orient: 'horizontal',
+      left: 'center',
+      bottom: 16,
+      textStyle: { color: '#9bb3b6' },
+      inRange: { color: ['#0d1c21', '#155e63', '#42d6c2', '#f4c95d', '#ff6b6b'] }
     },
     series: [{
-      name: '光谱矩阵',
       type: 'heatmap',
-      data: mappedPoints,
-      progressive: 1000
+      data: buildData(),
+      emphasis: { itemStyle: { borderColor: '#edf7f6', borderWidth: 1 } }
     }]
   })
 
-  // 💡 级联钻取流变完美修复！
-  myChart.on('click', (params) => {
-    if (params.componentType === 'series') {
-      // 1. 获取点击行所在的嫌疑人 ID 真实字符串
-      const targetSuspect = store.orderedSuspects.length > 0
-        ? store.orderedSuspects[params.value[1]]
-        : `Person${params.value[1] + 1}`
-
-      // 2. 强力向全局状态网络广播更新
-      store.selectPerson(targetSuspect)
-
-      // 3. 🚨 核心修复：执行自动化路由跃迁，命令视口瞬间下钻跳转至层级二多模态交叉工作台！
-      router.push('/task2_correction')
-    }
+  chart.off('click')
+  chart.on('click', (params) => {
+    const target = suspects.value[params.value[1]]
+    store.selectPerson(target)
+    router.push('/task2_correction')
   })
 }
 
-watch(() => [store.heatmapMatrixData, store.orderedSuspects, store.orderedItems], () => nextTick(recomputeHeatmap))
-onMounted(() => { recomputeHeatmap() })
+const resize = () => chart?.resize()
+
+watch(() => [store.heatmapMatrixData, store.orderedSuspects, store.orderedItems], render, { deep: true })
+
+onMounted(() => {
+  render()
+  window.addEventListener('resize', resize)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', resize)
+  chart?.dispose()
+})
 </script>
 
 <style scoped>
-.chart-container { width: 100%; height: 100%; display: flex; flex-direction: column; }
-.heatmap-canvas-lens { flex: 1; min-height: 420px; margin-top: 10px; }
+.heatmap-panel {
+  min-height: 620px;
+}
+
+.heatmap-frame {
+  min-height: 540px;
+}
 </style>

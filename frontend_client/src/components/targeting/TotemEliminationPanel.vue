@@ -1,72 +1,81 @@
 <template>
-  <div class="apple-glass-card panel-root">
-    <h4 class="舱室标题">⚙️ 组件 10 : 大众参会普及物资/泛滥礼品反向排除漏斗控制台</h4>
-    <div class="checkbox-row-flow">
-      <label v-for="item in filterItems" :key="item.id"
-             class="neon-checkbox-label"
-             :class="{ 'is-checked': store.excludedItems.includes(item.id) }">
-        <input type="checkbox"
-               :value="item.id"
-               :checked="store.excludedItems.includes(item.id)"
-               @change="handleToggle(item.id)">
-        <span class="custom-indicator"></span>
-        <span class="label-txt">{{ item.cnName }} <span class="coverage-txt">(社会覆盖率: {{ item.coverage }}%)</span></span>
+  <div class="panel">
+    <div class="panel-header">
+      <div>
+        <h4 class="panel-title">公共物品剔除</h4>
+        <p class="panel-subtitle">勾选高覆盖率物品，将它们从共现证据中排除。</p>
+      </div>
+    </div>
+
+    <div class="filter-list">
+      <label v-for="item in items" :key="item.name" class="filter-row">
+        <input
+          type="checkbox"
+          :checked="store.excludedItems.includes(item.name)"
+          @change="store.toggleItemExclusion(item.name)"
+        />
+        <span>
+          <strong>{{ item.name }}</strong>
+          <small>{{ item.coverage }} 覆盖率</small>
+        </span>
       </label>
     </div>
+
+    <button class="primary-btn full" @click="store.isFourthLayerActive = true">查看暗号物证</button>
   </div>
 </template>
 
 <script setup>
 import { useDashboardStore } from '../../store/dashboard'
+
 const store = useDashboardStore()
 
-// 💡 彻底消灭乱码！将英文键映射为无懈可击的中文判定
-const filterItems = [
-  { id: 'lavenderDie', cnName: '🔮 薰衣草散装骰子', coverage: 60 },
-  { id: 'sign', cnName: '🚩 现场标志性标牌', coverage: 60 },
-  { id: 'hairClip', cnName: '发夹普及物资', coverage: 47 },
-  { id: 'redWhistle', cnName: '📢 会场泛滥红哨子', coverage: 45 }
+const items = [
+  { name: 'Notebook', coverage: '60%' },
+  { name: 'Badge', coverage: '48%' },
+  { name: 'Toy', coverage: '44%' },
+  { name: 'Red Hat', coverage: '41%' },
+  { name: 'Yellow Bag', coverage: '20%' }
 ]
-
-const handleToggle = (id) => {
-  const currentExcludes = [...store.excludedItems]
-  const idx = currentExcludes.indexOf(id)
-  if (idx > -1) {
-    currentExcludes.splice(idx, 1)
-  } else {
-    currentExcludes.push(id)
-  }
-  // 强力驱动 Pinia 状态管理层
-  store.excludedItems = currentExcludes
-  store.fetchHeatmapMatrix() // 动态通知后端重排引擎更新
-}
 </script>
 
 <style scoped>
-.panel-root { padding: 14px 18px; }
-.checkbox-row-flow { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 10px; }
-
-/* Apple 风格高灵敏复选胶囊样式 */
-.neon-checkbox-label {
-  display: flex; align-items: center; gap: 8px; background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.05); padding: 8px 14px; border-radius: 20px;
-  cursor: pointer; font-size: 11.5px; color: #8E8E93; transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-  user-select: none;
-}
-.neon-checkbox-label input { display: none; }
-.custom-indicator {
-  width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.15);
-  transition: all 0.3s; display: inline-block;
+.filter-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 18px;
 }
 
-/* 激活态时产生利落的荧光红削波警示色 */
-.neon-checkbox-label.is-checked {
-  background: rgba(255, 90, 95, 0.05); border-color: rgba(255, 90, 95, 0.25); color: #FF5A5F;
-  box-shadow: 0 4px 12px rgba(255, 90, 95, 0.05);
-  .custom-indicator { background: #FF5A5F; box-shadow: 0 0 8px #FF5A5F; }
+.filter-row {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  min-height: 56px;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.035);
 }
-.neon-checkbox-label:hover {
-  background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.1);
+
+.filter-row input {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--accent);
 }
-.coverage-txt { font-size: 10px; opacity: 0.7; font-family: monospace; }
+
+.filter-row strong,
+.filter-row small {
+  display: block;
+}
+
+.filter-row small {
+  margin-top: 4px;
+  color: var(--subtle);
+}
+
+.full {
+  width: 100%;
+}
 </style>

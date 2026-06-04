@@ -1,72 +1,83 @@
 <template>
-  <div class="terminal-app-root">
-    <header class="cyber-header">
-      <div class="header-left">
-        <span class="pulse-dot"></span>
-        <h1>VAST 2020 MC2 · 现代多模态全景数字取证智能终端</h1>
-      </div>
-      <nav class="apple-capsule-nav">
-        <router-link to="/task1_auditing">🛰️ 层级一: 算法不确定性审计</router-link>
-        <router-link to="/task2_correction">🔍 层级二: 多模态真值校准</router-link>
-        <router-link to="/task3_clustering">📊 层级三: 嫌疑社群行为特征</router-link>
-        <router-link to="/task4_totem">🔮 层级四: 泛滥资产反向排除</router-link>
-        <router-link to="/task5_verdict">🛡️ 层级五: 组织暗号终极定案</router-link>
-      </nav>
-      <div class="header-right">
-        <div class="status-badge" :class="{ 'status-active': !store.isLoading }">
-          {{ store.isLoading ? '⚙️ 后端动态聚类重算中...' : '🔒 证据链多图互锁同步中' }}
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="任务导航">
+      <div class="brand-block">
+        <div class="brand-mark">MC2</div>
+        <div>
+          <p class="eyebrow">VAST Challenge 2020</p>
+          <h1>Evidence Console</h1>
         </div>
       </div>
-    </header>
 
-    <main class="viewport-container">
-      <router-view v-slot="{ Component, route }">
-        <transition :name="transitionName" mode="out-in">
-          <component :is="Component" :key="route.path" class="page-layer" />
-        </transition>
-      </router-view>
-    </main>
+      <nav class="task-nav">
+        <router-link
+          v-for="item in navItems"
+          :key="item.to"
+          :to="item.to"
+          class="nav-item"
+        >
+          <span class="nav-index">{{ item.index }}</span>
+          <span>
+            <strong>{{ item.title }}</strong>
+            <small>{{ item.caption }}</small>
+          </span>
+        </router-link>
+      </nav>
+
+      <div class="case-card">
+        <p class="eyebrow">当前证据链</p>
+        <strong>{{ store.selectedPersonId }}</strong>
+        <span :class="['risk-pill', isCoreSuspect ? 'risk-high' : 'risk-low']">
+          {{ isCoreSuspect ? '核心嫌疑' : '背景样本' }}
+        </span>
+      </div>
+    </aside>
+
+    <div class="workspace-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">{{ route.meta.kicker || 'Investigation Layer' }}</p>
+          <h2>{{ route.meta.title || 'Evidence Console' }}</h2>
+        </div>
+        <div class="topbar-actions">
+          <span :class="['sync-state', store.isLoading ? 'is-busy' : 'is-ready']">
+            {{ store.isLoading ? '同步中' : '数据已就绪' }}
+          </span>
+          <span class="threshold-chip">阈值 {{ store.scoreThreshold.toFixed(2) }}</span>
+        </div>
+      </header>
+
+      <main class="viewport-container">
+        <router-view v-slot="{ Component, route: viewRoute }">
+          <transition name="page-fade" mode="out-in">
+            <component :is="Component" :key="viewRoute.path" class="page-layer" />
+          </transition>
+        </router-view>
+      </main>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref, watch, onMounted } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useDashboardStore } from './store/dashboard'
 
 const store = useDashboardStore()
 const route = useRoute()
-const transitionName = ref('zoom-dive')
 
-watch(() => route.meta.depth, (toD, fromD) => {
-  if (toD && fromD) {
-    transitionName.value = toD > fromD ? 'zoom-dive' : 'zoom-rise'
-  }
-})
+const navItems = [
+  { index: '01', to: '/task1_auditing', title: '模型审计', caption: '不确定性与误报' },
+  { index: '02', to: '/task2_correction', title: '人工校准', caption: '图文冲突复核' },
+  { index: '03', to: '/task3_clustering', title: '群体聚类', caption: '人-物共现结构' },
+  { index: '04', to: '/task4_totem', title: '物证过滤', caption: '公共物品剔除' },
+  { index: '05', to: '/task5_verdict', title: '最终定案', caption: '社交隔离验证' }
+]
+
+const isCoreSuspect = computed(() => store.hackerGroup.includes(store.selectedPersonId))
 
 onMounted(() => {
-  // 💡 修复核心：初始化仅拉取统计模型数据，绝对不能无脑调用 selectPerson() 覆写干扰状态！
   store.fetchModelEvaluation()
   store.fetchHeatmapMatrix()
 })
 </script>
-
-<style scoped>
-.terminal-app-root { display: flex; flex-direction: column; width: 100vw; height: 100vh; background-color: #0A0A0C; }
-.cyber-header { height: 64px; display: flex; justify-content: space-between; align-items: center; padding: 0 24px; background: rgba(10, 10, 12, 0.85); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); z-index: 100; }
-.header-left { display: flex; align-items: center; gap: 12px; }
-.header-left h1 { margin: 0; font-size: 15px; font-weight: 500; letter-spacing: -0.2px; color: #E5E5EA; }
-.pulse-dot { width: 8px; height: 8px; background: #30D158; border-radius: 50%; box-shadow: 0 0 8px #30D158; }
-.apple-capsule-nav { display: flex; background: rgba(255, 255, 255, 0.04); padding: 4px; border-radius: 32px; border: 1px solid rgba(255, 255, 255, 0.02); }
-.apple-capsule-nav a { text-decoration: none; color: #8E8E93; padding: 6px 14px; font-size: 12px; font-weight: 500; border-radius: 24px; transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); }
-.apple-capsule-nav a.router-link-active { background: rgba(255, 255, 255, 0.1); color: #FFFFFF; backdrop-filter: blur(5px); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); }
-.status-badge { font-size: 12px; color: #8E8E93; background: rgba(255,255,255,0.02); padding: 6px 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.03); }
-.status-active { color: #30D158; }
-.viewport-container { flex: 1; position: relative; overflow: hidden; background: #000; }
-.page-layer { position: absolute; width: 100%; height: 100%; box-sizing: border-box; }
-.zoom-dive-enter-active, .zoom-dive-leave-active, .zoom-rise-enter-active, .zoom-rise-leave-active { transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1); }
-.zoom-dive-leave-to { transform: scale(0.85); opacity: 0; filter: blur(12px); }
-.zoom-dive-enter-from { transform: scale(1.15); opacity: 0; filter: blur(6px); }
-.zoom-rise-leave-to { transform: scale(1.15); opacity: 0; filter: blur(12px); }
-.zoom-rise-enter-from { transform: scale(0.85); opacity: 0; filter: blur(6px); }
-</style>
