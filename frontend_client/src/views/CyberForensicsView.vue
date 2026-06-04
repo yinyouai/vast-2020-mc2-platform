@@ -35,6 +35,10 @@
       </article>
     </div>
 
+    <EvidencePhotoGallery />
+
+    <DynamicSocialTree />
+
     <div class="forensics-layout">
       <SocialIsolationMatrix />
       <ProvenanceNarrative />
@@ -43,6 +47,8 @@
 </template>
 
 <script setup>
+import EvidencePhotoGallery from '../components/targeting/EvidencePhotoGallery.vue'
+import DynamicSocialTree from '../components/targeting/DynamicSocialTree.vue'
 import SocialIsolationMatrix from '../components/targeting/SocialIsolationMatrix.vue'
 import ProvenanceNarrative from '../components/targeting/ProvenanceNarrative.vue'
 </script>
@@ -50,8 +56,8 @@ import ProvenanceNarrative from '../components/targeting/ProvenanceNarrative.vue
 <style scoped>
 .forensics-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1.35fr) minmax(340px, 0.85fr);
-  gap: 18px;
+  grid-template-columns: minmax(0, 1.2fr) minmax(360px, 0.8fr);
+  gap: clamp(20px, 2.6vw, 34px);
   min-height: 650px;
 }
 

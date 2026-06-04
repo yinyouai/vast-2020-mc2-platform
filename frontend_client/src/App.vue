@@ -164,7 +164,10 @@ const revealSelector = [
   '.sample-dot',
   '.compare-card',
   '.case-card',
-  '.network-card'
+  '.network-card',
+  '.evidence-card',
+  '.evidence-preview-panel',
+  '.dynamic-network-panel'
 ].join(',')
 
 const prefersReducedMotion = () =>
