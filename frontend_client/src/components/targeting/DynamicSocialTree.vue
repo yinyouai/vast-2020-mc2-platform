@@ -5,7 +5,6 @@
         <h4 class="panel-title">动态树状社交隔离网络</h4>
         <p class="panel-subtitle">外圈紫色节点代表 8 名核心成员，中心普通参会者保持自然互动；黄色提袋把线下物证链收束成最终嫌疑团体。</p>
       </div>
-      <button type="button" class="ghost-btn" @click="restartNetwork">重新收束网络</button>
     </div>
 
     <div class="network-legend" aria-label="网络图图例">
@@ -40,14 +39,6 @@
           </div>
         </div>
 
-        <button
-          v-if="selectedNode.personId"
-          type="button"
-          class="primary-btn"
-          @click="store.selectPerson(selectedNode.personId)"
-        >
-          锁定 {{ selectedNode.personId }}
-        </button>
       </aside>
     </div>
   </section>
@@ -328,10 +319,6 @@ const dragBehavior = () =>
         d.fy = null
       }
     })
-
-const restartNetwork = () => {
-  simulation?.alpha(0.9).restart()
-}
 
 onMounted(paintNetwork)
 

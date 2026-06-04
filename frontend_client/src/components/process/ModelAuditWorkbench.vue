@@ -98,15 +98,18 @@
               <strong>Person3_2 / 机器检测画布</strong>
               <span>低阈值下多候选框重叠，先展示检测结构，再进入人工收敛。</span>
             </div>
-            <div class="bbox bbox-red" style="left: 6%; top: 16%; width: 65%; height: 56%;">
-              yellowBag 0.39
-            </div>
-            <div class="bbox bbox-gold" style="left: 0%; top: 0%; width: 76%; height: 57%;">
-              yellowBalloon 0.40
-            </div>
-            <div class="bbox bbox-blue" style="left: 0%; top: 0%; width: 80%; height: 82%;">
-              pumpkinNotes 0.53
-            </div>
+            <img
+              :src="reviewImage"
+              alt="原始样本 Person3 证据照片"
+              :class="{ 'is-loaded': imageState === 'loaded', 'is-failed': imageState === 'failed' }"
+              @load="imageState = 'loaded'"
+              @error="imageState = 'failed'"
+            />
+            <span v-if="imageState === 'loading'" class="workbench-image-state">加载真实图片中</span>
+            <span v-else-if="imageState === 'failed'" class="workbench-image-state is-failed">图片未就绪，已使用稳定占位</span>
+            <div class="bbox bbox-red" data-label="yellowBag 0.39" style="left: 6%; top: 16%; width: 65%; height: 56%;"></div>
+            <div class="bbox bbox-gold" data-label="yellowBalloon 0.40" style="left: 0%; top: 0%; width: 76%; height: 57%;"></div>
+            <div class="bbox bbox-blue" data-label="pumpkinNotes 0.53" style="left: 0%; top: 0%; width: 80%; height: 82%;"></div>
           </div>
         </div>
 
@@ -120,9 +123,14 @@
               <strong>Person3_2 / 人工确认画布</strong>
               <span>结合文本语义后，只保留与线下会合相关的关键物证。</span>
             </div>
-            <div class="bbox bbox-green" style="left: 18%; top: 20%; width: 49%; height: 50%;">
-              黄色提袋 / 人工确认
-            </div>
+            <img
+              :src="reviewImage"
+              alt="人工修正后的 Person3 证据照片"
+              :class="{ 'is-loaded': imageState === 'loaded', 'is-failed': imageState === 'failed' }"
+              @load="imageState = 'loaded'"
+              @error="imageState = 'failed'"
+            />
+            <div class="bbox bbox-green" data-label="黄色提袋 / 人工确认" style="left: 18%; top: 20%; width: 49%; height: 50%;"></div>
           </div>
           <div class="compare-note">
             <p>文本语义指向“入口处的识别标记”，因此人工复核将视觉结果收敛为单一物证。这一步是后续群体聚类可信的关键前提。</p>
@@ -134,6 +142,11 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
+
+const imageState = ref('loading')
+const reviewImage = 'http://localhost:5000/static/MC2-Image-Data/Person3/Person3_1.jpg'
+
 const rankedSamples = [
   { name: 'Person18_8', score: '0.668', type: 'TP' },
   { name: 'Person9_2', score: '0.664', type: 'TP' },
@@ -368,6 +381,8 @@ const samplePoints = [
 }
 
 .workbench-placeholder {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -392,14 +407,98 @@ const samplePoints = [
   font-size: 0.84rem;
 }
 
+.image-stage img {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity var(--motion-medium) ease;
+}
+
+.image-stage img.is-loaded {
+  opacity: 1;
+}
+
+.image-stage img.is-failed {
+  display: none;
+}
+
+.workbench-image-state {
+  position: absolute;
+  left: 14px;
+  top: 14px;
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 0 11px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: var(--shadow-soft);
+  font-size: 0.74rem;
+  font-weight: 900;
+}
+
+.workbench-image-state::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  margin-right: 6px;
+  border: 2px solid rgba(47, 125, 246, 0.18);
+  border-top-color: var(--accent);
+  border-radius: 999px;
+  animation: workbench-spin 760ms linear infinite;
+}
+
+.workbench-image-state.is-failed {
+  color: #9a6818;
+  border-color: rgba(240, 180, 76, 0.24);
+  background: rgba(255, 247, 219, 0.92);
+}
+
+.workbench-image-state.is-failed::before {
+  display: none;
+}
+
 .bbox {
   position: absolute;
+  z-index: 3;
   border: 3px solid;
   border-radius: 12px;
-  padding: 6px 8px;
-  font-size: 0.72rem;
+  font-size: 0;
   font-weight: 800;
-  background: rgba(255, 255, 255, 0.7);
+  color: transparent;
+  background: transparent;
+  box-shadow: none;
+  pointer-events: none;
+}
+
+.bbox::before {
+  content: attr(data-label);
+  position: absolute;
+  left: 10px;
+  top: -10px;
+  transform: translateY(-100%);
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: var(--shadow-soft);
+  white-space: nowrap;
+  font-size: 0.72rem;
+  color: currentColor;
+}
+
+@keyframes workbench-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .bbox-red {

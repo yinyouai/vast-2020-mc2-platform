@@ -18,12 +18,21 @@
         <div class="case-compare">
           <div class="case-view">
             <div class="case-view__title">标注前 / 机器预测</div>
-            <div class="case-image" :class="{ 'is-placeholder': !scene.hasImage }">
-              <img v-if="scene.hasImage" :src="scene.image" :alt="scene.title" />
-              <div v-else class="case-placeholder">
+            <div class="case-image" :class="{ 'is-placeholder': imageStates[scene.id] !== 'loaded' }">
+              <img
+                :src="scene.image"
+                :alt="scene.title"
+                :class="imageClass(scene.id)"
+                loading="lazy"
+                @load="markImageLoaded(scene.id)"
+                @error="markImageFailed(scene.id)"
+              />
+              <div class="case-placeholder">
                 <strong>{{ scene.placeholderTitle }}</strong>
                 <p>{{ scene.placeholderText }}</p>
               </div>
+              <span v-if="imageStates[scene.id] === 'loading'" class="case-image-state">加载中</span>
+              <span v-else-if="imageStates[scene.id] === 'failed'" class="case-image-state is-failed">图像占位</span>
 
               <div
                 v-for="box in scene.beforeBoxes"
@@ -39,11 +48,18 @@
 
           <div class="case-view">
             <div class="case-view__title">标注后 / 人工修正</div>
-            <div class="case-image" :class="{ 'is-placeholder': !scene.hasImage }">
-              <img v-if="scene.hasImage" :src="scene.image" :alt="`${scene.title} 人工修正`" />
-              <div v-else class="case-placeholder is-clean">
+            <div class="case-image" :class="{ 'is-placeholder': imageStates[scene.id] !== 'loaded' }">
+              <img
+                :src="scene.image"
+                :alt="`${scene.title} 人工修正`"
+                :class="imageClass(scene.id)"
+                loading="lazy"
+                @load="markImageLoaded(scene.id)"
+                @error="markImageFailed(scene.id)"
+              />
+              <div class="case-placeholder is-clean">
                 <strong>{{ scene.placeholderTitle }}</strong>
-                <p>同一张图经过人工复核后，仅保留与文本语义和后续推理一致的主物证。</p>
+                <p>人工复核后仅保留主物证。</p>
               </div>
 
               <div
@@ -75,16 +91,21 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
+
+const imageStates = ref({})
+const imageUrl = (person, imageName) =>
+  `http://localhost:5000/static/MC2-Image-Data/${person}/${imageName}`
+
 const scenes = [
   {
     id: 'person3',
     title: '样本 A / Person3_2',
     summary: '从多候选误判收敛为单一关键物证',
     caption: '文本中存在明显的线下会合提示，因此需要把多个候选视觉框收束为一个可追踪物证。',
-    image: '/process_samples/person3-before.jpg',
-    hasImage: false,
-    placeholderTitle: '原始检测图像占位',
-    placeholderText: '当前工作区中的原始 JPG 文件是空占位，因此这里先稳定展示检测框结构与修正流程，不让页面塌掉。',
+    image: imageUrl('Person3', 'Person3_1.jpg'),
+    placeholderTitle: 'Person3 证据图',
+    placeholderText: '真实图加载失败时显示检测结构。',
     beforeBoxes: [
       { label: 'pumpkinNotes 0.53', kind: 'is-blue', style: 'left:8%;top:14%;width:70%;height:58%;' },
       { label: 'yellowBalloon 0.40', kind: 'is-gold', style: 'left:4%;top:10%;width:74%;height:44%;' },
@@ -101,10 +122,9 @@ const scenes = [
     title: '样本 B / Person27_14',
     summary: '从高噪声候选集回退为公共物品',
     caption: '文本明确提到南瓜笔记本，这类物品更像会场通用资产，因此可作为“误报洗白”示例。',
-    image: '/process_samples/person27-before.jpg',
-    hasImage: false,
-    placeholderTitle: '原始检测图像占位',
-    placeholderText: '这一类样本适合在汇报时说明：视觉模型虽然给出多个候选，但并不意味着它属于核心嫌疑线索。',
+    image: imageUrl('Person27', 'Person27_1.jpg'),
+    placeholderTitle: 'Person27 对照图',
+    placeholderText: '真实图加载失败时显示公共物品对照结构。',
     beforeBoxes: [
       { label: 'eyeball 0.26', kind: 'is-red', style: 'left:26%;top:40%;width:20%;height:24%;' },
       { label: 'pumpkinNotes 0.40', kind: 'is-blue', style: 'left:21%;top:27%;width:31%;height:34%;' },
@@ -117,6 +137,26 @@ const scenes = [
     humanNote: '人工核对文本后，可将其回退为公共笔记本类资产，不再进入核心嫌疑证据链。'
   }
 ]
+
+scenes.forEach((scene) => {
+  imageStates.value[scene.id] = 'loading'
+})
+
+const markImageLoaded = (sceneId) => {
+  imageStates.value = { ...imageStates.value, [sceneId]: 'loaded' }
+}
+
+const markImageFailed = (sceneId) => {
+  imageStates.value = { ...imageStates.value, [sceneId]: 'failed' }
+}
+
+const imageClass = (sceneId) => {
+  const state = imageStates.value[sceneId] || 'loading'
+  return {
+    'is-loaded': state === 'loaded',
+    'is-failed': state === 'failed'
+  }
+}
 </script>
 
 <style scoped>
@@ -192,10 +232,21 @@ const scenes = [
 }
 
 .case-image img {
-  display: block;
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  opacity: 0;
+  transition: opacity var(--motion-medium) ease;
+}
+
+.case-image img.is-loaded {
+  opacity: 1;
+}
+
+.case-image img.is-failed {
+  display: none;
 }
 
 .case-image.is-placeholder {
@@ -227,15 +278,61 @@ const scenes = [
   line-height: 1.65;
 }
 
+.case-image-state {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 10px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: var(--shadow-soft);
+  font-size: 0.74rem;
+  font-weight: 900;
+}
+
+.case-image-state::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  margin-right: 6px;
+  border: 2px solid rgba(47, 125, 246, 0.18);
+  border-top-color: var(--accent);
+  border-radius: 999px;
+  animation: case-spin 760ms linear infinite;
+}
+
+.case-image-state.is-failed {
+  color: #9a6818;
+  border-color: rgba(240, 180, 76, 0.24);
+  background: rgba(255, 247, 219, 0.92);
+}
+
+.case-image-state.is-failed::before {
+  display: none;
+}
+
 .case-placeholder.is-clean {
   background: radial-gradient(circle at top right, rgba(57, 169, 125, 0.08), transparent 28%);
 }
 
 .overlay-box {
   position: absolute;
+  z-index: 3;
   border: 3px solid;
   border-radius: 12px;
   background: transparent;
+}
+
+@keyframes case-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .overlay-box__label {

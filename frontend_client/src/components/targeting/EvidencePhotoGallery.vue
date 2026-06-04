@@ -41,8 +41,12 @@
               :src="sample.image"
               :alt="`${sample.person} 证据照片`"
               loading="lazy"
-              @error="hideBrokenImage"
+              :class="imageClass(sample.id)"
+              @load="markImageLoaded(sample.id)"
+              @error="markImageFailed(sample.id)"
             />
+            <span v-if="imageStates[sample.id] === 'loading'" class="image-loading">加载中</span>
+            <span v-else-if="imageStates[sample.id] === 'failed'" class="image-fallback-badge">图像占位</span>
             <span class="sample-state">{{ sample.status }}</span>
           </span>
           <span class="sample-copy">
@@ -58,7 +62,6 @@
             <span>{{ activeSample.groupLabel }}</span>
             <strong>{{ activeSample.person }} / {{ activeSample.title }}</strong>
           </div>
-          <button type="button" class="ghost-btn" @click="store.selectPerson(activeSample.person)">锁定此人</button>
         </div>
 
         <div class="evidence-stage">
@@ -70,8 +73,12 @@
             :key="activeSample.id"
             :src="activeSample.image"
             :alt="`${activeSample.person} 证据大图`"
-            @error="hideBrokenImage"
+            :class="imageClass(activeSample.id)"
+            @load="markImageLoaded(activeSample.id)"
+            @error="markImageFailed(activeSample.id)"
           />
+          <span v-if="imageStates[activeSample.id] === 'loading'" class="stage-loading">正在加载真实证据照片...</span>
+          <span v-else-if="imageStates[activeSample.id] === 'failed'" class="stage-loading is-failed">后端图片未就绪，已切换为稳定证据占位画布</span>
           <div
             v-for="box in activeSample.boxes"
             :key="box.label"
@@ -108,6 +115,7 @@ import { useDashboardStore } from '../../store/dashboard'
 const store = useDashboardStore()
 const activeFilter = ref('all')
 const activeSampleId = ref('Person3')
+const imageStates = ref({})
 
 const imageUrl = (person, imageName) =>
   `http://localhost:5000/static/MC2-Image-Data/${person}/${imageName}`
@@ -322,6 +330,10 @@ const filters = [
   { key: 'outer', label: '外圈对照', caption: '基线' }
 ]
 
+samples.forEach((sample) => {
+  imageStates.value[sample.id] = 'loading'
+})
+
 const visibleSamples = computed(() => {
   if (activeFilter.value === 'all') return samples
   return samples.filter((sample) => sample.kind === activeFilter.value)
@@ -334,10 +346,29 @@ const activeSample = computed(() =>
 const selectSample = (sample) => {
   activeSampleId.value = sample.id
   store.selectPerson(sample.person)
+  ensureImageState(sample.id)
 }
 
-const hideBrokenImage = (event) => {
-  event.target.style.display = 'none'
+const ensureImageState = (sampleId) => {
+  if (!imageStates.value[sampleId]) {
+    imageStates.value = { ...imageStates.value, [sampleId]: 'loading' }
+  }
+}
+
+const markImageLoaded = (sampleId) => {
+  imageStates.value = { ...imageStates.value, [sampleId]: 'loaded' }
+}
+
+const markImageFailed = (sampleId) => {
+  imageStates.value = { ...imageStates.value, [sampleId]: 'failed' }
+}
+
+const imageClass = (sampleId) => {
+  const state = imageStates.value[sampleId] || 'loading'
+  return {
+    'is-loaded': state === 'loaded',
+    'is-failed': state === 'failed'
+  }
 }
 </script>
 
@@ -445,6 +476,18 @@ const hideBrokenImage = (event) => {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  opacity: 0;
+  transition: opacity var(--motion-medium) ease;
+}
+
+.evidence-thumb img.is-loaded,
+.evidence-stage img.is-loaded {
+  opacity: 1;
+}
+
+.evidence-thumb img.is-failed,
+.evidence-stage img.is-failed {
+  display: none;
 }
 
 .thumb-placeholder,
@@ -480,6 +523,48 @@ const hideBrokenImage = (event) => {
   background: var(--sample-accent);
   font-size: 0.72rem;
   font-weight: 900;
+}
+
+.image-loading,
+.image-fallback-badge,
+.stage-loading {
+  position: absolute;
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: var(--shadow-soft);
+  font-size: 0.74rem;
+  font-weight: 900;
+}
+
+.image-loading,
+.image-fallback-badge {
+  left: 8px;
+  top: 8px;
+  min-height: 26px;
+  padding: 0 9px;
+}
+
+.image-loading::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  margin-right: 6px;
+  border: 2px solid rgba(47, 125, 246, 0.18);
+  border-top-color: var(--accent);
+  border-radius: 999px;
+  animation: image-spin 780ms linear infinite;
+}
+
+.image-fallback-badge {
+  color: #9a6818;
+  border-color: rgba(240, 180, 76, 0.24);
+  background: rgba(255, 247, 219, 0.9);
 }
 
 .sample-copy strong,
@@ -544,6 +629,19 @@ const hideBrokenImage = (event) => {
 .stage-placeholder {
   padding: 24px;
   font-size: 1rem;
+}
+
+.stage-loading {
+  left: 20px;
+  bottom: 20px;
+  min-height: 34px;
+  padding: 0 14px;
+}
+
+.stage-loading.is-failed {
+  color: #9a6818;
+  border-color: rgba(240, 180, 76, 0.24);
+  background: rgba(255, 247, 219, 0.92);
 }
 
 .detection-box {
@@ -626,6 +724,12 @@ const hideBrokenImage = (event) => {
   }
   50% {
     box-shadow: 0 0 0 8px rgba(57, 169, 125, 0);
+  }
+}
+
+@keyframes image-spin {
+  to {
+    transform: rotate(360deg);
   }
 }
 

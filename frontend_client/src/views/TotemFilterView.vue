@@ -14,7 +14,6 @@
           <span class="data-chip">暗号稳定性</span>
         </div>
       </div>
-      <button class="primary-btn" @click="$router.push('/task5_verdict')">进入最终定案</button>
     </div>
 
     <div class="analysis-grid">
@@ -64,7 +63,6 @@
               当笔记本、胸牌、玩具等公共物品被剔除后，Person3、Person7、Person9、Person10、Person12、Person17、Person32 与 Person38 依然稳定围绕同一物证收敛，
               这使得黄色提袋成为进入最终社交隔离验证的最强候选信号。
             </p>
-            <button class="primary-btn" @click="goVerdict">送入社交隔离验证</button>
           </div>
         </div>
       </div>
@@ -73,7 +71,6 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router'
 import { useDashboardStore } from '../store/dashboard'
 import TotemEliminationPanel from '../components/targeting/TotemEliminationPanel.vue'
 import TotemBarChart from '../components/targeting/TotemBarChart.vue'
@@ -81,12 +78,6 @@ import TotemSankeyTunnel from '../components/targeting/TotemSankeyTunnel.vue'
 import NetworkBeforeAfter from '../components/process/NetworkBeforeAfter.vue'
 
 const store = useDashboardStore()
-const router = useRouter()
-
-const goVerdict = () => {
-  store.isFourthLayerActive = false
-  router.push('/task5_verdict')
-}
 </script>
 
 <style scoped>

@@ -14,7 +14,6 @@
           <span class="data-chip">真值回灌</span>
         </div>
       </div>
-      <button class="ghost-btn" @click="$router.push('/task3_clustering')">查看聚类层</button>
     </div>
 
     <div class="analysis-grid">

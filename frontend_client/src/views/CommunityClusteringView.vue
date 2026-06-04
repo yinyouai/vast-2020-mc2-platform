@@ -14,7 +14,6 @@
           <span class="data-chip">异常共现</span>
         </div>
       </div>
-      <button class="primary-btn" @click="$router.push('/task4_totem')">进入暗号过滤</button>
     </div>
 
     <div class="analysis-grid">
@@ -34,6 +33,29 @@
         <p>这一层先找出哪些物品有“形成小团体”的潜质，下一层再通过覆盖率和共享次数进一步排除公共物品。</p>
       </article>
     </div>
+
+    <section class="panel cluster-signal-board">
+      <div class="panel-header">
+        <div>
+          <h4 class="panel-title">聚类结构判读</h4>
+          <p class="panel-subtitle">从矩阵形态判断哪些线索值得进入下一层。</p>
+        </div>
+        <span class="data-chip">4 个判断维度</span>
+      </div>
+
+      <div class="signal-grid">
+        <article v-for="signal in clusterSignals" :key="signal.label" class="signal-card">
+          <span>{{ signal.label }}</span>
+          <strong>{{ signal.value }}</strong>
+          <small>{{ signal.hint }}</small>
+        </article>
+      </div>
+
+      <div class="cluster-verdict">
+        <span>当前结论</span>
+        <strong>黄色提袋不是覆盖最广的物品，但它最能把核心小团体从背景人群中切出来。</strong>
+      </div>
+    </section>
 
     <div class="cluster-layout">
       <ClusterHeatmap />
@@ -68,6 +90,13 @@
 
 <script setup>
 import ClusterHeatmap from '../components/targeting/ClusterHeatmap.vue'
+
+const clusterSignals = [
+  { label: '覆盖范围', value: '窄而集中', hint: '比大面积公共物品更有判别力' },
+  { label: '局部密度', value: '核心块高亮', hint: '少数人之间重复共现' },
+  { label: '噪声排除', value: '公共物品外扩', hint: '胸牌、笔记本更像背景' },
+  { label: '下一步', value: '送入暗号过滤', hint: '验证是否稳定共享' }
+]
 </script>
 
 <style scoped>
@@ -76,6 +105,58 @@ import ClusterHeatmap from '../components/targeting/ClusterHeatmap.vue'
   grid-template-columns: minmax(0, 1.55fr) minmax(300px, 0.75fr);
   gap: 18px;
   min-height: 620px;
+}
+
+.cluster-signal-board {
+  padding: clamp(20px, 2.4vw, 30px);
+}
+
+.signal-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.signal-card {
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.82);
+}
+
+.signal-card span,
+.cluster-verdict span {
+  display: block;
+  color: var(--subtle);
+  font-size: 0.76rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.signal-card strong {
+  display: block;
+  margin: 10px 0 6px;
+  font-size: 1.12rem;
+}
+
+.signal-card small {
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.cluster-verdict {
+  margin-top: 14px;
+  padding: 16px;
+  border: 1px solid rgba(240, 180, 76, 0.3);
+  border-radius: var(--radius);
+  background: rgba(240, 180, 76, 0.09);
+}
+
+.cluster-verdict strong {
+  display: block;
+  margin-top: 8px;
+  line-height: 1.55;
 }
 
 .insight-panel {
@@ -118,7 +199,8 @@ import ClusterHeatmap from '../components/targeting/ClusterHeatmap.vue'
 }
 
 @media (max-width: 1040px) {
-  .cluster-layout {
+  .cluster-layout,
+  .signal-grid {
     grid-template-columns: 1fr;
   }
 }

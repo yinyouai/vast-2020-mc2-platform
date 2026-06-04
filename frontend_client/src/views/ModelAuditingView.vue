@@ -14,7 +14,6 @@
           <span class="data-chip">模型可信度边界</span>
         </div>
       </div>
-      <button class="primary-btn" @click="$router.push('/task2_correction')">进入人工复核</button>
     </div>
 
     <div class="analysis-grid">
