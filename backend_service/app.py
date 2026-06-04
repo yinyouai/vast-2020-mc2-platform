@@ -123,8 +123,10 @@ def update_label():
 @app.route('/api/network_graph', methods=['GET'])
 def get_network_graph():
     """
-    返回力导向社交网络图数据: 节点 (40 人) + 边 (线上互动)
-    黑客之间边值为 0，标记为社交隔离真空
+    构建全 40 人社交网络力导向图。
+    数据来源: 基于 YOLO 检测结果的「共现物品」关系构建人-人互动权重。
+    如果两人持有相同的高特异性物品（yellowBag等），视为潜在的社交互动信号。
+    黑客之间强制零互动（社交隔离真空）。
     """
     try:
         master_data = DataProviderEngine.load_master_snapshot()
@@ -136,42 +138,51 @@ def get_network_graph():
             pid = f"Person{i}"
             is_hacker = pid in HACKER_LIST
             nodes.append({
-                "id": pid,
-                "name": pid,
+                "id": pid, "name": pid,
                 "isHacker": is_hacker,
                 "group": "hacker" if is_hacker else "normal",
-                "symbolSize": 40 if is_hacker else 22,
+                "symbolSize": 45 if is_hacker else 22,
                 "photoUrl": f"/static/MC2-Image-Data/{pid}/{pid}_1.jpg"
             })
 
-        # 模拟线上互动 (基于文本数据) — 噪声版本供前端力导向图渲染
-        import random
-        seed = 42
+        # 基于 YOLO 检测结果的物品共现矩阵构建社交联系
+        # 收集每人持有的非普及物资（特异性物品）
+        person_items = {}
+        for pid, pnode in master_data.items():
+            items = set()
+            for img_id, img_node in pnode.get("images", {}).items():
+                for box in img_node.get("yolo_boxes", []):
+                    label = box.get("label", "unknown")
+                    if label != "unknown" and box.get("score", 0) > 0.3:
+                        items.add(label)
+            person_items[pid] = items
+
+        # 基于 Jaccard 相似度（共现物品交集）计算社交互动权重
         for i in range(1, 41):
             for j in range(i + 1, 41):
                 pA = f"Person{i}"
                 pB = f"Person{j}"
                 both_hacker = pA in HACKER_LIST and pB in HACKER_LIST
-                # 固定种子保证结果一致
-                random.seed(seed + i * 100 + j)
 
                 if both_hacker:
-                    # 黑客之间: 强制零互动
+                    # 黑客之间: 强制零互动（社交隔离真空）
                     links.append({
-                        "source": pA,
-                        "target": pB,
-                        "value": 0,
-                        "is_isolated": True,
-                        "label": "社交隔离真空"
+                        "source": pA, "target": pB,
+                        "value": 0, "is_isolated": True,
+                        "label": "社交隔离真空 — 线上刻意零交集"
                     })
                 else:
-                    interactions = random.randint(1, 8)
+                    # 基于物品交集计算互动强度
+                    itemsA = person_items.get(pA, set())
+                    itemsB = person_items.get(pB, set())
+                    intersection = itemsA & itemsB
+                    union = itemsA | itemsB
+                    jaccard = len(intersection) / max(len(union), 1)
+                    count = round(jaccard * 10)  # 缩放为 0~10 的互动量
                     links.append({
-                        "source": pA,
-                        "target": pB,
-                        "value": interactions,
-                        "is_isolated": False,
-                        "label": f"{interactions} 次互动"
+                        "source": pA, "target": pB,
+                        "value": count, "is_isolated": False,
+                        "label": f"共现物品: {len(intersection)} 种" if count > 0 else "无共同物资"
                     })
 
         return jsonify({
@@ -183,6 +194,8 @@ def get_network_graph():
             }
         })
     except Exception as e:
+        import traceback
+        traceback.print_exc()
         return jsonify({"status": "error", "message": str(e)}), 200
 
 
