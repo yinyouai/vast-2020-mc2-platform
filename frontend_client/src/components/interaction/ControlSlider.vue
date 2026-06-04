@@ -27,6 +27,9 @@ const store = useDashboardStore()
 
 <style scoped>
 .threshold-panel {
-  box-shadow: none;
+  background:
+    linear-gradient(90deg, rgba(47, 125, 246, 0.08), rgba(53, 181, 166, 0.06)),
+    rgba(255, 255, 255, 0.92);
+  box-shadow: var(--shadow-soft);
 }
 </style>

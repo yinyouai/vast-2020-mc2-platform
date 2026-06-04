@@ -90,6 +90,13 @@
             {{ store.isLoading ? '正在同步分析数据' : '分析数据已同步' }}
           </span>
           <span class="threshold-chip">置信阈值 {{ store.scoreThreshold.toFixed(2) }}</span>
+          <div class="stage-progress" aria-label="分析层进度">
+            <span
+              v-for="item in navItems"
+              :key="item.to"
+              :class="['stage-progress__dot', Number(item.index) <= activeLayer ? 'is-past' : 'is-next', route.path === item.to ? 'is-current' : '']"
+            ></span>
+          </div>
         </div>
       </header>
 
@@ -105,7 +112,7 @@
         </router-link>
       </nav>
 
-      <main class="viewport-container">
+      <main ref="viewportRef" class="viewport-container">
         <router-view v-slot="{ Component, route: viewRoute }">
           <transition name="page-fade" mode="out-in">
             <component :is="Component" :key="viewRoute.path" class="page-layer" />
@@ -117,12 +124,16 @@
 </template>
 
 <script setup>
-import { computed, onMounted } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useDashboardStore } from './store/dashboard'
 
 const store = useDashboardStore()
 const route = useRoute()
+const viewportRef = ref(null)
+let revealObserver
+let mutationObserver
+let revealFrame = 0
 
 const navItems = [
   { index: '01', to: '/task1_auditing', title: '模型审计', caption: '识别不确定性与误报来源' },
@@ -141,8 +152,101 @@ const totemLabel = computed(() => {
   return map[store.activeTotem] || store.activeTotem
 })
 
+const revealSelector = [
+  '.page-intro',
+  '.analysis-card',
+  '.panel',
+  '.metric-card',
+  '.cluster-layout',
+  '.totem-layout',
+  '.forensics-layout',
+  '.workbench-sidebar > *',
+  '.sample-dot',
+  '.compare-card',
+  '.case-card',
+  '.network-card'
+].join(',')
+
+const prefersReducedMotion = () =>
+  window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+
+const observeRevealTargets = () => {
+  const root = viewportRef.value
+  if (!root) return
+
+  const nodes = Array.from(root.querySelectorAll(revealSelector))
+  nodes.forEach((node, index) => {
+    if (node.dataset.revealObserved === 'true') return
+
+    node.dataset.revealObserved = 'true'
+    node.classList.add('reveal')
+    node.style.setProperty('--reveal-delay', `${Math.min((index % 7) * 72, 432)}ms`)
+
+    if (prefersReducedMotion() || !revealObserver) {
+      node.classList.add('is-visible')
+      return
+    }
+
+    revealObserver.observe(node)
+  })
+}
+
+const queueRevealObservation = () => {
+  window.cancelAnimationFrame(revealFrame)
+  revealFrame = window.requestAnimationFrame(observeRevealTargets)
+}
+
+const setupRevealObserver = () => {
+  const root = viewportRef.value
+  if (!root) return
+
+  if (!('IntersectionObserver' in window)) {
+    queueRevealObservation()
+    return
+  }
+
+  revealObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return
+        entry.target.classList.add('is-visible')
+        revealObserver?.unobserve(entry.target)
+      })
+    },
+    {
+      root,
+      threshold: 0.16,
+      rootMargin: '0px 0px -12% 0px'
+    }
+  )
+
+  mutationObserver = new MutationObserver(queueRevealObservation)
+  mutationObserver.observe(root, { childList: true, subtree: true })
+  queueRevealObservation()
+}
+
 onMounted(() => {
   store.fetchModelEvaluation()
   store.fetchHeatmapMatrix()
+  setupRevealObserver()
+})
+
+watch(
+  () => route.path,
+  () => {
+    nextTick(() => {
+      viewportRef.value?.scrollTo({
+        top: 0,
+        behavior: prefersReducedMotion() ? 'auto' : 'smooth'
+      })
+      window.setTimeout(queueRevealObservation, 260)
+    })
+  }
+)
+
+onBeforeUnmount(() => {
+  window.cancelAnimationFrame(revealFrame)
+  revealObserver?.disconnect()
+  mutationObserver?.disconnect()
 })
 </script>

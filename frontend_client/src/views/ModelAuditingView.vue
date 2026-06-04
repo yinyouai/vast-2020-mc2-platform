@@ -35,6 +35,8 @@
       </article>
     </div>
 
+    <ModelAuditWorkbench />
+
     <div class="panel">
       <div class="panel-header">
         <div>
@@ -101,6 +103,7 @@ import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import * as echarts from 'echarts'
 import { useDashboardStore } from '../store/dashboard'
 import { animationTiming, buildAxis, buildTooltip, chartPalette, splitLine } from '../utils/chartTheme'
+import ModelAuditWorkbench from '../components/process/ModelAuditWorkbench.vue'
 
 const store = useDashboardStore()
 const radarRef = ref(null)

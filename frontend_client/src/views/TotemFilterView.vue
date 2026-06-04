@@ -35,6 +35,8 @@
       </article>
     </div>
 
+    <NetworkBeforeAfter />
+
     <div class="totem-layout">
       <TotemEliminationPanel />
       <div class="totem-charts">
@@ -76,6 +78,7 @@ import { useDashboardStore } from '../store/dashboard'
 import TotemEliminationPanel from '../components/targeting/TotemEliminationPanel.vue'
 import TotemBarChart from '../components/targeting/TotemBarChart.vue'
 import TotemSankeyTunnel from '../components/targeting/TotemSankeyTunnel.vue'
+import NetworkBeforeAfter from '../components/process/NetworkBeforeAfter.vue'
 
 const store = useDashboardStore()
 const router = useRouter()

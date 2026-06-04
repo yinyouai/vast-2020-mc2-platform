@@ -35,6 +35,8 @@
       </article>
     </div>
 
+    <ManualReviewComparison />
+
     <ControlSlider />
 
     <div class="exploration-workspace-grid">
@@ -48,6 +50,7 @@
 import ControlSlider from '../components/interaction/ControlSlider.vue'
 import ConflictPriorityQueue from '../components/interaction/ConflictPriorityQueue.vue'
 import CorrectionCanvas from '../components/interaction/CorrectionCanvas.vue'
+import ManualReviewComparison from '../components/process/ManualReviewComparison.vue'
 </script>
 
 <style scoped>
