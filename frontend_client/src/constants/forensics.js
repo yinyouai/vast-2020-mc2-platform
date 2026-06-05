@@ -28,49 +28,49 @@ export const NORMAL_REFERENCE_LIST = [
 
 /** Clustering method options */
 export const CLUSTERING_METHODS = [
-  { key: 'ward', label: 'Ward Hierarchical', desc: 'Minimize intra-cluster variance, compact cluster blocks' },
-  { key: 'complete', label: 'Complete Linkage', desc: 'Maximum inter-cluster distance, robust to outliers' },
-  { key: 'average', label: 'Average Linkage', desc: 'Mean inter-cluster distance, balanced results' },
-  { key: 'kmeans', label: 'K-Means', desc: 'Centroid-based partition clustering' },
-  { key: 'dbscan', label: 'DBSCAN', desc: 'Density-based clustering, auto-identifies noise' }
+  { key: 'ward', label: 'Ward 层次聚类', desc: '最小化簇内方差，紧凑聚类块' },
+  { key: 'complete', label: '完全链接', desc: '最大化簇间距离，对离群值鲁棒' },
+  { key: 'average', label: '平均链接', desc: '簇间平均距离，平衡结果' },
+  { key: 'kmeans', label: 'K-Means', desc: '基于质心的划分聚类' },
+  { key: 'dbscan', label: 'DBSCAN', desc: '基于密度的聚类，自动识别噪声' }
 ]
 
 /** Item metadata (name, coverage rate, secret totem flag) */
 export const ITEM_METADATA = {
-  yellowBag:       { cnName: 'Yellow Handoff Bag Totem', isSecretTotem: true,  coverage: 20, color: '#BF5AF2' },
-  lavenderDie:     { cnName: 'Lavender Loose Dice',      isSecretTotem: false, coverage: 60, color: '#9370DB' },
-  hairClip:        { cnName: 'Generic Hair Clip',        isSecretTotem: false, coverage: 47, color: '#FFB800' },
-  redWhistle:      { cnName: 'High-Risk Red Whistle',    isSecretTotem: false, coverage: 45, color: '#FF3333' },
-  pumpkinNotes:    { cnName: 'Pumpkin Sticky Notes',     isSecretTotem: false, coverage: 35, color: '#FF8C00' },
-  eyeball:         { cnName: 'Eyeball Toy',              isSecretTotem: false, coverage: 30, color: '#00BFFF' },
-  sign:            { cnName: 'Venue Marker Signage',     isSecretTotem: false, coverage: 60, color: '#6495ED' },
-  paperPlate:      { cnName: 'Paper Plate',              isSecretTotem: false, coverage: 55, color: '#A0A0A0' }
+  yellowBag:       { cnName: '黄色接头提袋图腾', isSecretTotem: true,  coverage: 20, color: '#BF5AF2' },
+  lavenderDie:     { cnName: '薰衣草散装骰子',   isSecretTotem: false, coverage: 60, color: '#9370DB' },
+  hairClip:        { cnName: '通用发夹',          isSecretTotem: false, coverage: 47, color: '#FFB800' },
+  redWhistle:      { cnName: '泛滥红哨子',        isSecretTotem: false, coverage: 45, color: '#FF3333' },
+  pumpkinNotes:    { cnName: '南瓜便利贴',        isSecretTotem: false, coverage: 35, color: '#FF8C00' },
+  eyeball:         { cnName: '眼球玩具',          isSecretTotem: false, coverage: 30, color: '#00BFFF' },
+  sign:            { cnName: '会场标识牌',        isSecretTotem: false, coverage: 60, color: '#6495ED' },
+  paperPlate:      { cnName: '纸盘',              isSecretTotem: false, coverage: 55, color: '#A0A0A0' }
 }
 
 /** Excludable mass-distributed items (Level 4 funnel) */
 export const EXCLUDABLE_ITEMS = [
-  { id: 'lavenderDie', cnName: 'Lavender Loose Dice',      coverage: 60 },
-  { id: 'sign',         cnName: 'Venue Marker Signage',     coverage: 60 },
-  { id: 'hairClip',     cnName: 'Hair Clip (Universal)',    coverage: 47 },
-  { id: 'redWhistle',   cnName: 'Red Whistle (Flooded)',    coverage: 45 }
+  { id: 'lavenderDie', cnName: '薰衣草散装骰子',   coverage: 60 },
+  { id: 'sign',         cnName: '会场标识牌',         coverage: 60 },
+  { id: 'hairClip',     cnName: '通用发夹',           coverage: 47 },
+  { id: 'redWhistle',   cnName: '泛滥红哨子',         coverage: 45 }
 ]
 
 /** Level 5 evidence chain status descriptions */
 export const EVIDENCE_CHAINS = [
   {
     key: 'multimodal',
-    title: 'Chain I: Multi-Modal Image / Ground-Truth Calibration',
-    desc: 'Yellow carry-bag totem image truth and post intent 100% interlock closed-loop.'
+    title: '物证链一：多模态图像与真值校准',
+    desc: '黄色提袋图腾图像真值与发帖意图 100% 互锁闭环。'
   },
   {
     key: 'totem',
-    title: 'Chain II: Universal Material Reverse Elimination & Specificity',
-    desc: 'After excising background noise, yellow bag asset holding is 100% core cell monopoly.'
+    title: '物证链二：普及物资反向排除与特异性凝聚',
+    desc: '切除背景噪声后，黄色提袋持有率为核心组织 100% 垄断。'
   },
   {
     key: 'isolation',
-    title: 'Chain III: Online Network Extreme Interaction Isolation Audit',
-    desc: 'Online zero-interaction, offline feature co-occurrence. Counter-surveillance confirmed.'
+    title: '物证链三：线上网络极致互动隔离审计',
+    desc: '线上零互动、线下特征共现。反侦察行为已确认。'
   }
 ]
 

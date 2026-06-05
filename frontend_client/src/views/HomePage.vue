@@ -27,36 +27,36 @@
 
         <!-- Title -->
         <h1 class="hero-title">
-          Digital Forensics
-          <span class="hl">Visual Analytics</span>
-          Platform
+          数字取证
+          <span class="hl">可视分析</span>
+          平台
         </h1>
         <p class="hero-desc">
-          Multi-modal panoramic data investigation with human-in-the-loop interactive visual analytics.
-          From <strong>40</strong> conference attendees, precisely identify an
-          <strong class="text-accent">8-person</strong> covert hacker cell.
+          人在回路的多模态全景数据调查与交互式可视化分析。
+          从 <strong>40</strong> 名参会者中，精准识别
+          <strong class="text-accent">8 人</strong> 秘密黑客组织。
         </p>
 
         <!-- Stats row -->
         <div class="stats-row">
           <div class="stat-item">
             <span class="stat-num">40</span>
-            <span class="stat-label">Suspects</span>
+            <span class="stat-label">嫌疑人</span>
           </div>
           <div class="stat-divider"></div>
           <div class="stat-item">
             <span class="stat-num">7</span>
-            <span class="stat-label">Materials</span>
+            <span class="stat-label">物资种类</span>
           </div>
           <div class="stat-divider"></div>
           <div class="stat-item">
             <span class="stat-num">5</span>
-            <span class="stat-label">Analysis Layers</span>
+            <span class="stat-label">分析层级</span>
           </div>
           <div class="stat-divider"></div>
           <div class="stat-item accent">
             <span class="stat-num">8</span>
-            <span class="stat-label">Confirmed</span>
+            <span class="stat-label">确认锁定</span>
           </div>
         </div>
 
@@ -120,11 +120,11 @@ const photos = reactive(
 function onImgErr(e) { e.target.style.display = 'none' }
 
 const tasks = [
-  { id: 1, num: '01', title: 'Model Uncertainty Audit', sub: 'YOLO v2 robustness · False positive ablation', color: '#6366F1', bg: 'rgba(99,102,241,0.1)', iconPath: '<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>', path: '/task1_auditing' },
-  { id: 2, num: '02', title: 'Multi-Modal Ground Truth Calibration', sub: 'Human-in-the-loop · Image-text cross validation', color: '#06B6D4', bg: 'rgba(6,182,212,0.1)', iconPath: '<path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>', path: '/task2_correction' },
-  { id: 3, num: '03', title: 'Community Feature Clustering', sub: 'Ward hierarchical · Person-item matrix reorder', color: '#F59E0B', bg: 'rgba(245,158,11,0.1)', iconPath: '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>', path: '/task3_clustering' },
-  { id: 4, num: '04', title: 'Secret Totem Elimination', sub: 'Noise clipping · Force-directed network · Sankey flow', color: '#8B5CF6', bg: 'rgba(139,92,246,0.1)', iconPath: '<polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/><line x1="12" y1="22" x2="12" y2="15.5"/><polyline points="22 8.5 12 15.5 2 8.5"/>', path: '/task4_totem' },
-  { id: 5, num: '05', title: 'Hacker Cell Final Verdict', sub: 'Social network isolation · Evidence chain convergence', color: '#EF4444', bg: 'rgba(239,68,68,0.1)', iconPath: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/>', path: '/task5_verdict' }
+  { id: 1, num: '01', title: '算法不确定性审计', sub: 'YOLO v2 鲁棒性 · 假阳性消融分析', color: '#6366F1', bg: 'rgba(99,102,241,0.1)', iconPath: '<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>', path: '/task1_auditing' },
+  { id: 2, num: '02', title: '多模态语义真值校准', sub: '人在回路 · 图文交叉验证', color: '#06B6D4', bg: 'rgba(6,182,212,0.1)', iconPath: '<path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>', path: '/task2_correction' },
+  { id: 3, num: '03', title: '嫌疑社群特征聚类', sub: 'Ward 层次聚类 · 人-物矩阵重排', color: '#F59E0B', bg: 'rgba(245,158,11,0.1)', iconPath: '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>', path: '/task3_clustering' },
+  { id: 4, num: '04', title: '秘密图腾反向排除', sub: '噪声削波 · 力导向图 · 桑基流图', color: '#8B5CF6', bg: 'rgba(139,92,246,0.1)', iconPath: '<polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/><line x1="12" y1="22" x2="12" y2="15.5"/><polyline points="22 8.5 12 15.5 2 8.5"/>', path: '/task4_totem' },
+  { id: 5, num: '05', title: '黑客组织终极定案', sub: '社交网络隔离 · 证据链收敛', color: '#EF4444', bg: 'rgba(239,68,68,0.1)', iconPath: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/>', path: '/task5_verdict' }
 ]
 </script>
 

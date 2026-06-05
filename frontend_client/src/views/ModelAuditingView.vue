@@ -7,7 +7,7 @@
       <div class="tbn-links">
         <router-link v-for="t in tabs" :key="t.path" :to="t.path" class="tbn-link" :class="{active:$route.path===t.path}">{{t.label}}</router-link>
       </div>
-      <div class="tbn-right"><span class="tbn-level">Level 01 · Model Uncertainty Audit</span></div>
+      <div class="tbn-right"><span class="tbn-level">层级一 · 算法不确定性审计</span></div>
     </div>
 
     <div class="page-scroll">
@@ -15,24 +15,24 @@
       <div class="hero-card">
         <span class="hc-num">01</span>
         <div>
-          <h2>Algorithmic Model Uncertainty Multi-Feature Audit</h2>
-          <p>Evaluate YOLO v2 multi-label object detection robustness. Adjust the confidence threshold slider to dynamically observe false-positive noise ablation and multi-dimensional performance convergence across all 40 suspects.</p>
+          <h2>算法模型不确定性多特征审计大厅</h2>
+          <p>评估 YOLO v2 多标签目标检测鲁棒性。调整置信度阈值滑块，动态观察 40 名嫌疑人的假阳性噪声消融与多维性能收敛。</p>
         </div>
       </div>
 
       <!-- KPI Row -->
       <div class="kpi-row">
-        <div class="kpi green"><span>Accuracy</span><b>{{ (62+store.scoreThreshold*22).toFixed(0) }}%</b></div>
-        <div class="kpi blue"><span>F1-Score</span><b>{{ (65+store.scoreThreshold*18).toFixed(0) }}%</b></div>
-        <div class="kpi red"><span>FP Noise Rate</span><b>{{ (48.2-store.scoreThreshold*38).toFixed(0) }}%</b></div>
-        <div class="kpi purple"><span>Precision</span><b>{{ (58+store.scoreThreshold*25).toFixed(0) }}%</b></div>
-        <div class="kpi amber"><span>Recall</span><b>{{ (70+store.scoreThreshold*12).toFixed(0) }}%</b></div>
-        <div class="kpi emerald"><span>Threshold</span><b>{{ store.scoreThreshold }}</b></div>
+        <div class="kpi green"><span>准确率</span><b>{{ (62+store.scoreThreshold*22).toFixed(0) }}%</b></div>
+        <div class="kpi blue"><span>F1 分数</span><b>{{ (65+store.scoreThreshold*18).toFixed(0) }}%</b></div>
+        <div class="kpi red"><span>假阳性率</span><b>{{ (48.2-store.scoreThreshold*38).toFixed(0) }}%</b></div>
+        <div class="kpi purple"><span>精确率</span><b>{{ (58+store.scoreThreshold*25).toFixed(0) }}%</b></div>
+        <div class="kpi amber"><span>召回率</span><b>{{ (70+store.scoreThreshold*12).toFixed(0) }}%</b></div>
+        <div class="kpi emerald"><span>阈值</span><b>{{ store.scoreThreshold }}</b></div>
       </div>
 
       <!-- Slider -->
       <div class="clean-card slider-bar">
-        <span class="slider-label">Confidence Threshold Noise Gate</span>
+        <span class="slider-label">置信度阈值噪声门控</span>
         <input type="range" min="0.05" max="0.90" step="0.05" v-model.number="store.scoreThreshold" class="modern-slider" />
         <div class="preset-group">
           <button v-for="p in presets" :key="p.v" :class="{on:Math.abs(store.scoreThreshold-p.v)<0.01}" @click="store.setScoreThreshold(p.v)">{{p.l}}</button>
@@ -42,11 +42,11 @@
       <!-- Top Charts Row -->
       <div class="charts-row-2">
         <div class="clean-card">
-          <div class="card-header"><h3>Multi-Dimensional Radar — Model Performance</h3><span class="label-emerald">Live</span></div>
+          <div class="card-header"><h3>多维雷达图 — 模型性能评估</h3><span class="label-emerald">实时</span></div>
           <div class="ch-lg" ref="radarRef"></div>
         </div>
         <div class="clean-card">
-          <div class="card-header"><h3>False Positive Noise Ablation Curve</h3><span class="label-rose">Noise</span></div>
+          <div class="card-header"><h3>假阳性噪声消融曲线</h3><span class="label-rose">噪声分析</span></div>
           <div class="ch-lg" ref="lineRef"></div>
         </div>
       </div>
@@ -54,23 +54,23 @@
       <!-- Boxplot + Density / ConfusionMatrix + Photos -->
       <div class="charts-row-2">
         <div class="clean-card">
-          <div class="card-header"><h3>YOLO Confidence Boxplot by Item Category</h3></div>
+          <div class="card-header"><h3>YOLO 置信度箱线图（按物资类别）</h3></div>
           <div class="ch-lg" ref="boxRef"></div>
         </div>
         <div class="clean-card">
-          <div class="card-header"><h3>Detection Spatial Kernel Density Distribution</h3></div>
+          <div class="card-header"><h3>检测空间核密度分布</h3></div>
           <div class="ch-lg" ref="densityRef"></div>
         </div>
       </div>
 
       <div class="charts-row-2">
         <div class="clean-card">
-          <div class="card-header"><h3>Cross-Modal Confusion Matrix (Image Detection vs Text Ground Truth)</h3></div>
+          <div class="card-header"><h3>跨模态混淆矩阵（图像检测 vs 文本真值）</h3></div>
           <div class="ch-md" ref="matrixRef"></div>
         </div>
         <div class="clean-card">
-          <div class="card-header"><h3>40-Person Image Classification Array</h3><span class="label-violet">Clickable</span></div>
-          <p class="hint">Purple border = core hacker cell · Green = high confidence · Red = low confidence noise · Click to navigate</p>
+          <div class="card-header"><h3>40 人图像分类阵列</h3><span class="label-violet">可点击</span></div>
+          <p class="hint">紫色边框 = 核心黑客 · 绿色 = 高置信度 · 红色 = 低置信度噪声 · 点击可导航</p>
           <div class="photo-grid">
             <div v-for="i in 40" :key="i" :class="photoCls(i)" @click="gotoPerson('Person'+i)">
               <img :src="`http://localhost:5000/static/MC2-Image-Data/Person${i}/Person${i}_1.jpg`" loading="lazy" @error="onImgErr" />
@@ -83,10 +83,10 @@
 
       <!-- Report -->
       <div class="clean-card report-card">
-        <div class="card-header"><h3>Chief Audit Analyst — Model Uncertainty Assessment Verdict</h3></div>
+        <div class="card-header"><h3>首席审计分析师 — 模型不确定性评估意见</h3></div>
         <div class="report-cols">
-          <div><h4>Machine Algorithm Blind-Spot False Alarm Analysis</h4><p>At low threshold (≤0.25), classification boundaries are extremely blurred. The algorithm is prone to massive false positives due to lighting reflection and rectangular contour features — misclassifying innocent attendees' (e.g. <b>Person27</b>) ordinary assets as high-risk items. Noise proliferation validates the uncertainty hazards inherent in CV model bias within the challenge dataset.</p></div>
-          <div><h4>Noise Waveform Truncation & Ground-Truth Foreground</h4><p>Observing the ablation curve, as the filtering threshold progressively increases, the field-wide FPR exhibits a steep inverse-collapse ablation trend. The multi-dimensional radar's control range converges toward a purified high-confidence viewport, minimizing model uncertainty and providing the cleanest feature pre-space for Level 2 human-in-the-loop data correction.</p></div>
+          <div><h4>机器算法盲区误报分析</h4><p>在低阈值（≤0.25）下，分类边界极度模糊。算法因光线反射和矩形轮廓特征，极易产生大量假阳性误报——将无辜参会者（如 <b>Person27</b>）的常规资产误判为高危物品。噪声泛滥验证了赛题数据集中 CV 模型偏差固有的不确定性隐患。</p></div>
+          <div><h4>噪声波形截断与真值前景提取</h4><p>观察消融曲线，随着过滤阈值逐步提升，全字段 FPR 呈现陡峭的反向坍塌消融趋势。多维雷达的控制范围向纯化后的高置信度视口收敛，最大限度降低模型不确定性，为层级二人在回路数据校正提供最干净的特征预空间。</p></div>
         </div>
       </div>
     </div>
@@ -104,8 +104,8 @@ const store=useDashboardStore(), router=useRouter(), hackerSet=new Set(HACKER_LI
 const radarRef=ref(null),lineRef=ref(null),boxRef=ref(null),densityRef=ref(null),matrixRef=ref(null)
 let charts=[]
 
-const presets=[{l:'Low 0.25',v:0.25},{l:'Mid 0.50',v:0.50},{l:'High 0.85',v:0.85}]
-const tabs=[{label:'Model Audit',path:'/task1_auditing'},{label:'Ground-Truth Calibration',path:'/task2_correction'},{label:'Community Clustering',path:'/task3_clustering'},{label:'Totem Elimination',path:'/task4_totem'},{label:'Final Verdict',path:'/task5_verdict'}]
+const presets=[{l:'低 0.25',v:0.25},{l:'中 0.50',v:0.50},{l:'高 0.85',v:0.85}]
+const tabs=[{label:'模型审计',path:'/task1_auditing'},{label:'真值校准',path:'/task2_correction'},{label:'社群聚类',path:'/task3_clustering'},{label:'图腾排除',path:'/task4_totem'},{label:'最终定案',path:'/task5_verdict'}]
 
 function makeDarkTheme(){
   return {
@@ -121,23 +121,23 @@ function renderAll(){
   charts.forEach(c=>c?.dispose());charts=[];if(!radarRef.value)return
   const t=store.scoreThreshold,dk=makeDarkTheme()
 
-  // 1. Radar — enhanced with dual data
+  // 1. Radar
   const r=echarts.init(radarRef.value);charts.push(r)
-  r.setOption({tooltip:{},radar:{center:['50%','55%'],radius:'68%',indicator:[{name:'Accuracy',max:100},{name:'F1-Score',max:100},{name:'Recall',max:100},{name:'Precision',max:100}],splitArea:{show:true,areaStyle:{color:['#f9fafb','#f3f4f6']}},axisName:{color:'#374151',fontSize:12,fontWeight:'bold'}},series:[{type:'radar',data:[{value:[(62+t*22).toFixed(1),(65+t*18).toFixed(1),(70+t*12).toFixed(1),(58+t*25).toFixed(1)],name:'Current',itemStyle:{color:'#10B981'},areaStyle:{color:'rgba(16,185,129,0.12)'},lineStyle:{width:3,color:'#10B981'}},{value:[62,65,70,58],name:'Baseline(t=0)',itemStyle:{color:'#9CA3AF'},areaStyle:{color:'rgba(156,163,175,0.04)'},lineStyle:{width:2,type:'dashed',color:'#9CA3AF'}}]}]})
+  r.setOption({tooltip:{},radar:{center:['50%','55%'],radius:'68%',indicator:[{name:'准确率',max:100},{name:'F1分数',max:100},{name:'召回率',max:100},{name:'精确率',max:100}],splitArea:{show:true,areaStyle:{color:['#f9fafb','#f3f4f6']}},axisName:{color:'#374151',fontSize:12,fontWeight:'bold'}},series:[{type:'radar',data:[{value:[(62+t*22).toFixed(1),(65+t*18).toFixed(1),(70+t*12).toFixed(1),(58+t*25).toFixed(1)],name:'当前',itemStyle:{color:'#10B981'},areaStyle:{color:'rgba(16,185,129,0.12)'},lineStyle:{width:3,color:'#10B981'}},{value:[62,65,70,58],name:'基线(t=0)',itemStyle:{color:'#9CA3AF'},areaStyle:{color:'rgba(156,163,175,0.04)'},lineStyle:{width:2,type:'dashed',color:'#9CA3AF'}}]}]})
 
-  // 2. Line — with confidence band
+  // 2. Line
   const l=echarts.init(lineRef.value);charts.push(l)
   const xa=['0.1','0.2','0.3','0.4','0.5','0.6','0.7','0.8','0.9']
   const ya=xa.map(v=>(48.2-parseFloat(v)*38).toFixed(1))
   const upper=ya.map(v=>(parseFloat(v)+3+Math.random()*2).toFixed(1))
   const lower=ya.map(v=>(parseFloat(v)-3-Math.random()*2).toFixed(1))
-  l.setOption({tooltip:{trigger:'axis'},grid:{left:'6%',right:'4%',top:'10%',bottom:'14%'},xAxis:{type:'category',data:xa,axisLabel:{fontSize:11,color:'#6b7280'},axisLine:{lineStyle:{color:'#d1d5db'}}},yAxis:{type:'value',name:'FPR %',nameTextStyle:{fontSize:12,color:'#374151',fontWeight:'bold'},axisLabel:{fontSize:11,color:'#6b7280'},splitLine:{lineStyle:{color:'#f3f4f6'}}},series:[{name:'FPR',type:'line',data:ya,smooth:true,showSymbol:false,lineStyle:{color:'#EF4444',width:3},areaStyle:{color:new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'rgba(239,68,68,0.08)'},{offset:1,color:'rgba(239,68,68,0)'}])}},{name:'Confidence Band',type:'line',data:upper,smooth:true,showSymbol:false,lineStyle:{color:'transparent',width:0},areaStyle:{color:'rgba(239,68,68,0.06)'},stack:'confidence'},{name:'',type:'line',data:lower,smooth:true,showSymbol:false,lineStyle:{color:'transparent',width:0},areaStyle:{color:'#fff'},stack:'confidence'},{name:'Threshold',type:'line',markLine:{silent:true,symbol:'none',data:[{xAxis:Math.round((t-0.05)/0.85*8),label:{formatter:'τ='+t,color:'#10B981',fontSize:13,fontWeight:'bold'},lineStyle:{color:'#10B981',width:2.5,type:'dashed'}}]},data:[]}]})
+  l.setOption({tooltip:{trigger:'axis'},grid:{left:'6%',right:'4%',top:'10%',bottom:'14%'},xAxis:{type:'category',data:xa,axisLabel:{fontSize:11,color:'#6b7280'},axisLine:{lineStyle:{color:'#d1d5db'}}},yAxis:{type:'value',name:'FPR %',nameTextStyle:{fontSize:12,color:'#374151',fontWeight:'bold'},axisLabel:{fontSize:11,color:'#6b7280'},splitLine:{lineStyle:{color:'#f3f4f6'}}},series:[{name:'FPR',type:'line',data:ya,smooth:true,showSymbol:false,lineStyle:{color:'#EF4444',width:3},areaStyle:{color:new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'rgba(239,68,68,0.08)'},{offset:1,color:'rgba(239,68,68,0)'}])}},{name:'置信带',type:'line',data:upper,smooth:true,showSymbol:false,lineStyle:{color:'transparent',width:0},areaStyle:{color:'rgba(239,68,68,0.06)'},stack:'confidence'},{name:'',type:'line',data:lower,smooth:true,showSymbol:false,lineStyle:{color:'transparent',width:0},areaStyle:{color:'#fff'},stack:'confidence'},{name:'阈值',type:'line',markLine:{silent:true,symbol:'none',data:[{xAxis:Math.round((t-0.05)/0.85*8),label:{formatter:'τ='+t,color:'#10B981',fontSize:13,fontWeight:'bold'},lineStyle:{color:'#10B981',width:2.5,type:'dashed'}}]},data:[]}]})
 
-  // 3. Boxplot — enhanced
+  // 3. Boxplot
   const b=echarts.init(boxRef.value);charts.push(b)
   const st=store.modelEvaluationData&&Object.keys(store.modelEvaluationData).length>0?store.modelEvaluationData:{paperPlate:{min:.27,q1:.35,median:.49,q3:.71,max:.97},lavenderDie:{min:.25,q1:.32,median:.41,q3:.55,max:.91},redWhistle:{min:.25,q1:.31,median:.41,q3:.55,max:.88},pumpkinNotes:{min:.25,q1:.29,median:.35,q3:.44,max:.80},yellowBag:{min:.25,q1:.29,median:.34,q3:.41,max:.79},hairClip:{min:.25,q1:.31,median:.38,q3:.51,max:.89},eyeball:{min:.25,q1:.28,median:.33,q3:.39,max:.81}}
   const cats=Object.keys(st),bd=cats.map(k=>[st[k].min,st[k].q1,st[k].median,st[k].q3,st[k].max])
-  b.setOption({tooltip:{trigger:'item'},grid:{left:'12%',right:'4%',top:'8%',bottom:'16%'},xAxis:{type:'category',data:cats,axisLabel:{rotate:25,fontSize:11,color:'#6b7280'}},yAxis:{type:'value',min:.25,max:1,name:'Confidence Score',nameTextStyle:{fontSize:12,fontWeight:'bold',color:'#374151'},splitLine:{lineStyle:{color:'#f3f4f6'}}},visualMap:{show:false,pieces:[{gt:t,color:'#10B981'}],outOfRange:{color:'#EF4444'}},series:[{type:'boxplot',data:bd,boxWidth:[12,30],itemStyle:{borderColor:'#6b7280',borderWidth:2}}]})
+  b.setOption({tooltip:{trigger:'item'},grid:{left:'12%',right:'4%',top:'8%',bottom:'16%'},xAxis:{type:'category',data:cats,axisLabel:{rotate:25,fontSize:11,color:'#6b7280'}},yAxis:{type:'value',min:.25,max:1,name:'置信度分数',nameTextStyle:{fontSize:12,fontWeight:'bold',color:'#374151'},splitLine:{lineStyle:{color:'#f3f4f6'}}},visualMap:{show:false,pieces:[{gt:t,color:'#10B981'}],outOfRange:{color:'#EF4444'}},series:[{type:'boxplot',data:bd,boxWidth:[12,30],itemStyle:{borderColor:'#6b7280',borderWidth:2}}]})
 
   // 4. Density scatter
   const d=echarts.init(densityRef.value);charts.push(d)
@@ -146,9 +146,9 @@ function renderAll(){
 
   // 5. Confusion matrix heatmap
   const m=echarts.init(matrixRef.value);charts.push(m)
-  const ml=['PumpkinNotes','HairClip','Eyeball','YellowBag','RedWhistle']
+  const ml=['南瓜便签','发夹','眼球','黄色提袋','红哨子']
   const md=[];for(let y=0;y<5;y++)for(let x=0;x<5;x++){let v=0;if(x===y)v=86;else if(x===4&&y===3)v=64;else v=3;md.push([x,y,v])}
-  m.setOption({tooltip:{formatter:p=>`CNN detects <b>${ml[p.value[0]]}</b><br/>NLP anchor says <b>${ml[p.value[1]]}</b><br/>Confusion: ${p.value[2]}%`},grid:{left:'18%',right:'4%',top:'6%',bottom:'14%'},xAxis:{type:'category',data:ml,position:'top',axisLabel:{fontSize:12,color:'#374151',fontWeight:'bold',rotate:15}},yAxis:{type:'category',data:ml,axisLabel:{fontSize:12,color:'#374151',fontWeight:'bold'}},visualMap:{min:0,max:90,show:true,orient:'horizontal',bottom:0,textStyle:{fontSize:11},inRange:{color:['#f9fafb','#D1FAE5','#6EE7B7','#10B981']}},series:[{type:'heatmap',data:md,label:{show:true,fontSize:14,fontWeight:'bold',color:'#374151'},emphasis:{itemStyle:{shadowBlur:10,shadowColor:'rgba(0,0,0,0.1)'}},itemStyle:{borderColor:'#fff',borderWidth:2}}]})
+  m.setOption({tooltip:{formatter:p=>`CNN 检测为 <b>${ml[p.value[0]]}</b><br/>NLP 锚定为 <b>${ml[p.value[1]]}</b><br/>混淆度: ${p.value[2]}%`},grid:{left:'18%',right:'4%',top:'6%',bottom:'14%'},xAxis:{type:'category',data:ml,position:'top',axisLabel:{fontSize:12,color:'#374151',fontWeight:'bold',rotate:15}},yAxis:{type:'category',data:ml,axisLabel:{fontSize:12,color:'#374151',fontWeight:'bold'}},visualMap:{min:0,max:90,show:true,orient:'horizontal',bottom:0,textStyle:{fontSize:11},inRange:{color:['#f9fafb','#D1FAE5','#6EE7B7','#10B981']}},series:[{type:'heatmap',data:md,label:{show:true,fontSize:14,fontWeight:'bold',color:'#374151'},emphasis:{itemStyle:{shadowBlur:10,shadowColor:'rgba(0,0,0,0.1)'}},itemStyle:{borderColor:'#fff',borderWidth:2}}]})
 }
 
 function photoCls(i){const p='Person'+i;if(hackerSet.has(p))return'pi hacker';if(i<=8)return'pi high';return i>25?'pi low':'pi'}

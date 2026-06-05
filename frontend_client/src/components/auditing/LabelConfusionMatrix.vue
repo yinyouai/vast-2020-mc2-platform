@@ -22,7 +22,7 @@
     </div>
     <div class="matrix-legend">
       <span class="legend-item"><span class="lg-block diag"></span> 对角匹配 (86%)</span>
-      <span class="legend-item"><span class="lg-block trap"></span> 高危混淆 (64%) — redWhistle→yellowBag</span>
+      <span class="legend-item"><span class="lg-block trap"></span> 高危混淆 (64%) — 红哨子→黄色提袋</span>
     </div>
   </div>
 </template>

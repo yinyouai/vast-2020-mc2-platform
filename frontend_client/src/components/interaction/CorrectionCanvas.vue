@@ -135,7 +135,7 @@ function renderWorkspace() {
 function drawOverlay(ctx, canvas) {
   ctx.fillStyle = 'rgba(0, 0, 0, 0.6)'
   ctx.font = 'bold 10px monospace'
-  ctx.fillText('SAI VISUAL FORENSICS INTEL · EVIDENCE OVERLAY', 20, 22)
+  ctx.fillText('SAI 可视化取证情报 · 证据覆盖图层', 20, 22)
 
   const b = box.value
   if (store.scoreThreshold <= 0.45) {

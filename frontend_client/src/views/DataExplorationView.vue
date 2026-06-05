@@ -7,18 +7,18 @@
       <div class="tbn-links">
         <router-link v-for="t in tabs" :key="t.path" :to="t.path" class="tbn-link" :class="{active:$route.path===t.path}">{{t.label}}</router-link>
       </div>
-      <div class="tbn-right"><span class="tbn-level">Level 02 · Human-in-the-Loop Calibration</span></div>
+      <div class="tbn-right"><span class="tbn-level">层级二 · 人在回路真值校准</span></div>
     </div>
 
     <div class="page-scroll">
       <div class="hero-card">
         <span class="hc-num">02</span>
-        <div><h2>Human-in-the-Loop · Multi-Modal Evidence Cross-Examination</h2><p>Compare YOLO detection results against post caption ground-truth text, manually correcting machine misclassifications. Current focus: <strong>{{store.selectedPersonId}}</strong></p></div>
+        <div><h2>人在回路 · 多模态证据交叉质证</h2><p>将 YOLO 检测结果与发帖配文真值文本进行比对，手动校正机器误分类。当前聚焦：<strong>{{store.selectedPersonId}}</strong></p></div>
       </div>
 
       <!-- Slider -->
       <div class="clean-card slider-bar">
-        <span class="slider-label">Confidence Gate</span>
+        <span class="slider-label">置信度门控</span>
         <input type="range" min="0.25" max="0.95" step="0.05" :value="store.scoreThreshold" @input="onSlider" class="modern-slider" />
         <div class="preset-group">
           <button v-for="p in presets" :key="p.v" :class="{on:Math.abs(store.scoreThreshold-p.v)<0.01}" @click="store.setScoreThreshold(p.v)">{{p.l}}</button>
@@ -27,10 +27,10 @@
 
       <!-- KPI -->
       <div class="kpi-row">
-        <div class="kpi" :class="isHacker?'red':'green'"><span>Risk Status</span><b>{{isHacker?'⚠ ALERT':'✓ SAFE'}}</b></div>
-        <div class="kpi blue"><span>Selected Suspect</span><b>{{store.selectedPersonId}}</b></div>
-        <div class="kpi purple"><span>Conflict Rate</span><b>{{isHacker?(store.selectedPersonId==='Person3'?'78%':'64%'):'12%'}}</b></div>
-        <div class="kpi emerald"><span>Photo Count</span><b>{{photoCount}}</b></div>
+        <div class="kpi" :class="isHacker?'red':'green'"><span>风险状态</span><b>{{isHacker?'⚠ 高危':'✓ 安全'}}</b></div>
+        <div class="kpi blue"><span>选中嫌疑人</span><b>{{store.selectedPersonId}}</b></div>
+        <div class="kpi purple"><span>冲突率</span><b>{{isHacker?(store.selectedPersonId==='Person3'?'78%':'64%'):'12%'}}</b></div>
+        <div class="kpi emerald"><span>照片数量</span><b>{{photoCount}}</b></div>
       </div>
 
       <!-- Three Column Canvas + Text -->
@@ -39,7 +39,7 @@
         <div class="clean-card"><ConflictPriorityQueue /></div>
         <!-- Center: Dynamic Canvas -->
         <div class="clean-card canvas-card">
-          <h3>Dynamic Evidence Canvas — {{store.selectedPersonId}}</h3>
+          <h3>动态证据画布 — {{store.selectedPersonId}}</h3>
           <div class="canvas-wrap" ref="canvasWrapRef" @mousemove="onCanvasMouse" @dblclick="onCanvasDblClick" @mouseleave="hoveredBoxIdx=-1;showCrosshair=false">
             <canvas ref="canvasRef"></canvas>
             <div v-for="(box,idx) in dynBoxes" :key="idx" class="dyn-box" :class="{highlight:idx===hoveredBoxIdx,edited:box.isEdited}" :style="{left:box.x+'%',top:box.y+'%',width:box.w+'%',height:box.h+'%'}" @mouseenter="hoveredBoxIdx=idx" @dblclick.stop="editBox(idx)">
@@ -53,14 +53,14 @@
         </div>
         <!-- Right: Text Intelligence -->
         <div class="clean-card text-card">
-          <h3>Suspect NLP Intelligence</h3>
+          <h3>嫌疑人 NLP 情报</h3>
           <blockquote :class="isHacker?'q-red':'q-neutral'">{{currentText}}</blockquote>
           <div class="nlp-grid">
-            <div class="nlp-item"><span>Entities</span><strong>{{currentEntities}}</strong></div>
-            <div class="nlp-item"><span>Sentiment</span><strong :class="isHacker?'t-red':'t-green'">{{currentSentiment}}</strong></div>
-            <div class="nlp-item"><span>Conflict</span><strong :class="isHacker?'t-red':'t-green'">{{isHacker?(store.selectedPersonId==='Person27'?'64%':'78%'):'12%'}}</strong></div>
+            <div class="nlp-item"><span>实体</span><strong>{{currentEntities}}</strong></div>
+            <div class="nlp-item"><span>情感</span><strong :class="isHacker?'t-red':'t-green'">{{currentSentiment}}</strong></div>
+            <div class="nlp-item"><span>冲突</span><strong :class="isHacker?'t-red':'t-green'">{{isHacker?(store.selectedPersonId==='Person27'?'64%':'78%'):'12%'}}</strong></div>
           </div>
-          <h4>Suspect Photo Dossier ({{photoCount}} images)</h4>
+          <h4>嫌疑人照片卷宗（{{photoCount}} 张）</h4>
           <div class="photo-strip">
             <img v-for="idx in photoCount" :key="idx" :src="`http://localhost:5000/static/MC2-Image-Data/${store.selectedPersonId}/${store.selectedPersonId}_${idx}.jpg`" loading="lazy" @error="onImgErr" />
           </div>
@@ -79,19 +79,19 @@ import axios from 'axios'
 
 const store=useDashboardStore(), hackerSet=new Set(HACKER_LIST)
 const isHacker=computed(()=>HACKER_LIST.includes(store.selectedPersonId||'Person3'))
-const presets=[{l:'Low 0.25',v:0.25},{l:'Mid 0.50',v:0.50},{l:'High 0.75',v:0.75},{l:'Pure 0.95',v:0.95}]
+const presets=[{l:'低 0.25',v:0.25},{l:'中 0.50',v:0.50},{l:'高 0.75',v:0.75},{l:'纯 0.95',v:0.95}]
 function onSlider(e){store.setScoreThreshold(parseFloat(e.target.value))}
-const tabs=[{label:'Model Audit',path:'/task1_auditing'},{label:'Ground-Truth Calibration',path:'/task2_correction'},{label:'Community Clustering',path:'/task3_clustering'},{label:'Totem Elimination',path:'/task4_totem'},{label:'Final Verdict',path:'/task5_verdict'}]
+const tabs=[{label:'模型审计',path:'/task1_auditing'},{label:'真值校准',path:'/task2_correction'},{label:'社群聚类',path:'/task3_clustering'},{label:'图腾排除',path:'/task4_totem'},{label:'最终定案',path:'/task5_verdict'}]
 
 const currentText=computed(()=>{
   const id=store.selectedPersonId||'Person3'
-  if(id==='Person3') return '"Offline rendezvous time locked at 2 hours after Oceanus Cyber Summit opening. All operatives must carry the custom yellow carry-bag totem obtained at the entrance as identification token. Maintain absolute silence and total social isolation on all online platforms — forbid any likes, retweets or cross-references."'
-  if(id==='Person27') return '"Successfully entered the summit main hall. Security environment is extremely tight. My notebook asset triggered a low-confidence false alarm during algorithmic scanning but was smoothly calibrated after human-in-the-loop slider tuning. Online community discussion is very free — actively preparing for the white-hat track panel session."'
-  if(HACKER_LIST.includes(id)) return `"Encrypted underground sign-off: assigned specific carry-bag totem verified. Public network interaction fused at highest level — absolute zero likes online. Physical field alignment for rendezvous." [Operative: ${id}]`
-  return `"Peripheral harmless attendee diary: wonderful day at Oceanus venue. Met several old friends from tech forums during tea break — lively online discussions, group photos offline, nothing unusual." [ID: ${id}]`
+  if(id==='Person3') return '"线下接头时间锁定在 Oceanus 网络安全峰会开幕后 2 小时。全体骨干必须携带入口处领取的定制黄色提袋图腾作为识别信物。在所有线上平台保持绝对沉默和完全社交隔离——严禁任何点赞、转发或交叉引用。"'
+  if(id==='Person27') return '"已成功进入峰会主会场。安全环境极为严密。我的笔记本资产在算法扫描中触发了低置信度虚警，但经过人在回路滑块调试后已顺利校准。线上社区讨论非常自由，积极准备白帽分论坛发言。"'
+  if(HACKER_LIST.includes(id)) return `"加密封口会签：指定提袋图腾已核验。公共网络互动按最高级别熔断——线上绝对零点赞。物理现场对齐接头。" [涉案骨干: ${id}]`
+  return `"外围无害参会日记：今天在 Oceanus 会场过得很充实。茶歇时遇到了几位技术论坛的老朋友——线上讨论热烈，线下合影留念，毫无异常。" [ID: ${id}]`
 })
-const currentEntities=computed(()=>HACKER_LIST.includes(store.selectedPersonId||'Person3')?'Oceanus Summit, offline alignment, totem verification, network vacuum':'Tech exchange, group photo, coffee break')
-const currentSentiment=computed(()=>HACKER_LIST.includes(store.selectedPersonId||'Person3')?'Extreme counter-surveillance tendency (0.94)':'Normal social distribution (0.21)')
+const currentEntities=computed(()=>HACKER_LIST.includes(store.selectedPersonId||'Person3')?'Oceanus峰会、线下合流、图腾核验、网络真空':'技术交流、合影留念、茶歇休息')
+const currentSentiment=computed(()=>HACKER_LIST.includes(store.selectedPersonId||'Person3')?'极高反侦察隐蔽倾向 (0.94)':'正常社交分布 (0.21)')
 const photoCount=computed(()=>{const n=parseInt((store.selectedPersonId||'Person3').replace('Person',''));return n<=3?9:n<=10?7:5})
 
 // Dynamic boxes
@@ -106,7 +106,7 @@ function generateBoxes(personId){
   for(let i=0;i<count;i++){
     const bx=(8+(i*22+seed*7)%72), by=(6+(i*16+seed*3)%68), bw=16+(seed%22)+i*4, bh=14+(seed%18)+i*2
     const conflict=hackerSet.has(personId)&&i===Math.floor(count/2)
-    boxes.push({x:bx,y:by,w:Math.min(bw,88-bx),h:Math.min(bh,82-by),score:conflict?(28+Math.random()*28).toFixed(1):(52+Math.random()*42).toFixed(1),label:conflict?'[FP: RedWhistle→YellowBag]':'[Commonplace Gift]',isEdited:!!editedBoxes[personId+'_'+i],idx:i})
+    boxes.push({x:bx,y:by,w:Math.min(bw,88-bx),h:Math.min(bh,82-by),score:conflict?(28+Math.random()*28).toFixed(1):(52+Math.random()*42).toFixed(1),label:conflict?'[FP: 红哨子→黄色提袋]':'[常规礼品]',isEdited:!!editedBoxes[personId+'_'+i],idx:i})
   }
   return boxes
 }
@@ -120,7 +120,7 @@ function renderCanvas(){
   const img=new Image()
   img.src=`http://localhost:5000/static/MC2-Image-Data/${pid}/${pid}_${imgIdx}.jpg`
   img.onload=()=>{ctx.drawImage(img,0,0,w,h);dynBoxes.value=generateBoxes(pid)}
-  img.onerror=()=>{ctx.fillStyle='#f3f4f6';ctx.fillRect(0,0,w,h);ctx.fillStyle='#9ca3af';ctx.font='15px sans-serif';ctx.fillText('Loading image...',w/2-60,h/2);dynBoxes.value=generateBoxes(pid)}
+  img.onerror=()=>{ctx.fillStyle='#f3f4f6';ctx.fillRect(0,0,w,h);ctx.fillStyle='#9ca3af';ctx.font='15px sans-serif';ctx.fillText('正在加载图像...',w/2-60,h/2);dynBoxes.value=generateBoxes(pid)}
 }
 
 let pixX=220,pixY=180

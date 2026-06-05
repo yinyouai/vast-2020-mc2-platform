@@ -5,34 +5,34 @@
       <div class="tbn-links">
         <router-link v-for="t in tabs" :key="t.path" :to="t.path" class="tbn-link" :class="{active:$route.path===t.path}">{{t.label}}</router-link>
       </div>
-      <div class="tbn-right"><span class="tbn-level">Level 03 · Suspect Community Clustering</span></div>
+      <div class="tbn-right"><span class="tbn-level">层级三 · 嫌疑社群特征聚类</span></div>
     </div>
 
     <div class="page-scroll">
       <div class="hero-card">
         <span class="hc-num">03</span>
-        <div><h2>Person-Item Co-Occurrence Hierarchical Biclustering Analysis</h2><p>Ward hierarchical clustering tree performs bidirectional permutation on 40 suspects × items matrix, collapsing scattered social networks into regular behavioral blocks. Three core interest factions have been autonomously separated. <strong>5 clustering engine algorithms</strong> available for comparison.</p></div>
+        <div><h2>人-物共现层次双聚类分析</h2><p>Ward 层次聚类树对 40 名嫌疑人 × 物品种类矩阵进行双向排列，将散乱的社交网络折叠为规则的行为方块。三个核心利益派系已自主分离。提供 <strong>5 种聚类引擎算法</strong> 供对比。</p></div>
       </div>
 
       <!-- Method selector -->
       <div class="clean-card method-bar">
-        <span>Clustering Engine:</span>
+        <span>聚类引擎：</span>
         <button v-for="m in methods" :key="m.k" :class="{active:store.clusteringMethod===m.k}" @click="changeMethod(m.k)">{{m.name}}<small>{{m.desc}}</small></button>
       </div>
 
       <!-- Main: Heatmap + Trees -->
       <div class="main-grid">
         <div class="clean-card">
-          <div class="card-header"><h3>Biclustered Co-occurrence Heatmap (Ward-Reordered Rows & Columns)</h3><span class="label-emerald">Interactive</span></div>
+          <div class="card-header"><h3>双聚类共现热力图（Ward 重排行与列）</h3><span class="label-emerald">可交互</span></div>
           <div class="ch-xl" ref="heatmapRef"></div>
         </div>
         <div class="side-col">
           <div class="clean-card">
-            <div class="card-header"><h3>2D PCA Projection of Suspect Clusters</h3></div>
+            <div class="card-header"><h3>嫌疑人聚类 2D PCA 投影</h3></div>
             <div class="ch-lg" ref="pcaRef"></div>
           </div>
           <div class="clean-card">
-            <div class="card-header"><h3>Group-Wise Item Possession Rate</h3></div>
+            <div class="card-header"><h3>分组物资持有率</h3></div>
             <div class="ch-lg" ref="barRef"></div>
           </div>
         </div>
@@ -40,9 +40,9 @@
 
       <!-- Gallery -->
       <div class="clean-card">
-        <div class="card-header"><h3>Cluster Photo Gallery — Cell C (Core 8) vs Cell A+B (Periphery 32)</h3></div>
+        <div class="card-header"><h3>聚类照片廊 — 集团 C（核心 8 人）vs 集团 A+B（外围 32 人）</h3></div>
         <div class="cg-section cg-hacker">
-          <div class="cg-title"><span class="badge-p">Cell C</span> Core Hacker Cell · 8-Operative Isolated Block · Behavioral spectrum completely outside mainstream</div>
+          <div class="cg-title"><span class="badge-p">集团 C</span> 核心黑客组织 · 8 人孤立方阵 · 行为光谱完全脱离主流</div>
           <div class="cg-photos">
             <div v-for="pid in HACKER_LIST" :key="pid" class="cgi hacker" @click="gotoPerson(pid)">
               <img :src="`http://localhost:5000/static/MC2-Image-Data/${pid}/${pid}_1.jpg`" loading="lazy" />
@@ -51,7 +51,7 @@
           </div>
         </div>
         <div class="cg-section">
-          <div class="cg-title"><span class="badge-d">Cell A+B</span> Peripheral Attendee Pool · 32 People · Anchored on commonplace giveaway items</div>
+          <div class="cg-title"><span class="badge-d">集团 A+B</span> 外围参会者池 · 32 人 · 锚定在会场普及礼品上</div>
           <div class="cg-photos small">
             <div v-for="i in normalList" :key="i" class="cgi" @click="gotoPerson('Person'+i)">
               <img :src="`http://localhost:5000/static/MC2-Image-Data/Person${i}/Person${i}_1.jpg`" loading="lazy" />
@@ -62,11 +62,11 @@
 
       <!-- Report -->
       <div class="clean-card report-card">
-        <div class="card-header"><h3>Chief Intelligence Analyst — Community Pattern Reconnaissance Report</h3></div>
+        <div class="card-header"><h3>首席情报分析师 — 社群模式侦察报告</h3></div>
         <div class="rep-3col">
-          <div><h4>Bidirectional Topological Convergence</h4><p>After matrix reordering, 40 conference speakers collapsed spatially into three core interest factions. This specific behavioral homogeneity trend strongly reveals an organized, premeditated covert offline meetup network inside the venue.</p></div>
-          <div><h4>Cells A+B: Peripheral Attendees</h4><p>80% of attendees' color blocks are tightly anchored on [PumpkinNotes], [Eyeball Toy], [RedWhistle] — all venue-distributed giveaway items. These two groups' suspicion has been reverse-excluded.</p></div>
-          <div><h4>Cell C: Core Hacker Cell</h4><p>Maximum alert! After top-layer permutation, an isolated block of <strong>8 operatives</strong> separated — behavioral spectrum completely deviating from the mainstream, possessing zero giveaway items yet exhibiting absolute deadlock co-occurrence!</p></div>
+          <div><h4>双向拓扑收敛</h4><p>矩阵重排后，40 名参会者空间坍塌为三个核心利益派系。这种特定的行为同质化趋势强烈揭示了一个有组织、有预谋的秘密线下碰头网络。</p></div>
+          <div><h4>集团 A+B：外围参会者</h4><p>80% 参会者的色块紧密锚定在【南瓜便签】【眼球玩具】【泛滥红哨子】——均为会场分发普及礼品。这两个群组的嫌疑已被反向排除。</p></div>
+          <div><h4>集团 C：核心黑客组织</h4><p>最高警戒！顶层排列之后，一个 <strong>8 人</strong> 孤立方阵自行分离——行为光谱完全偏离主流，持有零普及礼品却展现绝对死锁共现！</p></div>
         </div>
       </div>
     </div>
@@ -85,16 +85,16 @@ const normalList=Array.from({length:40},(_,i)=>i+1).filter(i=>!hackerSet.has('Pe
 const heatmapRef=ref(null),pcaRef=ref(null),barRef=ref(null)
 let charts=[]
 
-const methods=[{k:'ward',name:'Ward',desc:'Minimize intra-cluster variance'},{k:'complete',name:'Complete Linkage',desc:'Robust to outliers'},{k:'average',name:'Average Linkage',desc:'Balanced clustering'},{k:'kmeans',name:'K-Means',desc:'Centroid-based partition'},{k:'dbscan',name:'DBSCAN',desc:'Density-based; auto-detect noise'}]
+const methods=[{k:'ward',name:'Ward',desc:'最小化簇内方差'},{k:'complete',name:'完全链接',desc:'对离群值鲁棒'},{k:'average',name:'平均链接',desc:'平衡聚类'},{k:'kmeans',name:'K-Means',desc:'基于质心的划分'},{k:'dbscan',name:'DBSCAN',desc:'密度聚类，自动识别噪声'}]
 function changeMethod(m){store.setClusteringMethod(m)}
-const tabs=[{label:'Model Audit',path:'/task1_auditing'},{label:'Ground-Truth Calibration',path:'/task2_correction'},{label:'Community Clustering',path:'/task3_clustering'},{label:'Totem Elimination',path:'/task4_totem'},{label:'Final Verdict',path:'/task5_verdict'}]
+const tabs=[{label:'模型审计',path:'/task1_auditing'},{label:'真值校准',path:'/task2_correction'},{label:'社群聚类',path:'/task3_clustering'},{label:'图腾排除',path:'/task4_totem'},{label:'最终定案',path:'/task5_verdict'}]
 
 function renderCharts(){
   charts.forEach(c=>c?.dispose());charts=[];if(!heatmapRef.value)return
 
   // Heatmap — enhanced with dendrogram feel (padding, hover effects)
   const h=echarts.init(heatmapRef.value);charts.push(h)
-  const xData=store.orderedItems.length?store.orderedItems:['BirdCall','PumpkinNotes','Eyeball','HairClip','LavenderDie','RedWhistle','YellowBag']
+  const xData=store.orderedItems.length?store.orderedItems:['鸟鸣器','南瓜便签','眼球','发夹','薰衣草骰子','泛滥红哨子','黄色提袋']
   const yData=store.orderedSuspects.length?store.orderedSuspects:Array.from({length:40},(_,i)=>'Person'+(i+1))
   const pts=[],cl={}
   if(store.heatmapMatrixData.length)store.heatmapMatrixData.forEach(d=>{cl[`${d.suspect}-${d.item}`]=d.count})
@@ -102,18 +102,18 @@ function renderCharts(){
     let c=0;if(store.heatmapMatrixData.length)c=cl[`${yData[y]}-${xData[x]}`]||0;else{if(y<8&&x>=5)c=3;else if(y>=8&&y<25&&x<4)c=Math.floor(Math.random()*3)+1;else if(y>=25&&x>=4&&x<6)c=2}
     pts.push([x,y,c])
   }
-  h.setOption({tooltip:{backgroundColor:'rgba(255,255,255,0.95)',borderColor:'#e5e7eb',textStyle:{color:'#111827'},formatter:p=>`<b>${yData[p.value[1]]}</b> × ${xData[p.value[0]]}<br/>Possession count: <span style="color:#10B981;font-weight:bold">${p.value[2]}</span>`},grid:{left:'12%',right:'4%',top:'4%',bottom:'14%'},xAxis:{type:'category',data:xData,axisLabel:{rotate:20,fontSize:11,color:'#6b7280',fontWeight:'bold'}},yAxis:{type:'category',data:yData,axisLabel:{fontSize:9,color:'#6b7280',formatter:v=>hackerSet.has(v)?'⚠'+v:v}},visualMap:{min:0,max:4,orient:'horizontal',left:'center',bottom:'0%',textStyle:{fontSize:11,color:'#6b7280'},inRange:{color:['#f9fafb','#D1FAE5','#6EE7B7','#10B981']}},series:[{type:'heatmap',data:pts,emphasis:{itemStyle:{shadowBlur:10,shadowColor:'rgba(0,0,0,0.15)'}},itemStyle:{borderColor:'#fff',borderWidth:1}}]})
+  h.setOption({tooltip:{backgroundColor:'rgba(255,255,255,0.95)',borderColor:'#e5e7eb',textStyle:{color:'#111827'},formatter:p=>`<b>${yData[p.value[1]]}</b> × ${xData[p.value[0]]}<br/>持有数量: <span style="color:#10B981;font-weight:bold">${p.value[2]}</span>`},grid:{left:'12%',right:'4%',top:'4%',bottom:'14%'},xAxis:{type:'category',data:xData,axisLabel:{rotate:20,fontSize:11,color:'#6b7280',fontWeight:'bold'}},yAxis:{type:'category',data:yData,axisLabel:{fontSize:9,color:'#6b7280',formatter:v=>hackerSet.has(v)?'⚠'+v:v}},visualMap:{min:0,max:4,orient:'horizontal',left:'center',bottom:'0%',textStyle:{fontSize:11,color:'#6b7280'},inRange:{color:['#f9fafb','#D1FAE5','#6EE7B7','#10B981']}},series:[{type:'heatmap',data:pts,emphasis:{itemStyle:{shadowBlur:10,shadowColor:'rgba(0,0,0,0.15)'}},itemStyle:{borderColor:'#fff',borderWidth:1}}]})
   h.on('click',p=>{if(p.componentType==='series'){const s=yData[p.value[1]];store.selectPerson(s);router.push('/task2_correction')}})
 
   // PCA — enhanced
   const p=echarts.init(pcaRef.value);charts.push(p)
   const sc=[]
   for(let i=1;i<=40;i++){const isH=hackerSet.has('Person'+i);const ang=(i/40)*Math.PI*2;const r=isH?0.5+Math.random()*0.5:(1.5+Math.random()*3);sc.push({v:[r*Math.cos(ang)+Math.random()*0.4,r*Math.sin(ang)+Math.random()*0.4],h:isH,id:'Person'+i})}
-  p.setOption({grid:{left:'10%',right:'4%',top:'10%',bottom:'14%'},xAxis:{type:'value',axisLabel:{fontSize:10,color:'#6b7280'},splitLine:{lineStyle:{color:'#f3f4f6'}},name:'PC1 (62.4%)',nameTextStyle:{fontSize:12,fontWeight:'bold',color:'#374151'}},yAxis:{type:'value',axisLabel:{fontSize:10,color:'#6b7280'},splitLine:{lineStyle:{color:'#f3f4f6'}},name:'PC2 (21.8%)',nameTextStyle:{fontSize:12,fontWeight:'bold',color:'#374151'}},series:[{type:'scatter',data:sc.filter(d=>!d.h).map(d=>d.v),symbolSize:16,itemStyle:{color:'#93C5FD',opacity:.6,borderColor:'#fff',borderWidth:1},name:'Periphery'},{type:'scatter',data:sc.filter(d=>d.h).map(d=>d.v),symbolSize:26,itemStyle:{color:'#8B5CF6',shadowBlur:14,shadowColor:'rgba(139,92,246,0.4)',borderColor:'#fff',borderWidth:2},name:'Hacker',label:{show:true,formatter:p=>sc.find(d=>d.v===p.value)?.id,fontSize:10,position:'top',color:'#374151',fontWeight:'bold'}}]})
+  p.setOption({grid:{left:'10%',right:'4%',top:'10%',bottom:'14%'},xAxis:{type:'value',axisLabel:{fontSize:10,color:'#6b7280'},splitLine:{lineStyle:{color:'#f3f4f6'}},name:'主成分1 (62.4%)',nameTextStyle:{fontSize:12,fontWeight:'bold',color:'#374151'}},yAxis:{type:'value',axisLabel:{fontSize:10,color:'#6b7280'},splitLine:{lineStyle:{color:'#f3f4f6'}},name:'主成分2 (21.8%)',nameTextStyle:{fontSize:12,fontWeight:'bold',color:'#374151'}},series:[{type:'scatter',data:sc.filter(d=>!d.h).map(d=>d.v),symbolSize:16,itemStyle:{color:'#93C5FD',opacity:.6,borderColor:'#fff',borderWidth:1},name:'外围'},{type:'scatter',data:sc.filter(d=>d.h).map(d=>d.v),symbolSize:26,itemStyle:{color:'#8B5CF6',shadowBlur:14,shadowColor:'rgba(139,92,246,0.4)',borderColor:'#fff',borderWidth:2},name:'黑客',label:{show:true,formatter:p=>sc.find(d=>d.v===p.value)?.id,fontSize:10,position:'top',color:'#374151',fontWeight:'bold'}}]})
 
   // Bar
   const b=echarts.init(barRef.value);charts.push(b)
-  b.setOption({tooltip:{trigger:'axis'},legend:{data:['Cell C (Hacker)','Cell A','Cell B'],bottom:0,textStyle:{fontSize:11,color:'#6b7280'},itemWidth:12,itemHeight:12},grid:{left:'8%',right:'4%',top:'10%',bottom:'18%'},xAxis:{type:'category',data:['YellowBag','RedWhistle','PumpkinNotes','HairClip','Eyeball'],axisLabel:{fontSize:10,color:'#6b7280',fontWeight:'bold',rotate:15}},yAxis:{type:'value',name:'Possession %',nameTextStyle:{fontSize:12,fontWeight:'bold',color:'#374151'},splitLine:{lineStyle:{color:'#f3f4f6'}}},series:[{name:'Cell C (Hacker)',type:'bar',data:[100,0,0,0,0],itemStyle:{color:'#8B5CF6',borderRadius:[6,6,0,0]},barWidth:'35%'},{name:'Cell A',type:'bar',data:[0,55,48,52,40],itemStyle:{color:'#93C5FD',borderRadius:[6,6,0,0]},barWidth:'35%'},{name:'Cell B',type:'bar',data:[0,38,30,35,42],itemStyle:{color:'#FCD34D',borderRadius:[6,6,0,0]},barWidth:'35%'}]})
+  b.setOption({tooltip:{trigger:'axis'},legend:{data:['集团 C (黑客)','集团 A','集团 B'],bottom:0,textStyle:{fontSize:11,color:'#6b7280'},itemWidth:12,itemHeight:12},grid:{left:'8%',right:'4%',top:'10%',bottom:'18%'},xAxis:{type:'category',data:['黄色提袋','泛滥红哨子','南瓜便签','发夹','眼球玩具'],axisLabel:{fontSize:10,color:'#6b7280',fontWeight:'bold',rotate:15}},yAxis:{type:'value',name:'持有 %',nameTextStyle:{fontSize:12,fontWeight:'bold',color:'#374151'},splitLine:{lineStyle:{color:'#f3f4f6'}}},series:[{name:'集团 C (黑客)',type:'bar',data:[100,0,0,0,0],itemStyle:{color:'#8B5CF6',borderRadius:[6,6,0,0]},barWidth:'35%'},{name:'集团 A',type:'bar',data:[0,55,48,52,40],itemStyle:{color:'#93C5FD',borderRadius:[6,6,0,0]},barWidth:'35%'},{name:'集团 B',type:'bar',data:[0,38,30,35,42],itemStyle:{color:'#FCD34D',borderRadius:[6,6,0,0]},barWidth:'35%'}]})
 }
 function gotoPerson(pid){store.selectPerson(pid);router.push('/task2_correction')}
 

@@ -9,7 +9,7 @@
         <router-link v-for="t in tabs" :key="t.path" :to="t.path" class="tbn-link" :class="{active:$route.path===t.path}">{{t.label}}</router-link>
       </div>
       <div class="tbn-right">
-        <span class="tbn-level">Level 05 — Final Verdict</span>
+        <span class="tbn-level">层级五 · 最终定案</span>
       </div>
     </div>
 
@@ -18,18 +18,18 @@
       <div class="hero-card">
         <div class="hc-badge">05</div>
         <div class="hc-content">
-          <h2>Cross-Modal Evidence Chain Final Convergence</h2>
-          <p>8 individuals uniquely identified with zero-interaction social network pattern + yellow bag totem specificity. Online extreme isolation + offline material alignment = irrefutable evidence. Case closed.</p>
+          <h2>跨模态证据链最终收敛</h2>
+          <p>8 名个体通过零互动社交网络模式 + 黄色提袋图腾特异性唯一识别。线上极致隔离 + 线下物资对齐 = 铁证如山。结案。</p>
         </div>
       </div>
 
       <!-- Social Network Graph -->
       <div class="clean-card">
         <div class="card-header">
-          <h3>Social Network Force-Directed Graph — 40-Person Interaction Topology</h3>
-          <span class="label-indigo">Interactive</span>
+          <h3>社交网络力导向图 — 40 人互动拓扑</h3>
+          <span class="label-indigo">可交互</span>
         </div>
-        <p class="hint">Purple = Core 8 · Blue = Periphery · Dashed = Social isolation vacuum · Solid = Normal interaction</p>
+        <p class="hint">紫色 = 核心 8 人 · 蓝色 = 外围人员 · 虚线 = 社交隔离真空 · 实线 = 正常互动</p>
         <div class="ch-xl" ref="socialRef"></div>
       </div>
 
@@ -37,9 +37,9 @@
       <div class="two-col-main">
         <div class="clean-card">
           <div class="card-header">
-            <h3>Social Interaction Heatmap Matrix</h3>
+            <h3>社交互动热力图矩阵</h3>
           </div>
-          <p class="hint">Dark = High isolation · Bright = Normal interaction</p>
+          <p class="hint">暗色 = 高隔离度 · 亮色 = 正常互动</p>
           <div class="ch-tall" ref="matrixRef"></div>
         </div>
 
@@ -47,7 +47,7 @@
           <!-- Roster -->
           <div class="clean-card">
             <div class="card-header">
-              <h3>Core Cell — 8 Operative Final Roster</h3>
+              <h3>核心组织 — 8 名骨干最终名册</h3>
             </div>
             <div class="roster">
               <div v-for="pid in HACKER_LIST" :key="pid" class="rcard" @click="store.selectPerson(pid)">
@@ -59,7 +59,7 @@
                 </div>
                 <div class="rcard-info">
                   <strong>{{ pid }}</strong>
-                  <span class="badge badge-purple">Confirmed</span>
+                  <span class="badge badge-purple">已确认</span>
                 </div>
               </div>
             </div>
@@ -68,7 +68,7 @@
           <!-- Text Intelligence -->
           <div class="clean-card">
             <div class="card-header">
-              <h3>Suspect Intelligence Decrypt</h3>
+              <h3>嫌疑人情报解密</h3>
             </div>
             <div class="intel-list">
               <div v-for="pid in HACKER_LIST" :key="pid" class="intel-row" :class="{active:store.selectedPersonId===pid}" @click="store.selectPerson(pid)">
@@ -84,28 +84,28 @@
       <div class="two-col">
         <div class="clean-card">
           <div class="card-header">
-            <h3>Evidence Chain Multi-Graph Interlock Verification</h3>
+            <h3>证据链多图互锁验证</h3>
           </div>
           <div class="ev-list">
             <div class="ev-item">
               <div class="ev-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg></div>
               <div>
-                <h4>Chain I: Multi-Modal Image / Ground-Truth Calibration</h4>
-                <p>Yellow bag totem image truth and post intent 100% interlocked. False positives fully ablated by Level 1 threshold.</p>
+                <h4>物证链一：多模态图像与真值校准</h4>
+                <p>黄色提袋图腾图像真值与发帖意图 100% 互锁。假阳性已通过层级一阈值完全消融。</p>
               </div>
             </div>
             <div class="ev-item">
               <div class="ev-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg></div>
               <div>
-                <h4>Chain II: Reverse Elimination & Specificity Convergence</h4>
-                <p>After excising background noise, yellow bag holding is 100% core cell monopoly — specificity confirmed.</p>
+                <h4>物证链二：反向排除与特异性凝聚</h4>
+                <p>切除背景噪声后，黄色提袋持有为核心组织 100% 垄断——特异性已确认。</p>
               </div>
             </div>
             <div class="ev-item">
               <div class="ev-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg></div>
               <div>
-                <h4>Chain III: Online Network Extreme Isolation Audit</h4>
-                <p>Complete zero-interaction vacuum between 8 entities. Online isolation + offline co-occurrence = irrefutable.</p>
+                <h4>物证链三：线上网络极致隔离审计</h4>
+                <p>8 名实体间完全零互动真空。线上隔离 + 线下共现 = 铁证如山。</p>
               </div>
             </div>
           </div>
@@ -114,15 +114,15 @@
         <!-- Verdict -->
         <div class="clean-card verdict-card">
           <div class="card-header">
-            <h3>Digital Court Final Verdict</h3>
+            <h3>数字法庭最终宣判</h3>
           </div>
-          <p class="verdict-desc">Cross-modal forensic evidence chains multi-graph interlock: <strong>SUCCESS</strong>. The following 8 entities, simultaneously triggering bidirectional evidence interlock of yellow bag totem specificity AND online social interaction absolute zero isolation, are definitively confirmed as core members of the covert hacker cell:</p>
+          <p class="verdict-desc">跨模态取证证据链多图互锁：<strong>成功</strong>。以下 8 名实体同时触发黄色提袋图腾特异性与线上社交互动绝对零隔离的双向证据互锁，正式确认为秘密黑客组织核心成员：</p>
           <div class="final-list">
             <span v-for="pid in HACKER_LIST" :key="pid" class="fl-tag">{{ pid }}</span>
           </div>
           <button class="verdict-btn" @click="triggerVerdict">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-            Lock Evidence Chain · Generate Final Judgment
+            Lock 证据链 · 生成最终判决书
           </button>
         </div>
       </div>
@@ -130,8 +130,8 @@
       <!-- Evidence Wall -->
       <div class="clean-card">
         <div class="card-header">
-          <h3>Core Cell Evidence Photo Wall</h3>
-          <span class="label-emerald">Evidence Locked</span>
+          <h3>核心组织证据照片墙</h3>
+          <span class="label-emerald">证据已锁定</span>
         </div>
         <div class="evidence-wall">
           <div v-for="pid in HACKER_LIST" :key="pid" class="wall-card" @click="store.selectPerson(pid);$router.push('/task2_correction')">
@@ -143,7 +143,7 @@
             </div>
             <div class="wall-info">
               <strong>{{ pid }}</strong>
-              <span class="wall-tag">Evidence Locked</span>
+              <span class="wall-tag">证据已锁定</span>
               <p>{{ getFullText(pid) }}</p>
             </div>
           </div>
@@ -166,39 +166,39 @@ const matrixRef = ref(null)
 let charts = []
 
 const tabs = [
-  { label: 'Audit', path: '/task1_auditing' },
-  { label: 'Calibrate', path: '/task2_correction' },
-  { label: 'Cluster', path: '/task3_clustering' },
-  { label: 'Eliminate', path: '/task4_totem' },
-  { label: 'Verdict', path: '/task5_verdict' }
+  { label: '审计', path: '/task1_auditing' },
+  { label: '校准', path: '/task2_correction' },
+  { label: '聚类', path: '/task3_clustering' },
+  { label: '排除', path: '/task4_totem' },
+  { label: '定案', path: '/task5_verdict' }
 ]
 
 function getPreview(pid) {
   const m = {
-    Person3: 'Offline handoff time-locked to Summit opening +2hr. Yellow bag as recognition cipher.',
-    Person7: 'Cyberspace invisible isolation defense operational. High-risk cipher parcel for cross-verification.',
-    Person9: 'Arrived at venue. Yellow beacon parcel acquired. Online isolation deployed.',
-    Person10: 'Intra-cell communications at full blackout. Physical venue alignment for handoff.',
-    Person12: 'Strict stranger disguise per protocol. Totem token carried on person.',
-    Person17: 'Totem verification passed. Public network at maximum blackout level.',
-    Person32: 'Cipher materiel verified. Online absolute zero-interaction status.',
-    Person38: 'Totem holding confirmed. Communications blackout. Physical handoff complete.'
+    Person3: '线下接头时间锁死在峰会后 2 小时。黄色提袋作为识别暗号。',
+    Person7: '网络空间隐形隔离防线已部署。高危暗号包裹用于交叉验证。',
+    Person9: '已抵达会场。黄色信标包裹已获取。线上隔离已就绪。',
+    Person10: '组织内通讯完全黑灯。物理会场对齐准备接头。',
+    Person12: '按协议严格保持陌生人伪装。图腾信物随身携带。',
+    Person17: '图腾核验已通过。公共网络处于最高黑灯级别。',
+    Person32: '暗号物资已核实。线上绝对零互动状态。',
+    Person38: '图腾持有已确认。通讯黑灯。物理接头已完成。'
   }
-  return m[pid] || 'Underground countersign: totem verified, communications blackout.'
+  return m[pid] || '地下暗号：图腾已核验，通讯黑灯。'
 }
 
 function getFullText(pid) {
   const m = {
-    Person3: 'Image-text conflict 78% — machine misidentified red whistle as yellow bag. NLP caption explicitly describes "bag".',
-    Person7: 'Independent diary-style encrypted protocol. Multi-modal clustering 100% assigned to Group C.',
-    Person9: 'Image + text dual-mode high alignment. Independent text contains "yellow beacon".',
-    Person10: 'Holding frequency locked — 100% yellow bag + 0% universal items.',
-    Person12: 'NLP extracted "totem token" entity. Online zero intersection with other 7 members.',
-    Person17: 'Ward clustering isolation matrix member. Holding fully deviates from A/B groups.',
-    Person32: 'Hierarchical clustering maximum differentiation. Holds zero universally-distributed assets.',
-    Person38: 'Post reverse-elimination — one of only 8 remaining. Social network absolute vacuum isolation.'
+    Person3: '图文冲突 78% — 机器错认红哨子为黄色提袋。NLP 配文明确描述"提袋"。',
+    Person7: '独立日记式加密协议。多模态聚类 100% 指派至 C 组。',
+    Person9: '图像+文本双模高度对齐。独立文本包含"黄色信标"。',
+    Person10: '持有频率锁定 — 100% 黄色提袋 + 0% 普及物品。',
+    Person12: 'NLP 提取"图腾信物"实体。线上与其他 7 名成员零交集。',
+    Person17: 'Ward 聚类隔离矩阵成员。持有物品完全偏离 A/B 组。',
+    Person32: '层次聚类最大差异化。持有零普及分发资产。',
+    Person38: '反向排除后——仅存 8 人之一。社交网络绝对真空隔离。'
   }
-  return m[pid] || 'Multi-modal evidence chain closed-loop interlock.'
+  return m[pid] || '多模态证据链闭环互锁。'
 }
 
 function renderCharts() {
@@ -248,16 +248,16 @@ function renderCharts() {
       formatter: p => {
         if (p.dataType === 'edge') {
           const b = hackerSet.has(p.data.source) && hackerSet.has(p.data.target)
-          return b ? `<b>⚠ Social Isolation Vacuum</b><br/>${p.data.source} ↔ ${p.data.target}<br/>Interactions: <span style="color:#EF4444">0</span>` : `${p.data.source} ↔ ${p.data.target}<br/>${p.data.value} interactions`
+          return b ? `<b>⚠ 社交隔离真空</b><br/>${p.data.source} ↔ ${p.data.target}<br/>互动: <span style="color:#EF4444">0</span>` : `${p.data.source} ↔ ${p.data.target}<br/>${p.data.value} 次互动`
         }
-        return hackerSet.has(p.name) ? `<b>⚠ ${p.name}</b><br/>Core Member · Zero Online Interaction` : `${p.name}<br/>Periphery Attendee`
+        return hackerSet.has(p.name) ? `<b>⚠ ${p.name}</b><br/>核心成员 · 线上零互动` : `${p.name}<br/>外围参会者`
       }
     },
     series: [{
       type: 'graph', layout: 'force', roam: true, draggable: true,
       force: { repulsion: 350, gravity: 0.04, edgeLength: [100, 250], friction: 0.5 },
       data: nodes, links: links,
-      categories: [{ name: 'Core Cell', itemStyle: { color: '#8B5CF6' } }, { name: 'Periphery', itemStyle: { color: '#94A3B8' } }],
+      categories: [{ name: '核心组织', itemStyle: { color: '#8B5CF6' } }, { name: '外围人员', itemStyle: { color: '#94A3B8' } }],
       emphasis: { focus: 'adjacency', lineStyle: { width: 5 }, itemStyle: { shadowBlur: 20 } },
       label: { show: true, position: 'bottom', fontSize: 10, color: '#64748B' },
       lineStyle: { color: 'rgba(148,163,184,0.2)', curveness: 0.1 }
@@ -286,7 +286,7 @@ function renderCharts() {
       formatter: p => {
         const pX = 'Person' + (p.value[0] + 1), pY = 'Person' + (p.value[1] + 1)
         const b = hackerSet.has(pX) && hackerSet.has(pY) && pX !== pY
-        return b ? `<b>⚠ Social Isolation</b><br/>${pX} ↔ ${pY}<br/>0 interactions` : `${pX} ↔ ${pY}<br/>${p.value[2]} interactions`
+        return b ? `<b>⚠ 社交隔离</b><br/>${pX} ↔ ${pY}<br/>0 次互动` : `${pX} ↔ ${pY}<br/>${p.value[2]} 次互动`
       }
     },
     grid: { left: '6%', right: '3%', top: '3%', bottom: '10%' },
@@ -304,7 +304,7 @@ function renderCharts() {
 }
 
 function triggerVerdict() {
-  alert(`VAST 2020 MC2 — Digital Court Final Verdict\n\nCross-modal evidence chains: SUCCESS\n\n${HACKER_LIST.join(' · ')}\n\nAll 8 entities confirmed as core hacker cell members.\nFull evidence atlas compiled. Case closed.`)
+  alert(`VAST 2020 MC2 — 数字法庭最终宣判\n\n跨模态证据链：成功\n\n${HACKER_LIST.join(' · ')}\n\n上述 8 名实体全部确认为核心黑客组织成员。\n完整证据图谱已汇编。结案。`)
 }
 
 onMounted(() => renderCharts())
