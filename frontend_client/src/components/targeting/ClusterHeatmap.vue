@@ -131,7 +131,12 @@ const render = () => {
   chart.off('click')
   chart.on('click', (params) => {
     const target = suspects.value[params.value[1]]
-    store.selectPerson(target)
+    const itemName = items.value[params.value[0]]
+    store.selectReviewTarget({
+      personId: target,
+      itemName,
+      intensity: params.value[2]
+    })
     router.push('/task2_correction')
   })
 }

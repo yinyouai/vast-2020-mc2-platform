@@ -37,10 +37,14 @@
     <NetworkBeforeAfter />
 
     <div class="totem-layout">
-      <TotemEliminationPanel />
+      <TotemEliminationPanel
+        :items="totemItems"
+        @toggle="toggleTotemItem"
+        @open-evidence="store.isFourthLayerActive = true"
+      />
       <div class="totem-charts">
-        <TotemBarChart />
-        <TotemSankeyTunnel />
+        <TotemBarChart :items="totemItems" />
+        <TotemSankeyTunnel :items="totemItems" />
       </div>
     </div>
 
@@ -72,12 +76,28 @@
 
 <script setup>
 import { useDashboardStore } from '../store/dashboard'
+import { ref } from 'vue'
 import TotemEliminationPanel from '../components/targeting/TotemEliminationPanel.vue'
 import TotemBarChart from '../components/targeting/TotemBarChart.vue'
 import TotemSankeyTunnel from '../components/targeting/TotemSankeyTunnel.vue'
 import NetworkBeforeAfter from '../components/process/NetworkBeforeAfter.vue'
 
 const store = useDashboardStore()
+
+const totemItems = ref([
+  { name: 'Notebook', coverage: 60, role: '公共噪声', excluded: false },
+  { name: 'Badge', coverage: 48, role: '公共噪声', excluded: false },
+  { name: 'Toy', coverage: 44, role: '公共噪声', excluded: false },
+  { name: 'Red Hat', coverage: 41, role: '误报候选', excluded: false },
+  { name: 'Yellow Bag', coverage: 20, role: '候选暗号', excluded: false }
+])
+
+const toggleTotemItem = (name) => {
+  const item = totemItems.value.find((entry) => entry.name === name)
+  if (!item) return
+  item.excluded = !item.excluded
+  store.toggleItemExclusion(name)
+}
 </script>
 
 <style scoped>

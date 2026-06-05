@@ -9,9 +9,28 @@
 
     <div class="workbench-grid">
       <aside class="workbench-sidebar">
-        <div class="process-control">
-          <span>阈值</span>
-          <strong>0.20</strong>
+        <div class="process-control threshold-control">
+          <div class="threshold-head">
+            <span>动态阈值</span>
+            <strong>{{ thresholdLabel }}</strong>
+          </div>
+          <label class="threshold-slider" for="audit-threshold">
+            <span>低召回</span>
+            <input
+              id="audit-threshold"
+              v-model.number="threshold"
+              type="range"
+              min="0.2"
+              max="0.8"
+              step="0.01"
+              aria-label="调整模型审计阈值"
+            />
+            <span>高精度</span>
+          </label>
+          <div class="threshold-metrics">
+            <span>保留 {{ keptCount }}</span>
+            <span>过滤 {{ filteredCount }}</span>
+          </div>
         </div>
         <div class="process-control">
           <span>边界颜色</span>
@@ -31,10 +50,15 @@
             <span>分数</span>
             <span>判定</span>
           </div>
-          <div v-for="row in rankedSamples" :key="row.name" class="rank-row">
+          <div
+            v-for="row in rankedRows"
+            :key="row.name"
+            class="rank-row"
+            :class="{ 'is-muted-row': !row.kept }"
+          >
             <span>{{ row.name }}</span>
-            <span>{{ row.score }}</span>
-            <span :class="row.type === 'TP' ? 'is-green' : 'is-red'">{{ row.type }}</span>
+            <span>{{ row.scoreLabel }}</span>
+            <span :class="row.badgeClass">{{ row.decision }}</span>
           </div>
         </div>
 
@@ -56,8 +80,17 @@
             />
             <line x1="12" y1="12" x2="12" y2="148" stroke="#b6c5d5" />
             <line x1="12" y1="148" x2="208" y2="148" stroke="#b6c5d5" />
+            <line
+              :x1="curveThresholdX"
+              y1="14"
+              :x2="curveThresholdX"
+              y2="148"
+              stroke="#1c8a67"
+              stroke-width="2"
+              stroke-dasharray="4 4"
+            />
           </svg>
-          <p>AP 估计值：20.97%。通过人工确认 TP / FP 后，曲线会实时更新，帮助我们判断该类别是否值得继续信任。</p>
+          <p>当前阈值保留 {{ keptCount }} 个候选，误报 {{ falsePositiveCount }} 个。</p>
         </div>
       </aside>
 
@@ -71,10 +104,13 @@
             v-for="sample in samplePoints"
             :key="sample.id"
             class="sample-dot"
-            :class="sample.type === 'TP' ? 'is-green' : 'is-red'"
+            :class="[sample.type === 'TP' ? 'is-green' : 'is-red', { 'is-below-threshold': sample.score < threshold }]"
             :style="{ left: sample.left, top: sample.top }"
           >
             {{ sample.short }}
+          </div>
+          <div class="threshold-line" :style="{ left: thresholdLeft }">
+            <span>{{ thresholdLabel }}</span>
           </div>
         </div>
         <div class="sample-axis">
@@ -142,32 +178,57 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 const imageState = ref('loading')
 const reviewImage = 'http://localhost:5000/static/MC2-Image-Data/Person3/Person3_1.jpg'
+const threshold = ref(0.25)
 
 const rankedSamples = [
-  { name: 'Person18_8', score: '0.668', type: 'TP' },
-  { name: 'Person9_2', score: '0.664', type: 'TP' },
-  { name: 'Person32_22', score: '0.594', type: 'TP' },
-  { name: 'Person30_17', score: '0.569', type: 'TP' },
-  { name: 'Person23_11', score: '0.563', type: 'FP' },
-  { name: 'Person27_14', score: '0.552', type: 'FP' }
+  { name: 'Person18_8', score: 0.668, type: 'TP' },
+  { name: 'Person9_2', score: 0.664, type: 'TP' },
+  { name: 'Person32_22', score: 0.594, type: 'TP' },
+  { name: 'Person30_17', score: 0.569, type: 'TP' },
+  { name: 'Person23_11', score: 0.563, type: 'FP' },
+  { name: 'Person27_14', score: 0.552, type: 'FP' }
 ]
 
 const samplePoints = [
-  { id: 1, short: 'P18', type: 'TP', left: '72%', top: '10%' },
-  { id: 2, short: 'P09', type: 'TP', left: '69%', top: '22%' },
-  { id: 3, short: 'P32', type: 'TP', left: '58%', top: '31%' },
-  { id: 4, short: 'P30', type: 'TP', left: '52%', top: '46%' },
-  { id: 5, short: 'P23', type: 'FP', left: '44%', top: '40%' },
-  { id: 6, short: 'P27', type: 'FP', left: '47%', top: '58%' },
-  { id: 7, short: 'P08', type: 'TP', left: '38%', top: '72%' },
-  { id: 8, short: 'P16', type: 'FP', left: '29%', top: '84%' },
-  { id: 9, short: 'P21', type: 'TP', left: '63%', top: '79%' },
-  { id: 10, short: 'P37', type: 'FP', left: '77%', top: '88%' }
+  { id: 1, short: 'P18', score: 0.668, type: 'TP', left: '72%', top: '10%' },
+  { id: 2, short: 'P09', score: 0.664, type: 'TP', left: '69%', top: '22%' },
+  { id: 3, short: 'P32', score: 0.594, type: 'TP', left: '58%', top: '31%' },
+  { id: 4, short: 'P30', score: 0.569, type: 'TP', left: '52%', top: '46%' },
+  { id: 5, short: 'P23', score: 0.563, type: 'FP', left: '44%', top: '40%' },
+  { id: 6, short: 'P27', score: 0.552, type: 'FP', left: '47%', top: '58%' },
+  { id: 7, short: 'P08', score: 0.418, type: 'TP', left: '38%', top: '72%' },
+  { id: 8, short: 'P16', score: 0.326, type: 'FP', left: '29%', top: '84%' },
+  { id: 9, short: 'P21', score: 0.506, type: 'TP', left: '63%', top: '79%' },
+  { id: 10, short: 'P37', score: 0.708, type: 'FP', left: '77%', top: '88%' }
 ]
+
+const thresholdLabel = computed(() => threshold.value.toFixed(2))
+
+const rankedRows = computed(() =>
+  rankedSamples.map((row) => {
+    const kept = row.score >= threshold.value
+
+    return {
+      ...row,
+      kept,
+      scoreLabel: row.score.toFixed(3),
+      decision: kept ? row.type : '过滤',
+      badgeClass: kept ? (row.type === 'TP' ? 'is-green' : 'is-red') : 'is-filtered'
+    }
+  })
+)
+
+const keptCount = computed(() => rankedRows.value.filter((row) => row.kept).length)
+const filteredCount = computed(() => rankedRows.value.length - keptCount.value)
+const falsePositiveCount = computed(
+  () => rankedRows.value.filter((row) => row.kept && row.type === 'FP').length
+)
+const thresholdLeft = computed(() => `${((threshold.value - 0.2) / 0.8) * 100}%`)
+const curveThresholdX = computed(() => 12 + ((threshold.value - 0.2) / 0.8) * 196)
 </script>
 
 <style scoped>
@@ -233,6 +294,68 @@ const samplePoints = [
   font-size: 1rem;
 }
 
+.threshold-control {
+  background:
+    radial-gradient(circle at 86% 18%, rgba(47, 125, 246, 0.12), transparent 28%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(247, 251, 255, 0.86));
+}
+
+.threshold-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.threshold-head strong {
+  margin-top: 0;
+  font-size: 1.35rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.threshold-slider {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  margin-top: 14px;
+  color: var(--subtle);
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.threshold-slider input {
+  width: 100%;
+  height: 32px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.threshold-slider input:focus-visible {
+  outline: 3px solid rgba(47, 125, 246, 0.2);
+  outline-offset: 3px;
+  border-radius: 999px;
+}
+
+.threshold-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.threshold-metrics span {
+  display: inline-flex;
+  min-height: 28px;
+  align-items: center;
+  padding: 0 10px;
+  border-radius: 999px;
+  color: var(--text);
+  background: rgba(47, 125, 246, 0.08);
+  font-size: 0.74rem;
+  font-weight: 900;
+}
+
 .process-legend {
   display: flex;
   flex-wrap: wrap;
@@ -255,6 +378,10 @@ const samplePoints = [
 
 .is-red {
   color: #c55353;
+}
+
+.is-filtered {
+  color: var(--subtle);
 }
 
 .legend-pill.is-green {
@@ -289,6 +416,11 @@ const samplePoints = [
   color: var(--subtle);
   font-weight: 700;
   background: rgba(47, 125, 246, 0.05);
+}
+
+.rank-row.is-muted-row {
+  color: var(--subtle);
+  background: rgba(245, 248, 252, 0.72);
 }
 
 .curve-card p,
@@ -347,12 +479,43 @@ const samplePoints = [
   box-shadow: 0 14px 24px rgba(48, 78, 114, 0.16);
 }
 
+.sample-dot.is-below-threshold {
+  opacity: 0.26;
+  filter: grayscale(0.4);
+}
+
 .sample-dot.is-green {
   background: linear-gradient(135deg, #39a97d, #70c9a7);
 }
 
 .sample-dot.is-red {
   background: linear-gradient(135deg, #df6a6a, #f0a2a2);
+}
+
+.threshold-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 2;
+  width: 2px;
+  background: linear-gradient(180deg, rgba(28, 138, 103, 0), rgba(28, 138, 103, 0.88), rgba(28, 138, 103, 0));
+  transform: translateX(-50%);
+  transition: left var(--motion-fast) var(--ease-spring);
+}
+
+.threshold-line span {
+  position: absolute;
+  top: 12px;
+  left: 8px;
+  padding: 5px 9px;
+  border: 1px solid rgba(57, 169, 125, 0.24);
+  border-radius: 999px;
+  color: #1c8a67;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: var(--shadow-soft);
+  font-size: 0.72rem;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
 }
 
 .sample-axis {

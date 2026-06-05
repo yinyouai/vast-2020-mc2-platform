@@ -1,11 +1,8 @@
 <template>
   <div class="panel threshold-panel">
-    <div class="panel-header">
-      <div>
-        <h4 class="panel-title">复核阈值</h4>
-        <p class="panel-subtitle">提高阈值会隐藏低置信框，帮助分析者把注意力集中到真正值得复核的冲突样本上。</p>
-      </div>
-      <span class="threshold-chip">{{ store.scoreThreshold.toFixed(2) }}</span>
+    <div class="threshold-copy">
+      <span>复核阈值</span>
+      <strong>{{ store.scoreThreshold.toFixed(2) }}</strong>
     </div>
     <input
       type="range"
@@ -16,6 +13,10 @@
       @input="store.setScoreThreshold(Number($event.target.value))"
       aria-label="复核阈值"
     />
+    <div class="threshold-scale">
+      <span>保留更多</span>
+      <span>只看高冲突</span>
+    </div>
   </div>
 </template>
 
@@ -27,9 +28,56 @@ const store = useDashboardStore()
 
 <style scoped>
 .threshold-panel {
+  display: grid;
+  grid-template-columns: auto minmax(180px, 1fr) auto;
+  gap: 16px;
+  align-items: center;
+  padding: 16px 20px;
+  border-color: rgba(47, 125, 246, 0.14);
   background:
-    linear-gradient(90deg, rgba(47, 125, 246, 0.08), rgba(53, 181, 166, 0.06)),
-    rgba(255, 255, 255, 0.92);
+    linear-gradient(90deg, rgba(47, 125, 246, 0.07), rgba(53, 181, 166, 0.05)),
+    rgba(255, 255, 255, 0.9);
   box-shadow: var(--shadow-soft);
+}
+
+.threshold-copy {
+  display: grid;
+  gap: 3px;
+}
+
+.threshold-copy span,
+.threshold-scale span {
+  color: var(--subtle);
+  font-size: 0.76rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+}
+
+.threshold-copy strong {
+  color: var(--accent);
+  font-size: 1.2rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.threshold-panel input {
+  width: 100%;
+  accent-color: var(--accent);
+}
+
+.threshold-scale {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  white-space: nowrap;
+}
+
+@media (max-width: 760px) {
+  .threshold-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .threshold-scale {
+    justify-content: space-between;
+  }
 }
 </style>

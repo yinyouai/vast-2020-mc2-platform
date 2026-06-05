@@ -3,7 +3,7 @@
     <div class="panel-header">
       <div>
         <h4 class="panel-title">物品覆盖率分布</h4>
-        <p class="panel-subtitle">覆盖率越高，作为关键物证的判别力通常越弱。</p>
+        <p class="panel-subtitle">已剔除物品会淡化，候选暗号保持高亮。</p>
       </div>
     </div>
     <div ref="barRef" class="chart-frame small-chart"></div>
@@ -13,35 +13,41 @@
 <script setup>
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import * as echarts from 'echarts'
-import { useDashboardStore } from '../../store/dashboard'
 import { animationTiming, buildAxis, buildTooltip, chartPalette, splitLine } from '../../utils/chartTheme'
 
-const store = useDashboardStore()
+const props = defineProps({
+  items: {
+    type: Array,
+    default: () => []
+  }
+})
+
 const barRef = ref(null)
 let chart
 
-const items = ['Notebook', 'Badge', 'Toy', 'Red Hat', 'Yellow Bag']
-const values = [60, 48, 44, 41, 20]
-
-const averageCoverage = computed(() => Math.round(values.reduce((sum, value) => sum + value, 0) / values.length))
+const averageCoverage = computed(() => {
+  if (!props.items.length) return 0
+  return Math.round(props.items.reduce((sum, item) => sum + item.coverage, 0) / props.items.length)
+})
 
 const render = () => {
   if (!barRef.value) return
   if (!chart) chart = echarts.init(barRef.value)
+
   chart.setOption({
     backgroundColor: 'transparent',
     tooltip: buildTooltip((params) => {
-      const excluded = store.excludedItems.includes(params.name)
+      const target = props.items.find((item) => item.name === params.name)
       return `
         <strong>${params.name}</strong><br/>
         覆盖率：${params.value}%<br/>
-        当前状态：${excluded ? '已从背景基线中剔除' : '仍作为背景噪声保留'}
+        状态：${target?.excluded ? '已剔除' : target?.role || '保留'}
       `
     }),
     grid: { left: 54, right: 24, top: 24, bottom: 46 },
     xAxis: {
       type: 'category',
-      data: items,
+      data: props.items.map((item) => item.name),
       ...buildAxis()
     },
     yAxis: {
@@ -52,23 +58,22 @@ const render = () => {
     series: [{
       type: 'bar',
       barWidth: 32,
-      data: values.map((value, index) => {
-        const name = items[index]
-        const excluded = store.excludedItems.includes(name)
-        const gradientStops = name === 'Yellow Bag'
+      data: props.items.map((item) => {
+        const gradientStops = item.role === '候选暗号'
           ? ['#f6cd75', '#f0b44c']
-          : excluded
+          : item.excluded
             ? ['#9fb1c4', '#c5d0dd']
             : ['#6da3ff', '#58c9b2']
+
         return {
-          value,
+          value: item.coverage,
           itemStyle: {
             borderRadius: [10, 10, 4, 4],
             color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
               { offset: 0, color: gradientStops[0] },
               { offset: 1, color: gradientStops[1] }
             ]),
-            opacity: excluded ? 0.58 : 1
+            opacity: item.excluded ? 0.48 : 1
           }
         }
       }),
@@ -84,10 +89,7 @@ const render = () => {
           color: chartPalette.gold,
           formatter: `平均 ${averageCoverage.value}%`
         },
-        lineStyle: {
-          color: chartPalette.gold,
-          type: 'dashed'
-        },
+        lineStyle: { color: chartPalette.gold, type: 'dashed' },
         data: [{ yAxis: averageCoverage.value }]
       },
       animationDuration: animationTiming.duration,
@@ -99,7 +101,7 @@ const render = () => {
 
 const resize = () => chart?.resize()
 
-watch(() => store.excludedItems, render, { deep: true })
+watch(() => props.items, render, { deep: true })
 onMounted(() => {
   render()
   window.addEventListener('resize', resize)

@@ -1,178 +1,113 @@
 <template>
-  <section class="panel process-panel">
+  <section class="panel comparison-panel">
     <div class="panel-header">
       <div>
         <h4 class="panel-title">标注前后对照</h4>
-        <p class="panel-subtitle">不仅展示最终判断，还展示“模型最初看到了什么、人工最后保留了什么”，让汇报时能清楚讲过程。</p>
+        <p class="panel-subtitle">与当前复核对象实时同步，展示机器候选和人工标签之间的变化。</p>
       </div>
+      <span class="data-chip">{{ caseItem.id }}</span>
     </div>
 
-    <div class="cases-grid">
-      <article v-for="scene in scenes" :key="scene.id" class="case-card">
-        <div class="case-card__text">
-          <span>{{ scene.title }}</span>
-          <strong>{{ scene.summary }}</strong>
-          <p>{{ scene.caption }}</p>
-        </div>
+    <article class="case-card">
+      <div class="case-card__text">
+        <span>当前样本 / {{ caseItem.id }}</span>
+        <strong>{{ caseItem.machineLabel }} -> {{ caseItem.humanLabel }}</strong>
+        <p>{{ caseItem.caption }}</p>
+      </div>
 
-        <div class="case-compare">
-          <div class="case-view">
-            <div class="case-view__title">标注前 / 机器预测</div>
-            <div class="case-image" :class="{ 'is-placeholder': imageStates[scene.id] !== 'loaded' }">
-              <img
-                :src="scene.image"
-                :alt="scene.title"
-                :class="imageClass(scene.id)"
-                loading="lazy"
-                @load="markImageLoaded(scene.id)"
-                @error="markImageFailed(scene.id)"
-              />
-              <div class="case-placeholder">
-                <strong>{{ scene.placeholderTitle }}</strong>
-                <p>{{ scene.placeholderText }}</p>
-              </div>
-              <span v-if="imageStates[scene.id] === 'loading'" class="case-image-state">加载中</span>
-              <span v-else-if="imageStates[scene.id] === 'failed'" class="case-image-state is-failed">图像占位</span>
-
-              <div
-                v-for="box in scene.beforeBoxes"
-                :key="`before-${box.label}`"
-                class="overlay-box"
-                :class="box.kind"
-                :style="box.style"
-              >
-                <span class="overlay-box__label">{{ box.label }}</span>
-              </div>
+      <div class="case-compare">
+        <div class="case-view">
+          <div class="case-view__title">标注前 / 机器预测</div>
+          <div class="case-image" :class="{ 'is-placeholder': imageState !== 'loaded', 'is-pending-review': !isReviewed }">
+            <img
+              :key="imageUrl"
+              :src="imageUrl"
+              :alt="`${caseItem.id} 机器预测图`"
+              :class="{ 'is-loaded': imageState === 'loaded', 'is-failed': imageState === 'failed' }"
+              loading="lazy"
+              @load="imageState = 'loaded'"
+              @error="imageState = 'failed'"
+            />
+            <div class="case-placeholder">
+              <strong>{{ caseItem.id }} 证据图</strong>
+              <p>真实图加载失败时显示检测结构。</p>
             </div>
-          </div>
-
-          <div class="case-view">
-            <div class="case-view__title">标注后 / 人工修正</div>
-            <div class="case-image" :class="{ 'is-placeholder': imageStates[scene.id] !== 'loaded' }">
-              <img
-                :src="scene.image"
-                :alt="`${scene.title} 人工修正`"
-                :class="imageClass(scene.id)"
-                loading="lazy"
-                @load="markImageLoaded(scene.id)"
-                @error="markImageFailed(scene.id)"
-              />
-              <div class="case-placeholder is-clean">
-                <strong>{{ scene.placeholderTitle }}</strong>
-                <p>人工复核后仅保留主物证。</p>
-              </div>
-
-              <div
-                v-for="box in scene.afterBoxes"
-                :key="`after-${box.label}`"
-                class="overlay-box"
-                :class="box.kind"
-                :style="box.style"
-              >
-                <span class="overlay-box__label">{{ box.label }}</span>
-              </div>
+            <div class="overlay-box is-blue" style="left: 10%; top: 18%; width: 66%; height: 52%;">
+              <span class="overlay-box__label">{{ caseItem.machineLabel }}</span>
+            </div>
+            <div class="overlay-box is-red" style="left: 20%; top: 32%; width: 46%; height: 36%;">
+              <span class="overlay-box__label">冲突 {{ conflictPercent }}%</span>
             </div>
           </div>
         </div>
 
-        <div class="case-log">
-          <div class="case-log__item">
-            <span>机器阶段</span>
-            <p>{{ scene.machineNote }}</p>
-          </div>
-          <div class="case-log__item">
-            <span>人工阶段</span>
-            <p>{{ scene.humanNote }}</p>
+        <div class="case-view">
+          <div class="case-view__title">{{ afterTitle }}</div>
+          <div class="case-image" :class="{ 'is-placeholder': imageState !== 'loaded' }">
+            <img
+              :key="`after-${imageUrl}`"
+              :src="imageUrl"
+              :alt="`${caseItem.id} 人工修正图`"
+              :class="{ 'is-loaded': imageState === 'loaded', 'is-failed': imageState === 'failed' }"
+              loading="lazy"
+              @load="imageState = 'loaded'"
+              @error="imageState = 'failed'"
+            />
+            <div class="case-placeholder is-clean">
+              <strong>{{ afterPlaceholderTitle }}</strong>
+              <p>{{ afterPlaceholderText }}</p>
+            </div>
+            <div
+              v-if="isReviewed"
+              class="overlay-box is-green"
+              style="left: 24%; top: 24%; width: 42%; height: 42%;"
+            >
+              <span class="overlay-box__label">{{ afterLabel }}：{{ caseItem.humanLabel }}</span>
+            </div>
           </div>
         </div>
-      </article>
-    </div>
+      </div>
+    </article>
   </section>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 
-const imageStates = ref({})
-const imageUrl = (person, imageName) =>
-  `http://localhost:5000/static/MC2-Image-Data/${person}/${imageName}`
-
-const scenes = [
-  {
-    id: 'person3',
-    title: '样本 A / Person3_2',
-    summary: '从多候选误判收敛为单一关键物证',
-    caption: '文本中存在明显的线下会合提示，因此需要把多个候选视觉框收束为一个可追踪物证。',
-    image: imageUrl('Person3', 'Person3_1.jpg'),
-    placeholderTitle: 'Person3 证据图',
-    placeholderText: '真实图加载失败时显示检测结构。',
-    beforeBoxes: [
-      { label: 'pumpkinNotes 0.53', kind: 'is-blue', style: 'left:8%;top:14%;width:70%;height:58%;' },
-      { label: 'yellowBalloon 0.40', kind: 'is-gold', style: 'left:4%;top:10%;width:74%;height:44%;' },
-      { label: 'yellowBag 0.39', kind: 'is-red', style: 'left:14%;top:24%;width:58%;height:44%;' }
-    ],
-    afterBoxes: [
-      { label: '人工确认：黄色提袋', kind: 'is-green', style: 'left:24%;top:24%;width:40%;height:42%;' }
-    ],
-    machineNote: '模型同时给出南瓜便签、黄色气球、黄色提袋等多个高重叠候选，说明低阈值下存在明显类别混淆。',
-    humanNote: '结合文本叙事后，仅保留黄色提袋这一线下识别物证，其余框被视为背景噪声或误报。'
-  },
-  {
-    id: 'person27',
-    title: '样本 B / Person27_14',
-    summary: '从高噪声候选集回退为公共物品',
-    caption: '文本明确提到南瓜笔记本，这类物品更像会场通用资产，因此可作为“误报洗白”示例。',
-    image: imageUrl('Person27', 'Person27_1.jpg'),
-    placeholderTitle: 'Person27 对照图',
-    placeholderText: '真实图加载失败时显示公共物品对照结构。',
-    beforeBoxes: [
-      { label: 'eyeball 0.26', kind: 'is-red', style: 'left:26%;top:40%;width:20%;height:24%;' },
-      { label: 'pumpkinNotes 0.40', kind: 'is-blue', style: 'left:21%;top:27%;width:31%;height:34%;' },
-      { label: 'yellowBag 0.29', kind: 'is-gold', style: 'left:11%;top:8%;width:52%;height:52%;' }
-    ],
-    afterBoxes: [
-      { label: '人工确认：南瓜笔记本', kind: 'is-green', style: 'left:22%;top:26%;width:34%;height:36%;' }
-    ],
-    machineNote: '模型把同一区域扩张为多个类别候选，造成了“看起来很复杂”的假象。',
-    humanNote: '人工核对文本后，可将其回退为公共笔记本类资产，不再进入核心嫌疑证据链。'
+const props = defineProps({
+  caseItem: {
+    type: Object,
+    required: true
   }
-]
-
-scenes.forEach((scene) => {
-  imageStates.value[scene.id] = 'loading'
 })
 
-const markImageLoaded = (sceneId) => {
-  imageStates.value = { ...imageStates.value, [sceneId]: 'loaded' }
-}
+const imageState = ref('loading')
+const imageUrl = computed(
+  () => `http://localhost:5000/static/MC2-Image-Data/${props.caseItem.id}/${props.caseItem.id}_1.jpg`
+)
+const conflictPercent = computed(() => Math.round((props.caseItem.conflictScore || 0) * 100))
+const isReviewed = computed(() => ['confirmed', 'corrected'].includes(props.caseItem.status))
+const afterTitle = computed(() => isReviewed.value ? '标注后 / 人工结果' : '待标注 / 人工复核')
+const afterPlaceholderTitle = computed(() => isReviewed.value ? `${props.caseItem.id} 人工结果` : `${props.caseItem.id} 待人工复核`)
+const afterPlaceholderText = computed(() => isReviewed.value ? props.caseItem.humanLabel : '尚未提交人工标注，请先在复核工作台操作。')
+const afterLabel = computed(() => props.caseItem.status === 'corrected' ? '人工修正' : '人工确认')
 
-const markImageFailed = (sceneId) => {
-  imageStates.value = { ...imageStates.value, [sceneId]: 'failed' }
-}
-
-const imageClass = (sceneId) => {
-  const state = imageStates.value[sceneId] || 'loading'
-  return {
-    'is-loaded': state === 'loaded',
-    'is-failed': state === 'failed'
+watch(
+  () => props.caseItem.id,
+  () => {
+    imageState.value = 'loading'
   }
-}
+)
 </script>
 
 <style scoped>
-.process-panel {
+.comparison-panel {
   overflow: hidden;
-}
-
-.cases-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: clamp(22px, 3vw, 34px);
 }
 
 .case-card {
   display: grid;
-  grid-template-columns: minmax(240px, 0.42fr) minmax(0, 1fr);
+  grid-template-columns: minmax(220px, 0.36fr) minmax(0, 1fr);
   gap: clamp(18px, 2.4vw, 30px);
   align-items: center;
   padding: clamp(18px, 2.6vw, 30px);
@@ -184,15 +119,7 @@ const imageClass = (sceneId) => {
   box-shadow: var(--shadow-soft);
 }
 
-.case-card__text {
-  align-self: stretch;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
 .case-card__text span,
-.case-log__item span,
 .case-view__title {
   display: block;
   color: var(--subtle);
@@ -207,8 +134,8 @@ const imageClass = (sceneId) => {
   font-size: 1.04rem;
 }
 
-.case-card__text p,
-.case-log__item p {
+.case-card__text p {
+  display: block !important;
   margin: 0;
   color: var(--muted);
   line-height: 1.7;
@@ -218,15 +145,14 @@ const imageClass = (sceneId) => {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
-  margin-top: 0;
 }
 
 .case-image {
   position: relative;
   overflow: hidden;
   margin-top: 8px;
-  border-radius: 14px;
   border: 1px solid rgba(53, 89, 138, 0.12);
+  border-radius: 14px;
   background: linear-gradient(180deg, #ffffff, #f6faff);
   aspect-ratio: 4 / 3;
 }
@@ -249,12 +175,17 @@ const imageClass = (sceneId) => {
   display: none;
 }
 
+.case-image.is-pending-review img {
+  filter: saturate(0.78);
+  opacity: 0.58;
+}
+
 .case-image.is-placeholder {
   background:
     linear-gradient(rgba(47, 125, 246, 0.06) 1px, transparent 1px),
     linear-gradient(90deg, rgba(47, 125, 246, 0.06) 1px, transparent 1px),
     linear-gradient(180deg, #ffffff, #f7fbff);
-  background-size: 100% 48px, 48px 100%, 100% 100%;
+  background-size: 48px 48px, 48px 48px, 100% 100%;
 }
 
 .case-placeholder {
@@ -274,47 +205,9 @@ const imageClass = (sceneId) => {
 }
 
 .case-placeholder p {
+  display: block !important;
   margin: 0;
   line-height: 1.65;
-}
-
-.case-image-state {
-  position: absolute;
-  left: 10px;
-  top: 10px;
-  z-index: 4;
-  display: inline-flex;
-  align-items: center;
-  min-height: 28px;
-  padding: 0 10px;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  color: var(--muted);
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: var(--shadow-soft);
-  font-size: 0.74rem;
-  font-weight: 900;
-}
-
-.case-image-state::before {
-  content: "";
-  width: 8px;
-  height: 8px;
-  margin-right: 6px;
-  border: 2px solid rgba(47, 125, 246, 0.18);
-  border-top-color: var(--accent);
-  border-radius: 999px;
-  animation: case-spin 760ms linear infinite;
-}
-
-.case-image-state.is-failed {
-  color: #9a6818;
-  border-color: rgba(240, 180, 76, 0.24);
-  background: rgba(255, 247, 219, 0.92);
-}
-
-.case-image-state.is-failed::before {
-  display: none;
 }
 
 .case-placeholder.is-clean {
@@ -329,16 +222,10 @@ const imageClass = (sceneId) => {
   background: transparent;
 }
 
-@keyframes case-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 .overlay-box__label {
   position: absolute;
-  top: -2px;
   left: 10px;
+  top: -2px;
   transform: translateY(-100%);
   display: inline-flex;
   align-items: center;
@@ -359,14 +246,6 @@ const imageClass = (sceneId) => {
   color: #1d58b1;
 }
 
-.overlay-box.is-gold {
-  border-color: #f0b44c;
-}
-
-.overlay-box.is-gold .overlay-box__label {
-  color: #9a6818;
-}
-
 .overlay-box.is-red {
   border-color: #df6a6a;
 }
@@ -383,36 +262,9 @@ const imageClass = (sceneId) => {
   color: #1c8a67;
 }
 
-.case-log {
-  grid-column: 2;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-  margin-top: -8px;
-}
-
-.case-log__item {
-  padding: 12px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: rgba(247, 250, 255, 0.86);
-}
-
 @media (max-width: 1240px) {
-  .case-card {
-    grid-template-columns: 1fr;
-  }
-
-  .case-log {
-    grid-column: auto;
-    margin-top: 0;
-  }
-}
-
-@media (max-width: 760px) {
-  .cases-grid,
-  .case-compare,
-  .case-log {
+  .case-card,
+  .case-compare {
     grid-template-columns: 1fr;
   }
 }
