@@ -1,6 +1,6 @@
 <template>
   <div class="apple-glass-card component-wrapper">
-    <h4 class="舱室标题">🛰️ 组件 3 : 原始 YOLO v2 检测框物理空间核密度展布</h4>
+    <h4 class="舱室标题">组件 3：原始 YOLO v2 检测框空间密度</h4>
     <div class="density-viewport" ref="densityChartRef"></div>
   </div>
 </template>
@@ -13,7 +13,7 @@ const densityChartRef = ref(null)
 
 onMounted(() => {
   if (!densityChartRef.value) return
-  const chart = echarts.init(densityChartRef.value, 'dark')
+  const chart = echarts.init(densityChartRef.value)
 
   // 生成空间核密度散点
   const points = Array.from({ length: 180 }, () => [
@@ -36,12 +36,12 @@ onMounted(() => {
       },
       itemStyle: {
         color: new echarts.graphic.RadialGradient(0.4, 0.3, 1, [{
-          offset: 0, color: 'rgba(255, 90, 95, 0.8)' // 珊瑚红高亮聚焦
+          offset: 0, color: 'rgba(223, 106, 106, 0.72)' // 误报高密度热点
         }, {
-          offset: 1, color: 'rgba(101, 31, 255, 0.1)' // 渐变外扩
+          offset: 1, color: 'rgba(47, 125, 246, 0.08)' // 渐变外扩
         }]),
         shadowBlur: 10,
-        shadowColor: 'rgba(255, 90, 95, 0.5)'
+        shadowColor: 'rgba(223, 106, 106, 0.28)'
       }
     }]
   })
@@ -50,5 +50,15 @@ onMounted(() => {
 
 <style scoped>
 .component-wrapper { display: flex; flex-direction: column; height: 100%; }
-.density-viewport { width: 100%; height: 160px; }
+.density-viewport {
+  width: 100%;
+  height: 210px;
+  border: 1px solid rgba(53, 89, 138, 0.1);
+  border-radius: 14px;
+  background:
+    linear-gradient(rgba(47, 125, 246, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(47, 125, 246, 0.05) 1px, transparent 1px),
+    linear-gradient(180deg, #ffffff, #f7fbff);
+  background-size: 100% 42px, 42px 100%, 100% 100%;
+}
 </style>

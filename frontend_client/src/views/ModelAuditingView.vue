@@ -36,6 +36,12 @@
 
     <ModelAuditWorkbench />
 
+    <section class="audit-extension-grid">
+      <ModelEvaluation />
+      <LabelConfusionMatrix />
+      <DetectionDensityMap />
+    </section>
+
     <div class="panel">
       <div class="panel-header">
         <div>
@@ -103,6 +109,9 @@ import * as echarts from 'echarts'
 import { useDashboardStore } from '../store/dashboard'
 import { animationTiming, buildAxis, buildTooltip, chartPalette, splitLine } from '../utils/chartTheme'
 import ModelAuditWorkbench from '../components/process/ModelAuditWorkbench.vue'
+import ModelEvaluation from '../components/auditing/ModelEvaluation.vue'
+import LabelConfusionMatrix from '../components/auditing/LabelConfusionMatrix.vue'
+import DetectionDensityMap from '../components/auditing/DetectionDensityMap.vue'
 
 const store = useDashboardStore()
 const radarRef = ref(null)
@@ -218,6 +227,7 @@ const resizeCharts = () => {
 watch(() => store.scoreThreshold, renderCharts)
 
 onMounted(() => {
+  store.fetchModelEvaluation()
   renderCharts()
   window.addEventListener('resize', resizeCharts)
 })
@@ -239,5 +249,47 @@ onBeforeUnmount(() => {
   margin-bottom: 0;
   color: var(--muted);
   line-height: 1.75;
+}
+
+.audit-extension-grid {
+  display: grid;
+  grid-template-columns: minmax(360px, 1.1fr) minmax(320px, 0.9fr);
+  grid-auto-rows: minmax(260px, auto);
+  gap: clamp(18px, 2.2vw, 28px);
+}
+
+.audit-extension-grid :deep(.chart-container) {
+  min-height: 420px;
+}
+
+.audit-extension-grid :deep(.component-wrapper) {
+  min-height: 260px;
+}
+
+.audit-extension-grid :deep(.chart-container),
+.audit-extension-grid :deep(.component-wrapper) {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background:
+    radial-gradient(circle at top right, rgba(47, 125, 246, 0.08), transparent 28%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 251, 255, 0.92));
+  box-shadow: var(--shadow);
+  padding: var(--panel-padding);
+}
+
+.audit-extension-grid :deep(.chart-container:first-child) {
+  grid-row: span 2;
+}
+
+.audit-extension-grid :deep(.舱室标题) {
+  margin: 0 0 12px;
+  color: var(--text);
+  font-size: 1rem;
+}
+
+@media (max-width: 1120px) {
+  .audit-extension-grid {
+    grid-template-columns: 1fr;
+  }
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div class="apple-glass-card component-wrapper">
-    <h4 class="舱室标题">🛰️ 组件 2 : 多模态图文语义指鹿为马混淆判定矩阵</h4>
+    <h4 class="舱室标题">组件 2：多模态图文语义混淆矩阵</h4>
     <div class="matrix-layout">
       <div class="matrix-grid">
         <div class="matrix-row header">
@@ -39,11 +39,11 @@ const getCellClass = (img, txt) => {
 .matrix-layout { flex: 1; display: flex; align-items: center; justify-content: center; }
 .matrix-grid { display: flex; flex-direction: column; gap: 4px; width: 100%; }
 .matrix-row { display: grid; grid-template-columns: 1.2fr repeat(5, 1fr); gap: 4px; }
-.cell { height: 32px; display: flex; align-items: center; justify-content: center; font-size: 11px; border-radius: 6px; background: rgba(255,255,255,0.02); color: #E5E5EA; }
-.font-lbl { color: #AEAED2; font-weight: 500; }
+.cell { height: 34px; display: flex; align-items: center; justify-content: center; font-size: 11px; border-radius: 8px; background: rgba(47, 125, 246, 0.06); color: var(--text); }
+.font-lbl { color: var(--muted); font-weight: 700; }
 .row-title { justify-content: flex-end; padding-right: 8px; }
 
-.is-diagonal { background: rgba(48, 209, 88, 0.2) !important; color: #30D158; border: 1px solid rgba(48, 209, 88, 0.1); }
-.is-trap { background: rgba(255, 90, 95, 0.25) !important; color: #FF5A5F; font-weight: bold; border: 1px solid rgba(255, 90, 95, 0.2); }
-.data-cell:not(.header):hover { transform: scale(1.05); z-index: 10; box-shadow: 0 4px 12px rgba(0,0,0,0.5); cursor: pointer; }
+.is-diagonal { background: rgba(57, 169, 125, 0.14) !important; color: #25795a; border: 1px solid rgba(57, 169, 125, 0.18); }
+.is-trap { background: rgba(223, 106, 106, 0.16) !important; color: #b44e4e; font-weight: 900; border: 1px solid rgba(223, 106, 106, 0.24); }
+.data-cell:not(.header):hover { transform: scale(1.05); z-index: 10; box-shadow: var(--shadow-soft); cursor: pointer; }
 </style>

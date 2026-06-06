@@ -1,6 +1,6 @@
 <template>
   <div class="apple-glass-card chart-container">
-    <h4 class="舱室标题">🛰️ 组件 1 : 原始 YOLO v2 物资识别质量与置信度展布审计</h4>
+    <h4 class="舱室标题">组件 1：原始 YOLO v2 物资识别质量与置信度展布审计</h4>
     <div class="box-viewport" ref="boxChartRef"></div>
   </div>
 </template>
@@ -18,7 +18,7 @@ const renderChart = () => {
   if (!boxChartRef.value) return
   if (myChart) myChart.dispose()
 
-  myChart = echarts.init(boxChartRef.value, 'dark')
+  myChart = echarts.init(boxChartRef.value)
 
   // 💡 核心对齐修复：如果后端 API 尚未完全返回，系统以赛题官方 YOLO v2 真实质量四分位数作为高保真对齐底座
   // 这确保了在任何情况下组件 1 都能瞬间喷涌出漂亮的可视化结果，拒绝死黑！
@@ -50,7 +50,7 @@ const renderChart = () => {
       axisPointer: { type: 'shadow' },
       formatter: (params) => {
         if (params.componentSubtype === 'boxplot') {
-          return `📦 <b>物资品类: ${params.name}</b><br/>
+          return `<b>物资品类: ${params.name}</b><br/>
                   最大可信值 (Max): ${params.value[5]}<br/>
                   上四分位数 (Q3): ${params.value[4]}<br/>
                   中位数分值 (Median): ${params.value[3]}<br/>
@@ -63,27 +63,27 @@ const renderChart = () => {
     xAxis: {
       type: 'category',
       data: categories,
-      axisLabel: { rotate: 25, color: '#8E8E93', fontSize: 11, fontWeight: 500 }
+      axisLabel: { rotate: 25, color: '#56708f', fontSize: 11, fontWeight: 600 }
     },
     yAxis: {
       type: 'value',
       min: 0.25,
       max: 1.0,
       name: 'YOLO 置信度 (Score)',
-      nameTextStyle: { color: '#8E8E93', fontSize: 11 },
-      axisLabel: { color: '#8E8E93' },
-      splitLine: { lineStyle: { color: 'rgba(255,255,255,0.02)' } }
+      nameTextStyle: { color: '#56708f', fontSize: 11 },
+      axisLabel: { color: '#56708f' },
+      splitLine: { lineStyle: { color: 'rgba(53,89,138,0.12)', type: 'dashed' } }
     },
     // 跨页面大动脉联动：根据全局动态置信度，高能实时切分机器噪声层
     visualMap: {
       show: false,
-      pieces: [{ gt: store.scoreThreshold, color: '#30D158' }], // 通过过滤的物资渲染为 Apple 荧光绿
-      outOfRange: { color: '#FF5A5F' } // 低于当前调校滑块门限的垃圾噪声渲染为珊瑚红
+      pieces: [{ gt: store.scoreThreshold, color: '#39a97d' }],
+      outOfRange: { color: '#df6a6a' }
     },
     series: [{
       type: 'boxplot',
       data: boxData,
-      itemStyle: { borderWidth: 1.5, stroke: '#fff' },
+      itemStyle: { borderWidth: 1.5, borderColor: '#2f7df6' },
       boxWidth: [10, 30]
     }]
   })

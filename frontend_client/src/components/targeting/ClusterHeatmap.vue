@@ -20,6 +20,11 @@
     </div>
 
     <div ref="heatmapRef" class="chart-frame heatmap-frame"></div>
+    <div class="heatmap-legend" aria-label="热力图颜色图例">
+      <span>背景噪声</span>
+      <i v-for="color in legendColors" :key="color" :style="{ background: color }"></i>
+      <span>核心信号</span>
+    </div>
   </div>
 </template>
 
@@ -37,6 +42,7 @@ let chart
 
 const fallbackSuspects = Array.from({ length: 40 }, (_, i) => `Person${i + 1}`)
 const fallbackItems = ['Notebook', 'Badge', 'Toy', 'Cap', 'Red Hat', 'Yellow Bag', 'Connector']
+const legendColors = ['#eef4fb', '#cfe0f7', '#93bbe7', '#4ea2d8', '#f0b44c']
 
 const suspects = computed(() => store.orderedSuspects.length ? store.orderedSuspects : fallbackSuspects)
 const items = computed(() => store.orderedItems.length ? store.orderedItems : fallbackItems)
@@ -93,6 +99,7 @@ const render = () => {
       ...buildAxis({ fontSize: 10 })
     },
     visualMap: {
+      show: false,
       min: 0,
       max: 4,
       calculable: false,
@@ -191,6 +198,24 @@ onBeforeUnmount(() => {
 
 .heatmap-frame {
   min-height: 540px;
+}
+
+.heatmap-legend {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 10px;
+  color: var(--subtle);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.heatmap-legend i {
+  width: 30px;
+  height: 10px;
+  border: 1px solid rgba(53, 89, 138, 0.1);
+  border-radius: 999px;
 }
 
 @media (max-width: 1040px) {
