@@ -1,69 +1,35 @@
-import os
 import sys
 from pathlib import Path
 
-# 将当前挑战赛分析目录加入系统路径，确保模块间可以跨文件顺利 import
-sys.path.append(str(Path(__file__).resolve().parent))
+ANALYSIS_DIR = Path(__file__).resolve().parent
+ROOT_DIR = ANALYSIS_DIR.parent
+sys.path.insert(0, str(ANALYSIS_DIR))
 
 def execute_full_pipeline():
-    print("===============================================================")
-    print("🕵️‍♂️ VAST 2020 MC2 离线数据科学取证流水线：全案总调度开始 🕵️‍♂️")
-    print("===============================================================\n")
+    print("=" * 72)
+    print("VAST 2020 MC2 可复现取证流水线")
+    print("=" * 72)
 
-    # 统一固化的数据路径对齐 (严格基于共享数据集总仓)
-    RAW_DATA_DIR = "../raw_data/MC2-Image-Data"
-    MASTER_JSON = "../raw_data/i3_new_data.json"
-
-    # 验证原始数据集是否存在
-    if not os.path.exists(RAW_DATA_DIR):
-        print(f"❌ 错误：在指定位置未找到原始数据集文件夹: {RAW_DATA_DIR}")
-        print("💡 请检查你在第一步中，是否把 Person1~40 和 TrainingImages 剪切到了正确的位置。")
+    raw_data_dir = ROOT_DIR / "raw_data" / "MC2-Image-Data"
+    if not raw_data_dir.exists():
+        print(f"未找到数据目录：{raw_data_dir}")
         return
 
     try:
-        # -------------------------------------------------------------
-        # 1️⃣ 运行 Step 1: 碎片 wash 与硬修复
-        # -------------------------------------------------------------
-        print("---------------------------------------------------------------")
-        from data_cleaner import run_data_cleaner
-        run_data_cleaner(RAW_DATA_DIR, MASTER_JSON)
-        print("---------------------------------------------------------------\n")
-
-        # -------------------------------------------------------------
-        # 2️⃣ 运行 Step 2: 社交媒体文本特征挖掘
-        # -------------------------------------------------------------
-        print("---------------------------------------------------------------")
-        from text_mining import run_text_mining
-        run_text_mining(MASTER_JSON)
-        print("---------------------------------------------------------------\n")
-
-        # -------------------------------------------------------------
-        # 3️⃣ 运行 Step 3: YOLO 模型置信度审计与多模态冲突熵计算
-        # -------------------------------------------------------------
-        print("---------------------------------------------------------------")
         from model_auditor import run_model_auditor
-        run_model_auditor(MASTER_JSON)
-        print("---------------------------------------------------------------\n")
-
-        # -------------------------------------------------------------
-        # 4️⃣ 运行 Step 4 & 5: 双向聚类重排与黑客帮终极取证
-        # -------------------------------------------------------------
-        # 由于 totem_elimination.py 内部已经包含了调用 community_clustering.py
-        # 的聚类矩阵逻辑，我们直接调度 Step 5，即可完美、连贯地打印出最后的案情全景结果。
-        print("---------------------------------------------------------------")
+        run_model_auditor()
+        from community_clustering import run_community_clustering
+        run_community_clustering(data_source="corrected")
         from totem_elimination import run_totem_elimination
-        run_totem_elimination(MASTER_JSON)
-        print("---------------------------------------------------------------\n")
-
-        print("===============================================================")
-        print("🎉 恭喜！离线算法分析层全量流水线执行完毕，全案取证大获全胜！")
-        print("===============================================================")
+        run_totem_elimination()
+        print("=" * 72)
+        print("流水线执行完成。原始预测未被覆盖，结论来自独立校正层。")
+        print("=" * 72)
 
     except ImportError as e:
-        print(f"❌ 导入脚本模块失败，请确保 5 个分析脚本的文件名拼写和目录完全正确。")
-        print(f"错误详情: {e}")
+        print(f"导入分析模块失败：{e}")
     except Exception as e:
-        print(f"❌ 流水线在运行中发生意外中断: {e}")
+        print(f"流水线执行失败：{e}")
 
 if __name__ == "__main__":
     execute_full_pipeline()

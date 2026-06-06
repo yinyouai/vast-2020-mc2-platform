@@ -9,6 +9,8 @@ class AppConfig:
 
     # 核心多模态 Master JSON 主包物理落盘路径
     MASTER_JSON_PATH = RAW_DATA_DIR / "i3_new_data.json"
+    CORRECTIONS_JSON_PATH = RAW_DATA_DIR / "human_corrections.json"
+    ANALYSIS_JSON_PATH = RAW_DATA_DIR / "analysis_results.json"
 
     # 嫌疑人图片碎片物理存放地址
     IMAGE_ASSETS_DIR = RAW_DATA_DIR / "MC2-Image-Data"

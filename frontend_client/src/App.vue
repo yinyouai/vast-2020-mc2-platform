@@ -10,9 +10,7 @@
         <div class="brand-copy">
           <p class="eyebrow">VAST Challenge 2020</p>
           <h1>多模态取证分析平台</h1>
-          <p class="brand-description">
-            围绕模型误差校正、群体特征收敛与最终嫌疑群体锁定，构建五层递进式可视分析流程。
-          </p>
+          <p class="brand-description">从原始预测审计、人工校正到候选评分，构建可追溯的五层取证流程。</p>
         </div>
       </div>
 
@@ -39,7 +37,7 @@
         <p class="eyebrow">当前叙事</p>
         <h3>{{ route.meta.storyTitle || '证据会在层层筛选后逐步收敛。' }}</h3>
         <p>
-          {{ route.meta.storySummary || '结合图像、文本、物证和社交隔离关系，逐步逼近最终嫌疑团体。' }}
+          {{ route.meta.storySummary || '结合图像、文本和物品分布，逐步验证最终嫌疑团体。' }}
         </p>
       </div>
 
@@ -140,16 +138,17 @@ const navItems = [
   { index: '02', to: '/task2_correction', title: '人工复核', caption: '修正图文冲突与错误标签' },
   { index: '03', to: '/task3_clustering', title: '群体聚类', caption: '寻找人-物共现异常结构' },
   { index: '04', to: '/task4_totem', title: '暗号过滤', caption: '排除公共物品并收敛线索' },
-  { index: '05', to: '/task5_verdict', title: '最终定案', caption: '结合社交隔离完成判定' }
+  { index: '05', to: '/task5_verdict', title: '最终定案', caption: '逐人核验图文证据与排除项' }
 ]
 
 const isCoreSuspect = computed(() => store.hackerGroup.includes(store.selectedPersonId))
 const activeLayer = computed(() => Number(route.meta.depth || 1))
 const totemLabel = computed(() => {
   const map = {
+    canadaPencil: '加拿大枫叶铅笔',
     yellowBag: '黄色提袋'
   }
-  return map[store.activeTotem] || store.activeTotem
+  return map[store.activeTotem] || store.activeTotem || '分析中'
 })
 
 const revealSelector = [
@@ -185,7 +184,11 @@ const observeRevealTargets = () => {
     node.classList.add('reveal')
     node.style.setProperty('--reveal-delay', `${Math.min((index % 7) * 72, 432)}ms`)
 
-    if (prefersReducedMotion() || !revealObserver) {
+    const nodeRect = node.getBoundingClientRect()
+    const rootRect = root.getBoundingClientRect()
+    const isInViewport = nodeRect.bottom > rootRect.top && nodeRect.top < rootRect.bottom
+
+    if (prefersReducedMotion() || !revealObserver || isInViewport) {
       node.classList.add('is-visible')
       return
     }
@@ -229,8 +232,7 @@ const setupRevealObserver = () => {
 }
 
 onMounted(() => {
-  store.fetchModelEvaluation()
-  store.fetchHeatmapMatrix()
+  store.initialize()
   setupRevealObserver()
 })
 

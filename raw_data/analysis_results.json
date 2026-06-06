@@ -1,0 +1,638 @@
+{
+  "status": "complete",
+  "data_sources": {
+    "raw_predictions": "raw_data/i3_new_data.json",
+    "corrected_labels": "raw_data/human_corrections.json",
+    "final_basis": "corrected_labels"
+  },
+  "target_group_size": 8,
+  "raw_hypothesis": {
+    "label": "yellowBag",
+    "threshold": 0.55,
+    "owner_count": 8,
+    "owners": [
+      "Person3",
+      "Person7",
+      "Person9",
+      "Person10",
+      "Person12",
+      "Person17",
+      "Person32",
+      "Person38"
+    ],
+    "detections": [
+      {
+        "person_id": "Person32",
+        "image_id": "Person32_49",
+        "box_id": 4,
+        "score": 0.7926,
+        "rejected": true
+      },
+      {
+        "person_id": "Person7",
+        "image_id": "Person7_8",
+        "box_id": 8,
+        "score": 0.6434,
+        "rejected": true
+      },
+      {
+        "person_id": "Person3",
+        "image_id": "Person3_20",
+        "box_id": 3,
+        "score": 0.6399,
+        "rejected": true
+      },
+      {
+        "person_id": "Person3",
+        "image_id": "Person3_19",
+        "box_id": 4,
+        "score": 0.6286,
+        "rejected": true
+      },
+      {
+        "person_id": "Person3",
+        "image_id": "Person3_17",
+        "box_id": 3,
+        "score": 0.628,
+        "rejected": true
+      },
+      {
+        "person_id": "Person12",
+        "image_id": "Person12_12",
+        "box_id": 10,
+        "score": 0.6251,
+        "rejected": true
+      },
+      {
+        "person_id": "Person32",
+        "image_id": "Person32_30",
+        "box_id": 6,
+        "score": 0.6103,
+        "rejected": true
+      },
+      {
+        "person_id": "Person12",
+        "image_id": "Person12_8",
+        "box_id": 3,
+        "score": 0.5849,
+        "rejected": true
+      },
+      {
+        "person_id": "Person10",
+        "image_id": "Person10_7",
+        "box_id": 5,
+        "score": 0.5756,
+        "rejected": true
+      },
+      {
+        "person_id": "Person17",
+        "image_id": "Person17_62",
+        "box_id": 7,
+        "score": 0.5707,
+        "rejected": true
+      },
+      {
+        "person_id": "Person9",
+        "image_id": "Person9_5",
+        "box_id": 3,
+        "score": 0.5673,
+        "rejected": true
+      },
+      {
+        "person_id": "Person38",
+        "image_id": "Person38_15",
+        "box_id": 5,
+        "score": 0.5533,
+        "rejected": true
+      }
+    ],
+    "status": "invalidated"
+  },
+  "candidate_rankings": [
+    {
+      "label": "canadaPencil",
+      "owner_count": 8,
+      "coverage": 0.2,
+      "owners": [
+        "Person4",
+        "Person7",
+        "Person14",
+        "Person15",
+        "Person22",
+        "Person25",
+        "Person35",
+        "Person39"
+      ],
+      "min_occurrence": 2,
+      "mean_occurrence": 3.125,
+      "occurrence_std": 1.053,
+      "stable_owner_ratio": 1.0,
+      "text_support_count": 3,
+      "evidence_image_count": 25,
+      "exact_target_size": true,
+      "score": 0.9375,
+      "source": "人工逐图复核与漏检补标"
+    },
+    {
+      "label": "blueSunglasses",
+      "owner_count": 9,
+      "coverage": 0.225,
+      "owners": [
+        "Person2",
+        "Person7",
+        "Person9",
+        "Person13",
+        "Person17",
+        "Person22",
+        "Person27",
+        "Person31",
+        "Person39"
+      ],
+      "min_occurrence": 2,
+      "mean_occurrence": 2,
+      "occurrence_std": 0.0,
+      "stable_owner_ratio": 1.0,
+      "text_support_count": 3,
+      "evidence_image_count": 0,
+      "exact_target_size": false,
+      "score": 0.528,
+      "source": "人工纠正后的候选物品分布"
+    },
+    {
+      "label": "rainbowPens",
+      "owner_count": 8,
+      "coverage": 0.2,
+      "owners": [
+        "Person1",
+        "Person3",
+        "Person11",
+        "Person17",
+        "Person23",
+        "Person30",
+        "Person31",
+        "Person38"
+      ],
+      "min_occurrence": 1,
+      "mean_occurrence": 1,
+      "occurrence_std": 0.0,
+      "stable_owner_ratio": 0.0,
+      "text_support_count": 0,
+      "evidence_image_count": 0,
+      "exact_target_size": true,
+      "score": 0.4,
+      "source": "人工纠正后的候选物品分布"
+    },
+    {
+      "label": "rubiksCube",
+      "owner_count": 8,
+      "coverage": 0.2,
+      "owners": [
+        "Person4",
+        "Person6",
+        "Person8",
+        "Person17",
+        "Person21",
+        "Person30",
+        "Person34",
+        "Person38"
+      ],
+      "min_occurrence": 1,
+      "mean_occurrence": 1,
+      "occurrence_std": 0.0,
+      "stable_owner_ratio": 0.0,
+      "text_support_count": 0,
+      "evidence_image_count": 0,
+      "exact_target_size": true,
+      "score": 0.4,
+      "source": "人工纠正后的候选物品分布"
+    },
+    {
+      "label": "noisemaker",
+      "owner_count": 9,
+      "coverage": 0.225,
+      "owners": [
+        "Person1",
+        "Person2",
+        "Person11",
+        "Person12",
+        "Person15",
+        "Person20",
+        "Person27",
+        "Person36",
+        "Person37"
+      ],
+      "min_occurrence": 1,
+      "mean_occurrence": 1,
+      "occurrence_std": 0.0,
+      "stable_owner_ratio": 0.0,
+      "text_support_count": 2,
+      "evidence_image_count": 0,
+      "exact_target_size": false,
+      "score": 0.268,
+      "source": "人工纠正后的候选物品分布"
+    },
+    {
+      "label": "lavenderDie",
+      "owner_count": 9,
+      "coverage": 0.225,
+      "owners": [
+        "Person2",
+        "Person4",
+        "Person6",
+        "Person10",
+        "Person16",
+        "Person18",
+        "Person21",
+        "Person29",
+        "Person36"
+      ],
+      "min_occurrence": 1,
+      "mean_occurrence": 1,
+      "occurrence_std": 0.0,
+      "stable_owner_ratio": 0.0,
+      "text_support_count": 1,
+      "evidence_image_count": 0,
+      "exact_target_size": false,
+      "score": 0.26,
+      "source": "人工纠正后的候选物品分布"
+    },
+    {
+      "label": "pinkEraser",
+      "owner_count": 9,
+      "coverage": 0.225,
+      "owners": [
+        "Person1",
+        "Person5",
+        "Person9",
+        "Person15",
+        "Person18",
+        "Person19",
+        "Person28",
+        "Person33",
+        "Person40"
+      ],
+      "min_occurrence": 1,
+      "mean_occurrence": 1,
+      "occurrence_std": 0.0,
+      "stable_owner_ratio": 0.0,
+      "text_support_count": 1,
+      "evidence_image_count": 0,
+      "exact_target_size": false,
+      "score": 0.26,
+      "source": "人工纠正后的候选物品分布"
+    },
+    {
+      "label": "metalKey",
+      "owner_count": 10,
+      "coverage": 0.25,
+      "owners": [
+        "Person2",
+        "Person8",
+        "Person9",
+        "Person16",
+        "Person18",
+        "Person20",
+        "Person25",
+        "Person30",
+        "Person32",
+        "Person40"
+      ],
+      "min_occurrence": 1,
+      "mean_occurrence": 1,
+      "occurrence_std": 0.0,
+      "stable_owner_ratio": 0.0,
+      "text_support_count": 0,
+      "evidence_image_count": 0,
+      "exact_target_size": false,
+      "score": 0.216,
+      "source": "人工纠正后的候选物品分布"
+    },
+    {
+      "label": "miniCards",
+      "owner_count": 10,
+      "coverage": 0.25,
+      "owners": [
+        "Person1",
+        "Person4",
+        "Person6",
+        "Person10",
+        "Person13",
+        "Person14",
+        "Person24",
+        "Person25",
+        "Person32",
+        "Person39"
+      ],
+      "min_occurrence": 1,
+      "mean_occurrence": 1,
+      "occurrence_std": 0.0,
+      "stable_owner_ratio": 0.0,
+      "text_support_count": 0,
+      "evidence_image_count": 0,
+      "exact_target_size": false,
+      "score": 0.216,
+      "source": "人工纠正后的候选物品分布"
+    }
+  ],
+  "final": {
+    "totem": "canadaPencil",
+    "group": [
+      "Person4",
+      "Person7",
+      "Person14",
+      "Person15",
+      "Person22",
+      "Person25",
+      "Person35",
+      "Person39"
+    ],
+    "score": 0.9375,
+    "rationale": [
+      "纠正后恰好由 8 人持有",
+      "每位成员至少在 2 张图片中出现",
+      "组内稳定拥有者比例为 100%",
+      "已核验 25 张图片证据",
+      "3 位成员具有直接文本支持"
+    ],
+    "evidence": [
+      {
+        "person_id": "Person4",
+        "image_ids": [
+          "Person4_21",
+          "Person4_22",
+          "Person4_23",
+          "Person4_24"
+        ],
+        "primary_image_id": "Person4_21",
+        "image_paths": [
+          "/static/MC2-Image-Data/Person4/Person4_21.jpg",
+          "/static/MC2-Image-Data/Person4/Person4_22.jpg",
+          "/static/MC2-Image-Data/Person4/Person4_23.jpg",
+          "/static/MC2-Image-Data/Person4/Person4_24.jpg"
+        ],
+        "occurrence_count": 4,
+        "raw_detected": true,
+        "raw_max_score": 0.5179,
+        "raw_detection_images": [
+          "Person4_21",
+          "Person4_22",
+          "Person4_25",
+          "Person4_24",
+          "Person4_23"
+        ],
+        "text_snippets": [],
+        "source": "人工视觉复核",
+        "difficult": false
+      },
+      {
+        "person_id": "Person7",
+        "image_ids": [
+          "Person7_1",
+          "Person7_14",
+          "Person7_15"
+        ],
+        "primary_image_id": "Person7_1",
+        "image_paths": [
+          "/static/MC2-Image-Data/Person7/Person7_1.jpg",
+          "/static/MC2-Image-Data/Person7/Person7_14.jpg",
+          "/static/MC2-Image-Data/Person7/Person7_15.jpg"
+        ],
+        "occurrence_count": 3,
+        "raw_detected": true,
+        "raw_max_score": 0.4634,
+        "raw_detection_images": [
+          "Person7_14"
+        ],
+        "text_snippets": [],
+        "source": "人工视觉复核",
+        "difficult": false
+      },
+      {
+        "person_id": "Person14",
+        "image_ids": [
+          "Person14_8",
+          "Person14_9",
+          "Person14_10",
+          "Person14_16",
+          "Person14_17"
+        ],
+        "primary_image_id": "Person14_8",
+        "image_paths": [
+          "/static/MC2-Image-Data/Person14/Person14_8.jpg",
+          "/static/MC2-Image-Data/Person14/Person14_9.jpg",
+          "/static/MC2-Image-Data/Person14/Person14_10.jpg",
+          "/static/MC2-Image-Data/Person14/Person14_16.jpg",
+          "/static/MC2-Image-Data/Person14/Person14_17.jpg"
+        ],
+        "occurrence_count": 5,
+        "raw_detected": true,
+        "raw_max_score": 0.4547,
+        "raw_detection_images": [
+          "Person14_9",
+          "Person14_8",
+          "Person14_16",
+          "Person14_10"
+        ],
+        "text_snippets": [
+          "a maple leaf pencil reminds me of home"
+        ],
+        "source": "人工视觉复核",
+        "difficult": false
+      },
+      {
+        "person_id": "Person15",
+        "image_ids": [
+          "Person15_1",
+          "Person15_2"
+        ],
+        "primary_image_id": "Person15_1",
+        "image_paths": [
+          "/static/MC2-Image-Data/Person15/Person15_1.jpg",
+          "/static/MC2-Image-Data/Person15/Person15_2.jpg"
+        ],
+        "occurrence_count": 2,
+        "raw_detected": false,
+        "raw_max_score": 0,
+        "raw_detection_images": [],
+        "text_snippets": [],
+        "source": "人工漏检补标",
+        "difficult": false
+      },
+      {
+        "person_id": "Person22",
+        "image_ids": [
+          "Person22_3",
+          "Person22_5"
+        ],
+        "primary_image_id": "Person22_3",
+        "image_paths": [
+          "/static/MC2-Image-Data/Person22/Person22_3.jpg",
+          "/static/MC2-Image-Data/Person22/Person22_5.jpg"
+        ],
+        "occurrence_count": 2,
+        "raw_detected": false,
+        "raw_max_score": 0,
+        "raw_detection_images": [],
+        "text_snippets": [],
+        "source": "人工漏检补标",
+        "difficult": false
+      },
+      {
+        "person_id": "Person25",
+        "image_ids": [
+          "Person25_9",
+          "Person25_10",
+          "Person25_11"
+        ],
+        "primary_image_id": "Person25_9",
+        "image_paths": [
+          "/static/MC2-Image-Data/Person25/Person25_9.jpg",
+          "/static/MC2-Image-Data/Person25/Person25_10.jpg",
+          "/static/MC2-Image-Data/Person25/Person25_11.jpg"
+        ],
+        "occurrence_count": 3,
+        "raw_detected": true,
+        "raw_max_score": 0.4525,
+        "raw_detection_images": [
+          "Person25_11",
+          "Person25_16",
+          "Person25_22",
+          "Person25_1",
+          "Person25_2",
+          "Person25_9"
+        ],
+        "text_snippets": [],
+        "source": "人工视觉复核",
+        "difficult": false
+      },
+      {
+        "person_id": "Person35",
+        "image_ids": [
+          "Person35_7",
+          "Person35_8"
+        ],
+        "primary_image_id": "Person35_7",
+        "image_paths": [
+          "/static/MC2-Image-Data/Person35/Person35_7.jpg",
+          "/static/MC2-Image-Data/Person35/Person35_8.jpg"
+        ],
+        "occurrence_count": 2,
+        "raw_detected": true,
+        "raw_max_score": 0.2795,
+        "raw_detection_images": [
+          "Person35_8"
+        ],
+        "text_snippets": [
+          "The benefit of the maple leaf pencil is that you dont misspell sorry"
+        ],
+        "source": "人工视觉复核",
+        "difficult": false
+      },
+      {
+        "person_id": "Person39",
+        "image_ids": [
+          "Person39_3",
+          "Person39_4",
+          "Person39_11",
+          "Person39_12"
+        ],
+        "primary_image_id": "Person39_3",
+        "image_paths": [
+          "/static/MC2-Image-Data/Person39/Person39_3.jpg",
+          "/static/MC2-Image-Data/Person39/Person39_4.jpg",
+          "/static/MC2-Image-Data/Person39/Person39_11.jpg",
+          "/static/MC2-Image-Data/Person39/Person39_12.jpg"
+        ],
+        "occurrence_count": 4,
+        "raw_detected": true,
+        "raw_max_score": 0.3359,
+        "raw_detection_images": [
+          "Person39_3",
+          "Person39_9"
+        ],
+        "text_snippets": [
+          "My souvenir from Canada is not very useful until I sharpen it. I had better grab my eye protection in case we have another \"incident\" with the sharpener like last time..."
+        ],
+        "source": "人工视觉复核",
+        "difficult": false
+      }
+    ],
+    "excluded_nonmembers": [
+      {
+        "person_id": "Person3",
+        "max_score": 0.5706,
+        "image_id": "Person3_8",
+        "reason": "模型曾预测该物品，但人工纠正分布未确认其为真实拥有者"
+      },
+      {
+        "person_id": "Person23",
+        "max_score": 0.4812,
+        "image_id": "Person23_34",
+        "reason": "模型曾预测该物品，但人工纠正分布未确认其为真实拥有者"
+      },
+      {
+        "person_id": "Person9",
+        "max_score": 0.4259,
+        "image_id": "Person9_2",
+        "reason": "模型曾预测该物品，但人工纠正分布未确认其为真实拥有者"
+      },
+      {
+        "person_id": "Person32",
+        "max_score": 0.4026,
+        "image_id": "Person32_47",
+        "reason": "模型曾预测该物品，但人工纠正分布未确认其为真实拥有者"
+      },
+      {
+        "person_id": "Person37",
+        "max_score": 0.3977,
+        "image_id": "Person37_1",
+        "reason": "模型曾预测该物品，但人工纠正分布未确认其为真实拥有者"
+      },
+      {
+        "person_id": "Person5",
+        "max_score": 0.3656,
+        "image_id": "Person5_20",
+        "reason": "模型曾预测该物品，但人工纠正分布未确认其为真实拥有者"
+      },
+      {
+        "person_id": "Person13",
+        "max_score": 0.3578,
+        "image_id": "Person13_14",
+        "reason": "模型曾预测该物品，但人工纠正分布未确认其为真实拥有者"
+      },
+      {
+        "person_id": "Person33",
+        "max_score": 0.3493,
+        "image_id": "Person33_23",
+        "reason": "模型曾预测该物品，但人工纠正分布未确认其为真实拥有者"
+      }
+    ]
+  },
+  "stages": [
+    {
+      "id": 1,
+      "name": "原始模型审计",
+      "basis": "raw_predictions"
+    },
+    {
+      "id": 2,
+      "name": "人工纠正与漏检补标",
+      "basis": "corrected_labels"
+    },
+    {
+      "id": 3,
+      "name": "纠正后人物-物品矩阵",
+      "basis": "corrected_labels"
+    },
+    {
+      "id": 4,
+      "name": "候选覆盖率与稳定性评分",
+      "basis": "candidate_rankings"
+    },
+    {
+      "id": 5,
+      "name": "逐人图片和文本证据验证",
+      "basis": "final.evidence"
+    }
+  ]
+}

@@ -1,48 +1,39 @@
-import json
-import numpy as np
-import pandas as pd
+from pathlib import Path
+import sys
+
+ROOT_DIR = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT_DIR / "backend_service"))
+
+from core_engines.analysis_engine import ForensicAnalysisEngine
+from core_engines.data_provider import DataProviderEngine
 
 
-def run_model_auditor(json_path):
-    print("🚀 [Step 3] 启动原始 YOLO v2 不确定性审计与图文冲突量化...")
-    with open(json_path, "r", encoding="utf-8") as f:
-        master_data = json.load(f)
+def run_model_auditor(json_path=None):
+    print("[Step 3] 审计原始 YOLO v2 输出，不把置信度直接等同于正确率...")
+    training_dir = ROOT_DIR / "raw_data" / "MC2-Image-Data" / "TrainingImages"
+    labels = [path.name for path in training_dir.iterdir() if path.is_dir()]
+    engine = ForensicAnalysisEngine(
+        DataProviderEngine.load_master_snapshot(),
+        DataProviderEngine.load_corrections(),
+        labels,
+    )
+    audit = engine.model_audit()
+    hypothesis = engine.raw_hypothesis()
 
-    label_scores = []
-    conflict_records = []
-
-    for person_id, person_node in master_data.items():
-        for img_id, img_node in person_node["images"].items():
-            for box in img_node["yolo_boxes"]:
-                if box["label"] != "unknown" and box["score"] > 0:
-                    label_scores.append({"Label": box["label"], "Score": box["score"]})
-
-            # 多模态图文打架比对 (对应不确定性量化与效率提速)
-            if img_node["text_anchor"] and img_node["yolo_boxes"]:
-                valid_boxes = [b for b in img_node["yolo_boxes"] if b["label"] != "unknown"]
-                if not valid_boxes: continue
-
-                top_box = max(valid_boxes, key=lambda b: b["score"])
-                if top_box["label"] != img_node["text_anchor"]:
-                    conflict_records.append({
-                        "Suspect": person_id, "Image_ID": img_id,
-                        "Human_Said_Text": img_node["text_anchor"],
-                        "YOLO_Thought_Img": top_box["label"], "Confidence_Score": top_box["score"]
-                    })
-
-    # 打印任务一统计结果
-    df_scores = pd.DataFrame(label_scores)
-    stats = df_scores.groupby('Label')['Score'].agg(
-        ['min', lambda x: np.percentile(x, 25), 'median', lambda x: np.percentile(x, 75), 'max', 'count'])
-    stats.columns = ['Min', 'Q1', 'Median', 'Q3', 'Max', 'Count']
-    print("\n📊 [任务一审计结果] 赛题原始 YOLO v2 识别质量展布:")
-    print(stats.sort_values(by='Median', ascending=False))
-
-    # 打印任务二纠错队列
-    df_conflicts = pd.DataFrame(conflict_records)
-    print(f"\n🚨 [任务二审计结果] 成功捕捉到 {len(df_conflicts)} 处多模态冲突样本 (推荐分析师优先纠错列表):")
-    print(df_conflicts.head())
-
+    print(
+        f"训练类别 {audit['training_class_count']} 个，原始预测实际出现 "
+        f"{audit['detected_class_count']} 个类别，缺失 {audit['missing_class_count']} 个。"
+    )
+    print(
+        f"{audit['reviewed_class']} 人员级 "
+        f"precision={audit['reviewed_person_precision']:.3f}, "
+        f"recall={audit['reviewed_person_recall']:.3f}。"
+    )
+    print(
+        f"{hypothesis['label']} 高阈值假设：{hypothesis['owner_count']} 人、"
+        f"{len(hypothesis['detections'])} 个框，复核状态={hypothesis['status']}。"
+    )
+    return audit
 
 if __name__ == "__main__":
-    run_model_auditor("../raw_data/i3_new_data.json")
+    run_model_auditor()

@@ -1,0 +1,548 @@
+{
+  "version": 1,
+  "target_group_size": 8,
+  "method": "人工纠正分布与逐图视觉复核；原始 YOLO 预测仅用于定位候选，不作为真实标签",
+  "corrected_labels": {
+    "rainbowPens": {
+      "source": "人工纠正后的候选物品分布",
+      "persons": {
+        "Person1": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person3": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person11": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person17": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person23": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person30": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person31": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person38": {
+          "image_ids": [],
+          "occurrence_count": 1
+        }
+      }
+    },
+    "rubiksCube": {
+      "source": "人工纠正后的候选物品分布",
+      "persons": {
+        "Person4": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person6": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person8": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person17": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person21": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person30": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person34": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person38": {
+          "image_ids": [],
+          "occurrence_count": 1
+        }
+      }
+    },
+    "canadaPencil": {
+      "source": "人工逐图复核与漏检补标",
+      "persons": {
+        "Person4": {
+          "image_ids": [
+            "Person4_22",
+            "Person4_23",
+            "Person4_24"
+          ],
+          "occurrence_count": 3,
+          "source": "人工视觉复核"
+        },
+        "Person7": {
+          "image_ids": [
+            "Person7_1",
+            "Person7_14",
+            "Person7_15"
+          ],
+          "occurrence_count": 3,
+          "source": "人工视觉复核"
+        },
+        "Person14": {
+          "image_ids": [
+            "Person14_8",
+            "Person14_9",
+            "Person14_10",
+            "Person14_16",
+            "Person14_17"
+          ],
+          "occurrence_count": 5,
+          "source": "人工视觉复核",
+          "difficult": false
+        },
+        "Person15": {
+          "image_ids": [
+            "Person15_1",
+            "Person15_2"
+          ],
+          "occurrence_count": 2,
+          "source": "人工漏检补标"
+        },
+        "Person22": {
+          "image_ids": [
+            "Person22_3",
+            "Person22_5"
+          ],
+          "occurrence_count": 2,
+          "source": "人工漏检补标"
+        },
+        "Person25": {
+          "image_ids": [
+            "Person25_9",
+            "Person25_10",
+            "Person25_11"
+          ],
+          "occurrence_count": 3,
+          "source": "人工视觉复核"
+        },
+        "Person35": {
+          "image_ids": [
+            "Person35_7",
+            "Person35_8"
+          ],
+          "occurrence_count": 2,
+          "source": "人工视觉复核"
+        },
+        "Person39": {
+          "image_ids": [
+            "Person39_3",
+            "Person39_4",
+            "Person39_11",
+            "Person39_12"
+          ],
+          "occurrence_count": 4,
+          "source": "人工视觉复核"
+        }
+      }
+    },
+    "noisemaker": {
+      "source": "人工纠正后的候选物品分布",
+      "persons": {
+        "Person1": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person2": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person11": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person12": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person15": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person20": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person27": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person36": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person37": {
+          "image_ids": [],
+          "occurrence_count": 1
+        }
+      }
+    },
+    "pinkEraser": {
+      "source": "人工纠正后的候选物品分布",
+      "persons": {
+        "Person1": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person5": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person9": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person15": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person18": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person19": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person28": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person33": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person40": {
+          "image_ids": [],
+          "occurrence_count": 1
+        }
+      }
+    },
+    "blueSunglasses": {
+      "source": "人工纠正后的候选物品分布",
+      "persons": {
+        "Person2": {
+          "image_ids": [],
+          "occurrence_count": 2
+        },
+        "Person7": {
+          "image_ids": [],
+          "occurrence_count": 2
+        },
+        "Person9": {
+          "image_ids": [],
+          "occurrence_count": 2
+        },
+        "Person13": {
+          "image_ids": [],
+          "occurrence_count": 2
+        },
+        "Person17": {
+          "image_ids": [],
+          "occurrence_count": 2
+        },
+        "Person22": {
+          "image_ids": [],
+          "occurrence_count": 2
+        },
+        "Person27": {
+          "image_ids": [],
+          "occurrence_count": 2
+        },
+        "Person31": {
+          "image_ids": [],
+          "occurrence_count": 2
+        },
+        "Person39": {
+          "image_ids": [],
+          "occurrence_count": 2
+        }
+      }
+    },
+    "lavenderDie": {
+      "source": "人工纠正后的候选物品分布",
+      "persons": {
+        "Person2": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person4": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person6": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person10": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person16": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person18": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person21": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person29": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person36": {
+          "image_ids": [],
+          "occurrence_count": 1
+        }
+      }
+    },
+    "metalKey": {
+      "source": "人工纠正后的候选物品分布",
+      "persons": {
+        "Person2": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person8": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person9": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person16": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person18": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person20": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person25": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person30": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person32": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person40": {
+          "image_ids": [],
+          "occurrence_count": 1
+        }
+      }
+    },
+    "miniCards": {
+      "source": "人工纠正后的候选物品分布",
+      "persons": {
+        "Person1": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person4": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person6": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person10": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person13": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person14": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person24": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person25": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person32": {
+          "image_ids": [],
+          "occurrence_count": 1
+        },
+        "Person39": {
+          "image_ids": [],
+          "occurrence_count": 1
+        }
+      }
+    }
+  },
+  "rejected_predictions": [
+    {
+      "person_id": "Person10",
+      "image_id": "Person10_7",
+      "box_id": 5,
+      "predicted_label": "yellowBag",
+      "score": 0.575574,
+      "reason": "画面为骰子、卡片等物品，不是黄色提袋"
+    },
+    {
+      "person_id": "Person12",
+      "image_id": "Person12_12",
+      "box_id": 10,
+      "predicted_label": "yellowBag",
+      "score": 0.625058,
+      "reason": "黄色纸张与乐高饰品被误识别"
+    },
+    {
+      "person_id": "Person12",
+      "image_id": "Person12_8",
+      "box_id": 3,
+      "predicted_label": "yellowBag",
+      "score": 0.584929,
+      "reason": "纸张上的饰品被误识别"
+    },
+    {
+      "person_id": "Person17",
+      "image_id": "Person17_62",
+      "box_id": 7,
+      "predicted_label": "yellowBag",
+      "score": 0.570716,
+      "reason": "蓝色太阳镜被误识别"
+    },
+    {
+      "person_id": "Person3",
+      "image_id": "Person3_17",
+      "box_id": 3,
+      "predicted_label": "yellowBag",
+      "score": 0.627976,
+      "reason": "黄色笑脸气球被误识别"
+    },
+    {
+      "person_id": "Person3",
+      "image_id": "Person3_19",
+      "box_id": 4,
+      "predicted_label": "yellowBag",
+      "score": 0.628564,
+      "reason": "黄色笑脸气球被误识别"
+    },
+    {
+      "person_id": "Person3",
+      "image_id": "Person3_20",
+      "box_id": 3,
+      "predicted_label": "yellowBag",
+      "score": 0.639908,
+      "reason": "黄色气球场景被误识别"
+    },
+    {
+      "person_id": "Person32",
+      "image_id": "Person32_30",
+      "box_id": 6,
+      "predicted_label": "yellowBag",
+      "score": 0.610266,
+      "reason": "铅笔、剪刀和便签被误识别"
+    },
+    {
+      "person_id": "Person32",
+      "image_id": "Person32_49",
+      "box_id": 4,
+      "predicted_label": "yellowBag",
+      "score": 0.792602,
+      "reason": "黄色气球相关画面被误识别"
+    },
+    {
+      "person_id": "Person38",
+      "image_id": "Person38_15",
+      "box_id": 5,
+      "predicted_label": "yellowBag",
+      "score": 0.553256,
+      "reason": "黄色铃铛或哨状物被误识别"
+    },
+    {
+      "person_id": "Person7",
+      "image_id": "Person7_8",
+      "box_id": 8,
+      "predicted_label": "yellowBag",
+      "score": 0.643441,
+      "reason": "戴太阳镜的葫芦被误识别"
+    },
+    {
+      "person_id": "Person9",
+      "image_id": "Person9_5",
+      "box_id": 3,
+      "predicted_label": "yellowBag",
+      "score": 0.567263,
+      "reason": "乐高组合物被误识别"
+    },
+    {
+      "person_id": "Person4",
+      "image_id": "Person4_21",
+      "box_id": 0,
+      "predicted_label": "canadaPencil",
+      "score": 0.51787,
+      "reason": "人工视觉复核确认；模型漏检时作为新增标签写入纠正层"
+    }
+  ],
+  "audit_log": [
+    {
+      "person_id": "Person14",
+      "image_id": "Person14_10",
+      "box_id": 0,
+      "action": "confirm",
+      "new_label": "canadaPencil",
+      "difficult": false,
+      "note": "人工视觉复核确认；模型漏检时作为新增标签写入纠正层"
+    },
+    {
+      "person_id": "Person14",
+      "image_id": "Person14_17",
+      "box_id": -1,
+      "action": "add",
+      "new_label": "canadaPencil",
+      "difficult": false,
+      "note": "人工视觉复核确认；模型漏检时作为新增标签写入纠正层"
+    },
+    {
+      "person_id": "Person4",
+      "image_id": "Person4_21",
+      "box_id": 0,
+      "action": "reject",
+      "new_label": "canadaPencil",
+      "difficult": false,
+      "note": "人工视觉复核确认；模型漏检时作为新增标签写入纠正层"
+    }
+  ]
+}

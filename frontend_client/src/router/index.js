@@ -1,9 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import ModelAuditingView from '../views/ModelAuditingView.vue'
-import DataExplorationView from '../views/DataExplorationView.vue'
-import CommunityClusteringView from '../views/CommunityClusteringView.vue'
-import TotemFilterView from '../views/TotemFilterView.vue'
-import CyberForensicsView from '../views/CyberForensicsView.vue'
+
+const ModelAuditingView = () => import('../views/ModelAuditingView.vue')
+const DataExplorationView = () => import('../views/DataExplorationView.vue')
+const CommunityClusteringView = () => import('../views/CommunityClusteringView.vue')
+const TotemFilterView = () => import('../views/TotemFilterView.vue')
+const CyberForensicsView = () => import('../views/CyberForensicsView.vue')
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -68,10 +69,10 @@ const router = createRouter({
       meta: {
         depth: 5,
         kicker: '第 05 层',
-        title: '社交隔离验证与最终定案',
-        summary: '将线下物证收敛结果与线上社交隔离模式结合，验证该群体是否具备协同行动却刻意规避公开互动的特征。',
-        storyTitle: '最后一层要把“共同持有物证”提升为“有组织协同行动”的叙事闭环。',
-        storySummary: '只有当线下同物证收敛与线上异常沉默同时出现时，才能更有说服力地支撑最终嫌疑群体结论。'
+        title: '逐人证据验证与最终定案',
+        summary: '将候选评分下钻到每位成员的图片、文本与模型漏检记录，并展示非成员排除依据。',
+        storyTitle: '最后一层把群体统计下钻为每个人都能复查的具体证据。',
+        storySummary: '每位成员至少由两张图片支撑，并区分模型命中、人工补标、文本支持和非成员排除依据。'
       }
     }
   ]

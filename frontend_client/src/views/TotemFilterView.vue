@@ -1,160 +1,42 @@
 <template>
-  <section class="view-grid-layout">
-    <div class="page-intro">
-      <div>
-        <p class="eyebrow">任务 4 / 暗号过滤</p>
-        <h3>先排除所有“人人都可能有”的公共物品，再让真正的暗号物证自己浮出来。</h3>
-        <p>
-          这一层承接聚类结果，但进一步提出更严格的问题：某个物品即使共享人数较多，它是否真的只在目标团体中稳定出现？
-          如果只是会场礼品，它就不应进入最终定案逻辑。
-        </p>
-        <div class="intro-pills">
-          <span class="data-chip">覆盖率过滤</span>
-          <span class="data-chip">候选收敛</span>
-          <span class="data-chip">暗号稳定性</span>
-        </div>
+  <section class="view-grid-layout totem-page">
+    <div class="page-intro"><div><p class="eyebrow">任务 4 / 暗号物品筛选</p><h3>让候选经过人数、稳定性、图片和文本四道检验。</h3>
+      <div class="intro-pills"><span class="data-chip">9 个候选</span><span class="data-chip">4 项评分</span><span class="data-chip">规则流动图</span></div></div></div>
+    <div class="totem-workspace">
+      <TotemEliminationPanel :items="totemItems" :selected="store.selectedCandidateLabel"
+        @toggle="store.toggleItemExclusion" @select="store.selectCandidate" @auto-exclude="excludeNonmatching" @clear="store.setExcludedItems([])" />
+      <CandidateRankingChart/>
+    </div>
+    <div class="totem-secondary"><TotemBarChart :items="totemItems" @select="store.selectCandidate"/><TotemFlow/></div>
+    <section v-if="selectedCandidate" class="panel candidate-inspector">
+      <div class="candidate-identity"><span>当前候选</span><strong>{{ selectedCandidate.label }}</strong>
+        <b :class="{winner:selectedCandidate.label===store.activeTotem}">{{ selectedCandidate.label===store.activeTotem?'最终暗号':'对照候选' }}</b></div>
+      <div class="candidate-metrics">
+        <article><span>拥有者</span><b>{{ selectedCandidate.owner_count }} 人</b></article><article><span>最少出现</span><b>{{ selectedCandidate.min_occurrence }} 次</b></article>
+        <article><span>稳定率</span><b>{{ percent(selectedCandidate.stable_owner_ratio) }}</b></article><article><span>图片证据</span><b>{{ selectedCandidate.evidence_image_count }}</b></article>
+        <article><span>文本支持</span><b>{{ selectedCandidate.text_support_count }}</b></article><article><span>综合分</span><b>{{ selectedCandidate.score.toFixed(4) }}</b></article>
       </div>
-    </div>
-
-    <div class="analysis-grid">
-      <article class="analysis-card">
-        <span>筛选准则</span>
-        <strong>共享人数只是第一步，更重要的是每个人是否多次稳定持有。</strong>
-        <p>参考强队分析思路，真正的 totem 往往不仅共享于 8 人左右，而且每个人都具备足够多的出现次数，能构成稳定信号而非偶然碰撞。</p>
-      </article>
-      <article class="analysis-card">
-        <span>对比价值</span>
-        <strong>过滤前后结构若突然收紧，说明该物品具有判别力。</strong>
-        <p>如果剔除公共物品后，只剩下某一小群体依然强共现，那么它就更可能是线下会合的符号而非随机背景。</p>
-      </article>
-      <article class="analysis-card">
-        <span>当前假设</span>
-        <strong>黄色提袋是更稳健的候选暗号物证。</strong>
-        <p>因为它在剔除高覆盖物品后仍维持局部高密度收敛，这种“过滤后仍存在”的特征非常关键。</p>
-      </article>
-    </div>
-
-    <NetworkBeforeAfter />
-
-    <div class="totem-layout">
-      <TotemEliminationPanel
-        :items="totemItems"
-        @toggle="toggleTotemItem"
-        @open-evidence="store.isFourthLayerActive = true"
-      />
-      <div class="totem-charts">
-        <TotemBarChart :items="totemItems" />
-        <TotemSankeyTunnel :items="totemItems" />
-      </div>
-    </div>
-
-    <div v-if="store.isFourthLayerActive" class="modal-backdrop" role="dialog" aria-modal="true">
-      <div class="panel evidence-modal">
-        <div class="panel-header">
-          <div>
-            <h4 class="panel-title">黄色提袋证据摘要</h4>
-            <p class="panel-subtitle">该物证在核心群体内高度集中，而在普通参会者中接近缺席。</p>
-          </div>
-          <button class="ghost-btn" @click="store.isFourthLayerActive = false">关闭</button>
-        </div>
-        <div class="modal-grid">
-          <div class="evidence-preview">
-            <span>黄色提袋</span>
-          </div>
-          <div>
-            <h5>解释</h5>
-            <p>
-              当笔记本、胸牌、玩具等公共物品被剔除后，Person3、Person7、Person9、Person10、Person12、Person17、Person32 与 Person38 依然稳定围绕同一物证收敛，
-              这使得黄色提袋成为进入最终社交隔离验证的最强候选信号。
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
+      <div class="candidate-owners"><span v-for="person in selectedCandidate.owners" :key="person">{{ person }}</span></div>
+    </section>
   </section>
 </template>
-
 <script setup>
+import { computed } from 'vue'
 import { useDashboardStore } from '../store/dashboard'
-import { ref } from 'vue'
 import TotemEliminationPanel from '../components/targeting/TotemEliminationPanel.vue'
 import TotemBarChart from '../components/targeting/TotemBarChart.vue'
-import TotemSankeyTunnel from '../components/targeting/TotemSankeyTunnel.vue'
-import NetworkBeforeAfter from '../components/process/NetworkBeforeAfter.vue'
-
-const store = useDashboardStore()
-
-const totemItems = ref([
-  { name: 'Notebook', coverage: 60, role: '公共噪声', excluded: false },
-  { name: 'Badge', coverage: 48, role: '公共噪声', excluded: false },
-  { name: 'Toy', coverage: 44, role: '公共噪声', excluded: false },
-  { name: 'Red Hat', coverage: 41, role: '误报候选', excluded: false },
-  { name: 'Yellow Bag', coverage: 20, role: '候选暗号', excluded: false }
-])
-
-const toggleTotemItem = (name) => {
-  const item = totemItems.value.find((entry) => entry.name === name)
-  if (!item) return
-  item.excluded = !item.excluded
-  store.toggleItemExclusion(name)
-}
+import CandidateRankingChart from '../components/targeting/CandidateRankingChart.vue'
+import TotemFlow from '../components/targeting/TotemFlow.vue'
+const store=useDashboardStore();const percent=(value=0)=>`${Math.round(value*100)}%`
+const selectedCandidate=computed(()=>store.candidateRankings.find((item)=>item.label===store.selectedCandidateLabel)||store.candidateRankings[0])
+const totemItems=computed(()=>store.candidateRankings.map((item)=>({name:item.label,coverage:Math.round(item.coverage*100),ownerCount:item.owner_count,minOccurrence:item.min_occurrence,
+  stability:item.stable_owner_ratio,score:item.score,role:item.label===store.activeTotem?'最终候选':item.exact_target_size?'人数匹配但不稳定':'人数不匹配',excluded:store.excludedItems.includes(item.label)})))
+const excludeNonmatching=()=>store.setExcludedItems(store.candidateRankings.filter((item)=>!item.exact_target_size).map((item)=>item.label))
 </script>
-
 <style scoped>
-.totem-layout {
-  display: grid;
-  grid-template-columns: minmax(300px, 0.75fr) minmax(0, 1.6fr);
-  gap: 18px;
-}
-
-.totem-charts {
-  display: grid;
-  grid-template-rows: auto minmax(420px, 1fr);
-  gap: 18px;
-}
-
-.modal-backdrop {
-  position: fixed;
-  inset: 0;
-  z-index: 50;
-  display: grid;
-  place-items: center;
-  padding: 24px;
-  background: rgba(228, 237, 248, 0.72);
-  backdrop-filter: blur(10px);
-}
-
-.evidence-modal {
-  width: min(900px, 100%);
-}
-
-.modal-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 18px;
-}
-
-.evidence-preview {
-  display: grid;
-  place-items: center;
-  min-height: 280px;
-  border: 1px solid rgba(240, 180, 76, 0.34);
-  border-radius: var(--radius);
-  color: #8d6220;
-  background: linear-gradient(135deg, #fff7db, #fff2ca);
-  font-weight: 900;
-  letter-spacing: 0.08em;
-}
-
-.modal-grid p {
-  color: var(--muted);
-  line-height: 1.75;
-}
-
-@media (max-width: 1040px) {
-  .totem-layout,
-  .modal-grid {
-    grid-template-columns: 1fr;
-  }
-}
+.totem-page{gap:22px}.totem-workspace{display:grid;grid-template-columns:minmax(300px,.62fr) minmax(0,1.38fr);gap:18px}.totem-secondary{display:grid;grid-template-columns:minmax(360px,.8fr) minmax(0,1.2fr);gap:18px}
+.candidate-inspector{display:grid;grid-template-columns:220px 1fr;gap:18px}.candidate-identity span,.candidate-identity strong{display:block}.candidate-identity span{color:var(--subtle);font-size:.7rem;font-weight:800}.candidate-identity strong{margin:7px 0;font-size:1.55rem}.candidate-identity>b{display:inline-flex;padding:6px 9px;border-radius:5px;color:var(--muted);background:#eef2f6;font-size:.7rem}.candidate-identity>b.winner{color:#8a5a0a;background:#fff4d9}
+.candidate-metrics{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}.candidate-metrics article{padding:10px;border:1px solid var(--border);border-radius:7px;background:#fafcff}.candidate-metrics span,.candidate-metrics b{display:block}.candidate-metrics span{color:var(--subtle);font-size:.68rem}.candidate-metrics b{margin-top:5px;font-size:.9rem;font-variant-numeric:tabular-nums}
+.candidate-owners{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px}.candidate-owners span{padding:6px 8px;border:1px solid var(--border);border-radius:5px;color:var(--muted);background:#fff;font-size:.72rem}
+@media(max-width:1050px){.totem-workspace,.totem-secondary{grid-template-columns:1fr}.candidate-inspector{grid-template-columns:1fr}.candidate-metrics{grid-template-columns:repeat(3,1fr)}}
 </style>

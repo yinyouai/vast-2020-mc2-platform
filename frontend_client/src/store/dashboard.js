@@ -1,126 +1,248 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 
-const API_BASE = 'http://localhost:5000/api'
+export const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:5000/api'
+export const STATIC_BASE = API_BASE.replace(/\/api$/, '')
+let thresholdTimer
 
 export const useDashboardStore = defineStore('dashboard', {
   state: () => ({
-    scoreThreshold: 0.25,        // 全局动态置信度阈值 (由层级二滑块控制) [cite: 491]
-    selectedPersonId: 'Person3', // 当前锁定的追踪嫌疑人 (默认初始化为黑客成员) [cite: 491]
-    selectedImageId: 'Person3_1', // 当前在画布中正在被审查的图片主键ID [cite: 491]
+    scoreThreshold: 0.25,
+    matrixDataSource: 'corrected',
+    selectedPersonId: '',
+    selectedImageId: '',
     selectedReviewContext: null,
-    cachedReviewTargets: [],
-    excludedItems: [],           // 被分析师放逐的大众参会礼品黑名单 (由层级四控制) [cite: 491]
-
-    // 异步分布式数据缓存
+    excludedItems: [],
     orderedSuspects: [],
     orderedItems: [],
     heatmapMatrixData: [],
+    rawMatrixSnapshot: { suspects: [], items: [], cells: [] },
+    correctedMatrixSnapshot: { suspects: [], items: [], cells: [] },
     modelEvaluationData: {},
+    modelAudit: {},
+    analysisSummary: null,
+    reviewQueue: [],
+    activeTotem: '',
+    hackerGroup: [],
+    finalEvidence: [],
+    candidateRankings: [],
+    selectedCandidateLabel: '',
+    isFourthLayerActive: false,
     isLoading: false,
-
-      // 补充在 src/store/dashboard.js 的 state 内部
-    activeTotem: 'yellowBag',      // 当前破译的秘密接头暗号图腾
-    isFourthLayerActive: false,    // 第四层级深度下钻视窗开关
-    hackerGroup: ['Person3', 'Person7', 'Person9', 'Person10', 'Person12', 'Person17', 'Person32', 'Person38', 'Person27']
+    correctionInFlight: '',
+    correctionMessage: '',
+    errorMessage: ''
   }),
 
+  getters: {
+    selectedEvidence(state) {
+      return state.finalEvidence.find((item) => item.person_id === state.selectedPersonId) || null
+    },
+    selectedReviewItem(state) {
+      return state.reviewQueue.find((item) => item.id === state.selectedReviewContext?.id) || null
+    }
+  },
+
   actions: {
-    // 阈值滑动：通知全局并强制层次聚类重新洗牌
-    setScoreThreshold(val) {
-      this.scoreThreshold = val
+    setScoreThreshold(value) {
+      this.scoreThreshold = Number(value)
+      window.clearTimeout(thresholdTimer)
+      thresholdTimer = window.setTimeout(() => {
+        if (this.matrixDataSource === 'raw') this.fetchHeatmapMatrix()
+        this.fetchMatrixSnapshots()
+      }, 120)
+    },
+
+    setMatrixDataSource(source) {
+      this.matrixDataSource = source === 'raw' ? 'raw' : 'corrected'
       this.fetchHeatmapMatrix()
     },
 
-    // 精准锁定嫌疑人：钻取级联，自动将层级二画布挂载为其首张多模态图片 [cite: 491]
-    selectPerson(personId) {
+    selectPerson(personId, imageId = '') {
       this.selectedPersonId = personId
-      this.selectedImageId = `${personId}_1`
+      const evidence = this.finalEvidence.find((item) => item.person_id === personId)
+      this.selectedImageId = imageId || evidence?.primary_image_id || ''
     },
 
-    selectReviewTarget({ personId, itemName, intensity = 0 }) {
-      this.selectPerson(personId)
-      this.selectedReviewContext = {
-        personId,
-        itemName,
-        intensity,
-        source: 'cluster-heatmap'
-      }
-
-      const existing = this.cachedReviewTargets.find((item) => item.id === personId)
-      const target = {
-        rank: `P${this.cachedReviewTargets.length + 1}`,
-        id: personId,
-        source: 'cluster',
-        status: 'unreviewed',
-        priority: intensity >= 3 ? '高' : '低',
-        risk: intensity >= 3 ? 'high' : 'low',
-        conflictScore: Math.min(0.95, 0.28 + Number(intensity || 0) * 0.16),
-        machineLabel: `${itemName || '未知物品'} / 聚类选择`,
-        humanLabel: itemName || '待选择标签',
-        caption: `来自聚类矩阵的选择：${personId} 与 ${itemName || '未知物品'} 的关联强度为 ${intensity}。`,
-        textComment: `Cluster drill-down note: ${personId} was selected because ${itemName || 'an item'} appeared in the co-occurrence matrix.`,
-        semanticKeywords: [personId, itemName || 'unknown item', `strength ${intensity}`],
-        semanticSignal: intensity >= 3 ? '高强度共现' : '低强度对照',
-        semanticConflict: intensity > 0 ? '矩阵提示存在共现，需要人工核对文本和图像是否一致。' : '矩阵无明显信号，可作为背景噪声对照。',
-        verdict: '等待人工复核确认，可手动调整标签后再标记为已确认或已修正。',
-        note: '聚类选择'
-      }
-
-      if (existing) {
-        Object.assign(existing, target, { rank: existing.rank, status: existing.status, humanLabel: existing.humanLabel })
-      } else {
-        this.cachedReviewTargets.push(target)
-      }
+    selectReviewTarget(item) {
+      this.selectedReviewContext = item
+      this.selectPerson(item.person_id, item.image_id)
     },
 
-    updateReviewTarget(personId, patch) {
-      const target = this.cachedReviewTargets.find((item) => item.id === personId)
-      if (target) Object.assign(target, patch)
-    },
-
-    // 礼品黑名单过滤：强制矩阵削波 [cite: 491]
     toggleItemExclusion(itemName) {
-      const idx = this.excludedItems.indexOf(itemName)
-      if (idx > -1) {
-        this.excludedItems.splice(idx, 1)
-      } else {
-        this.excludedItems.push(itemName)
-      }
+      const index = this.excludedItems.indexOf(itemName)
+      if (index >= 0) this.excludedItems.splice(index, 1)
+      else this.excludedItems.push(itemName)
       this.fetchHeatmapMatrix()
+      this.fetchMatrixSnapshots()
     },
 
-    // 🔌 异步调用 Flask: 拉取层次聚类矩阵
+    setExcludedItems(items) {
+      this.excludedItems = [...new Set(items)]
+      this.fetchHeatmapMatrix()
+      this.fetchMatrixSnapshots()
+    },
+
+    async fetchAnalysisSummary() {
+      try {
+        const response = await axios.get(`${API_BASE}/analysis_summary`)
+        if (response.data.status !== 'success') return
+        const summary = response.data.data
+        this.analysisSummary = summary
+        this.activeTotem = summary.final.totem
+        this.hackerGroup = summary.final.group
+        this.finalEvidence = summary.final.evidence
+        this.candidateRankings = summary.candidate_rankings
+        if (!this.selectedCandidateLabel) {
+          this.selectedCandidateLabel = summary.final.totem
+        }
+        if (!this.selectedPersonId && this.hackerGroup.length) {
+          this.selectPerson(this.hackerGroup[0])
+        }
+      } catch (error) {
+        this.errorMessage = '无法获取分析摘要'
+        console.error(this.errorMessage, error)
+      }
+    },
+
+    selectCandidate(label) {
+      this.selectedCandidateLabel = label
+    },
+
     async fetchHeatmapMatrix() {
       this.isLoading = true
       try {
-        const res = await axios.post(`${API_BASE}/distribution_matrix`, {
+        const response = await axios.post(`${API_BASE}/distribution_matrix`, {
           score_threshold: this.scoreThreshold,
-          excluded_items: this.excludedItems
+          excluded_items: this.excludedItems,
+          data_source: this.matrixDataSource
         })
-        if (res.data.status === 'success') {
-          this.orderedSuspects = res.data.ordered_suspects
-          this.orderedItems = res.data.ordered_items
-          this.heatmapMatrixData = res.data.matrix_data
+        if (response.data.status === 'success') {
+          this.orderedSuspects = response.data.ordered_suspects
+          this.orderedItems = response.data.ordered_items
+          this.heatmapMatrixData = response.data.matrix_data
         }
-      } catch (err) {
-        console.error("无法拉取后端层次聚类重排数据流:", err)
+      } catch (error) {
+        this.errorMessage = '无法获取人物-物品矩阵'
+        console.error(this.errorMessage, error)
       } finally {
         this.isLoading = false
       }
     },
 
-    // 🔌 异步调用 Flask: 拉取机器模型缺陷四分位数
     async fetchModelEvaluation() {
       try {
-        const res = await axios.get(`${API_BASE}/model_evaluation`)
-        if (res.data.status === 'success') {
-          this.modelEvaluationData = res.data.data
+        const response = await axios.get(`${API_BASE}/model_evaluation`)
+        if (response.data.status === 'success') {
+          this.modelEvaluationData = response.data.data
+          this.modelAudit = response.data.audit
         }
-      } catch (err) {
-        console.error("无法获取模型质量评估数据流:", err)
+      } catch (error) {
+        this.errorMessage = '无法获取模型审计数据'
+        console.error(this.errorMessage, error)
+      }
+    },
+
+    async fetchMatrixSnapshots() {
+      try {
+        const [rawResponse, correctedResponse] = await Promise.all([
+          axios.post(`${API_BASE}/distribution_matrix`, {
+            score_threshold: this.scoreThreshold,
+            excluded_items: this.excludedItems,
+            data_source: 'raw'
+          }),
+          axios.post(`${API_BASE}/distribution_matrix`, {
+            excluded_items: this.excludedItems,
+            data_source: 'corrected'
+          })
+        ])
+        if (rawResponse.data.status === 'success') {
+          this.rawMatrixSnapshot = {
+            suspects: rawResponse.data.ordered_suspects,
+            items: rawResponse.data.ordered_items,
+            cells: rawResponse.data.matrix_data
+          }
+        }
+        if (correctedResponse.data.status === 'success') {
+          this.correctedMatrixSnapshot = {
+            suspects: correctedResponse.data.ordered_suspects,
+            items: correctedResponse.data.ordered_items,
+            cells: correctedResponse.data.matrix_data
+          }
+        }
+      } catch (error) {
+        console.error('无法获取矩阵对照快照', error)
+      }
+    },
+
+    async fetchReviewQueue() {
+      try {
+        const response = await axios.get(`${API_BASE}/review_queue`)
+        if (response.data.status === 'success') {
+          this.reviewQueue = response.data.data
+          if (!this.selectedReviewContext && this.reviewQueue.length) {
+            this.selectReviewTarget(this.reviewQueue[0])
+          }
+        }
+      } catch (error) {
+        this.errorMessage = '无法获取人工复核队列'
+        console.error(this.errorMessage, error)
+      }
+    },
+
+    async submitCorrection(item, patch) {
+      this.correctionInFlight = item.id
+      this.correctionMessage = ''
+      const nextStatus = patch.status || item.status
+      let action = 'confirm'
+      let newLabel = patch.humanLabel || item.corrected_label
+      if (item.status === 'rejected' && nextStatus === 'confirmed') {
+        action = 'restore'
+        newLabel = patch.humanLabel || item.predicted_label
+      } else if (nextStatus === 'rejected') {
+        action = 'reject'
+      } else if (item.box_id === -1 || item.predicted_label === '未检出') {
+        action = 'add'
+      } else if (newLabel && newLabel !== item.predicted_label) {
+        action = 'modify'
       }
 
+      try {
+        await axios.post(`${API_BASE}/update_label`, {
+          person_id: item.person_id,
+          image_id: item.image_id,
+          box_id: item.box_id,
+          action,
+          new_label: newLabel,
+          difficult: Boolean(patch.difficult ?? item.difficult),
+          note: patch.note || item.reason || ''
+        })
+        this.correctionMessage = `${item.image_id} 已写入校正层并完成重算`
+        await Promise.all([
+          this.fetchAnalysisSummary(),
+          this.fetchReviewQueue(),
+          this.fetchHeatmapMatrix(),
+          this.fetchMatrixSnapshots(),
+          this.fetchModelEvaluation()
+        ])
+      } catch (error) {
+        this.errorMessage = '复核操作保存失败'
+        throw error
+      } finally {
+        this.correctionInFlight = ''
+      }
+    },
+
+    async initialize() {
+      this.isLoading = true
+      await Promise.all([
+        this.fetchAnalysisSummary(),
+        this.fetchModelEvaluation(),
+        this.fetchReviewQueue(),
+        this.fetchMatrixSnapshots()
+      ])
+      await this.fetchHeatmapMatrix()
+      this.isLoading = false
     }
   }
 })

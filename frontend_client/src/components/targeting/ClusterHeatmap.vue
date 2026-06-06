@@ -2,16 +2,17 @@
   <div class="panel heatmap-panel">
     <div class="panel-header">
       <div>
-        <h4 class="panel-title">嫌疑人-物品共现矩阵</h4>
-        <p class="panel-subtitle">颜色越亮，表示某个人与该物品之间的关联越强。</p>
+        <span class="section-kicker">Ward 双向重排</span>
+        <h4 class="panel-title">人物 × 物品共现矩阵</h4>
+        <p class="panel-subtitle">当前数据层：{{ store.matrixDataSource === 'raw' ? '原始预测' : '人工校正' }}；颜色表示实际出现次数。</p>
       </div>
-      <span class="data-chip">{{ suspects.length }} x {{ items.length }}</span>
+      <span class="data-chip">{{ suspects.length }} × {{ items.length }}</span>
     </div>
 
     <div class="matrix-summary">
       <div class="matrix-summary__item">
         <span>集中信号</span>
-        <strong>黄色提袋局部收敛</strong>
+        <strong>{{ store.activeTotem || '等待分析' }} / {{ store.hackerGroup.length }} 人</strong>
       </div>
       <div class="matrix-summary__item">
         <span>交互提示</span>
@@ -40,12 +41,10 @@ const router = useRouter()
 const heatmapRef = ref(null)
 let chart
 
-const fallbackSuspects = Array.from({ length: 40 }, (_, i) => `Person${i + 1}`)
-const fallbackItems = ['Notebook', 'Badge', 'Toy', 'Cap', 'Red Hat', 'Yellow Bag', 'Connector']
 const legendColors = ['#eef4fb', '#cfe0f7', '#93bbe7', '#4ea2d8', '#f0b44c']
 
-const suspects = computed(() => store.orderedSuspects.length ? store.orderedSuspects : fallbackSuspects)
-const items = computed(() => store.orderedItems.length ? store.orderedItems : fallbackItems)
+const suspects = computed(() => store.orderedSuspects)
+const items = computed(() => store.orderedItems)
 
 const buildData = () => {
   const lookup = new Map()
@@ -53,17 +52,10 @@ const buildData = () => {
     lookup.set(`${entry.suspect}-${entry.item}`, entry.count)
   })
 
-  const core = new Set(store.hackerGroup)
   const data = []
   suspects.value.forEach((suspect, y) => {
     items.value.forEach((item, x) => {
-      let value = lookup.get(`${suspect}-${item}`)
-      if (value === undefined) {
-        const itemKey = String(item).toLowerCase()
-        if (core.has(suspect) && (itemKey.includes('yellow') || itemKey.includes('connector'))) value = 4
-        else if (!core.has(suspect) && x < 4) value = (x + y) % 3
-        else value = 0
-      }
+      const value = lookup.get(`${suspect}-${item}`) || 0
       data.push([x, y, value])
     })
   })
@@ -91,17 +83,29 @@ const render = () => {
     xAxis: {
       type: 'category',
       data: items.value,
-      ...buildAxis({ rotate: 28, fontSize: 11 })
+        ...buildAxis({ rotate: 32, fontSize: 10 }),
+        axisLabel: {
+          color: (value) => value === store.selectedCandidateLabel ? chartPalette.accent : chartPalette.muted,
+          fontWeight: (value) => value === store.selectedCandidateLabel ? 800 : 500,
+          rotate: 32,
+          interval: 0,
+          fontSize: 10
+        }
     },
     yAxis: {
       type: 'category',
       data: suspects.value,
-      ...buildAxis({ fontSize: 10 })
+        ...buildAxis({ fontSize: 10 }),
+        axisLabel: {
+          color: (value) => store.hackerGroup.includes(value) ? chartPalette.green : chartPalette.muted,
+          fontWeight: (value) => store.hackerGroup.includes(value) ? 800 : 500,
+          fontSize: 10
+        }
     },
     visualMap: {
       show: false,
       min: 0,
-      max: 4,
+      max: Math.max(1, ...store.heatmapMatrixData.map((item) => item.count)),
       calculable: false,
       orient: 'horizontal',
       left: 'center',
@@ -139,11 +143,12 @@ const render = () => {
   chart.on('click', (params) => {
     const target = suspects.value[params.value[1]]
     const itemName = items.value[params.value[0]]
-    store.selectReviewTarget({
-      personId: target,
-      itemName,
-      intensity: params.value[2]
-    })
+    store.selectCandidate(itemName)
+    const reviewItem = store.reviewQueue.find((item) =>
+      item.person_id === target && item.corrected_label === itemName
+    )
+    if (reviewItem) store.selectReviewTarget(reviewItem)
+    else store.selectPerson(target)
     router.push('/task2_correction')
   })
 }
@@ -167,6 +172,7 @@ onBeforeUnmount(() => {
 .heatmap-panel {
   min-height: 620px;
 }
+.section-kicker{display:block;margin-bottom:5px;color:var(--subtle);font-size:.7rem;font-weight:800}
 
 .matrix-summary {
   display: grid;

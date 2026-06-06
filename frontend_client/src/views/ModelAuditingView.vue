@@ -1,105 +1,51 @@
 <template>
-  <section class="view-grid-layout">
+  <section class="view-grid-layout audit-page">
     <div class="page-intro">
       <div>
-        <p class="eyebrow">任务 1 / 模型审计</p>
-        <h3>先判断模型“错得有多严重”，再决定后续证据链能信到什么程度。</h3>
-        <p>
-          这一层的目标不是直接抓人，而是先识别哪些类别被模型稳定识别，哪些类别大量误报或干脆漏检。
-          只有把阈值、误报率和召回率的权衡讲清楚，后续的人物聚类与暗号识别才有可信基础。
-        </p>
-        <div class="intro-pills">
-          <span class="data-chip">误报收敛</span>
-          <span class="data-chip">阈值调参</span>
-          <span class="data-chip">模型可信度边界</span>
-        </div>
+        <p class="eyebrow">任务 1 / 原始模型审计</p>
+        <h3>先把模型的盲区和阈值代价量出来。</h3>
+        <div class="intro-pills"><span class="data-chip">类别覆盖</span><span class="data-chip">置信度分布</span><span class="data-chip">阈值联动</span></div>
+      </div>
+      <div class="audit-status">
+        <span>当前核验对象</span><strong>{{ audit.reviewed_class || '—' }}</strong><small>人员级真值</small>
       </div>
     </div>
 
-    <div class="analysis-grid">
-      <article class="analysis-card">
-        <span>分析重点</span>
-        <strong>高置信度并不等于高正确率。</strong>
-        <p>参考优秀参赛作品的做法，单看置信分数会掩盖类别混淆问题。有些对象即使频繁被识别，也可能只是在错误类别中反复出现。</p>
-      </article>
-      <article class="analysis-card">
-        <span>关键观察</span>
-        <strong>公共物品最容易污染证据链。</strong>
-        <p>会场常见物品在低阈值下更容易被误认为高风险物证，因此这一层的主要价值，是为后续剔除“看起来很多、其实没用”的线索。</p>
-      </article>
-      <article class="analysis-card">
-        <span>设计意图</span>
-        <strong>把阈值变化和误报曲线绑定展示。</strong>
-        <p>这样评委能快速看懂：我们不是随意调阈值，而是在寻找“误报明显下降但有效召回尚可接受”的工作区间。</p>
-      </article>
-    </div>
-
-    <ModelAuditWorkbench />
-
-    <section class="audit-extension-grid">
-      <ModelEvaluation />
-      <LabelConfusionMatrix />
-      <DetectionDensityMap />
+    <section class="audit-command panel">
+      <div class="threshold-copy">
+        <span class="section-kicker">全局工作阈值</span>
+        <strong>{{ store.scoreThreshold.toFixed(2) }}</strong>
+        <p>同步过滤箱线图工作点、检测框散点、人员级指标和第三页原始矩阵。</p>
+      </div>
+      <div class="threshold-control">
+        <input type="range" min=".25" max=".75" step=".05" :value="store.scoreThreshold"
+          aria-label="原始预测置信度阈值" @input="store.setScoreThreshold($event.target.value)" />
+        <div class="threshold-ticks"><span v-for="tick in thresholdTicks" :key="tick">{{ tick.toFixed(2) }}</span></div>
+      </div>
+      <div class="threshold-impact">
+        <article><span>Precision</span><b>{{ percent(currentPoint.precision) }}</b></article>
+        <article><span>Recall</span><b>{{ percent(currentPoint.recall) }}</b></article>
+        <article><span>F1</span><b>{{ percent(currentPoint.f1) }}</b></article>
+        <article><span>预测拥有者</span><b>{{ currentPoint.predicted_owners || 0 }}</b></article>
+      </div>
     </section>
 
-    <div class="panel">
+    <section class="audit-main-grid">
+      <ModelEvaluation />
+      <div class="audit-side-stack">
+        <LabelConfusionMatrix />
+        <DetectionDensityMap />
+      </div>
+    </section>
+
+    <section class="panel threshold-chart-panel">
       <div class="panel-header">
-        <div>
-          <h4 class="panel-title">全局置信阈值</h4>
-          <p class="panel-subtitle">
-            当前阈值为 {{ store.scoreThreshold.toFixed(2) }}。该值会同步影响复核队列、共现聚类和物证过滤逻辑。
-          </p>
-        </div>
-        <span class="data-chip">预计误报率 {{ falsePositiveRate }}%</span>
+        <div><span class="section-kicker">人员级验证</span><h4 class="panel-title">阈值变化如何改变 {{ audit.reviewed_class || '候选物品' }} 判断</h4>
+          <p class="visible-subtitle">折线使用左轴，柱形使用右轴；红色工作线对应上方滑块。</p></div>
+        <span :class="['hypothesis-badge', hypothesis.status]">{{ hypothesis.label || '原始假设' }} {{ hypothesis.status === 'invalidated' ? '已否定' : '待复核' }}</span>
       </div>
-      <input
-        class="apple-slider"
-        type="range"
-        min="0.05"
-        max="0.9"
-        step="0.05"
-        :value="store.scoreThreshold"
-        @input="store.setScoreThreshold(Number($event.target.value))"
-        aria-label="全局置信阈值"
-      />
-    </div>
-
-    <div class="metric-grid">
-      <div v-for="metric in metrics" :key="metric.label" class="metric-card">
-        <span>{{ metric.label }}</span>
-        <strong>{{ metric.value }}%</strong>
-      </div>
-    </div>
-
-    <div class="split-grid">
-      <div class="panel">
-        <div class="panel-header">
-          <div>
-            <h4 class="panel-title">模型质量雷达</h4>
-            <p class="panel-subtitle">从 Accuracy、Precision、Recall 与 F1 四个维度，观察当前阈值下的整体性能结构。</p>
-          </div>
-        </div>
-        <div ref="radarRef" class="chart-frame"></div>
-      </div>
-
-      <div class="panel">
-        <div class="panel-header">
-          <div>
-            <h4 class="panel-title">误报消融曲线</h4>
-            <p class="panel-subtitle">如果阈值提高后误报明显下降，说明当前大量噪声来自低置信检测而非稳定证据。</p>
-          </div>
-        </div>
-        <div ref="lineRef" class="chart-frame"></div>
-      </div>
-    </div>
-
-    <div class="panel audit-note">
-      <h4>本层结论</h4>
-      <p>
-        当前阈值下，模型仍会将部分会场常见物品错误推入高风险候选集合。下一层应优先复核图文冲突最强的样本，
-        尤其是那些文本提到“黄色提袋”等显著线索、但图像预测仍停留在低置信公共类别的对象。
-      </p>
-    </div>
+      <div ref="curveRef" class="threshold-chart"></div>
+    </section>
   </section>
 </template>
 
@@ -107,189 +53,63 @@
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import * as echarts from 'echarts'
 import { useDashboardStore } from '../store/dashboard'
-import { animationTiming, buildAxis, buildTooltip, chartPalette, splitLine } from '../utils/chartTheme'
-import ModelAuditWorkbench from '../components/process/ModelAuditWorkbench.vue'
+import { buildTooltip, chartPalette, splitLine } from '../utils/chartTheme'
 import ModelEvaluation from '../components/auditing/ModelEvaluation.vue'
 import LabelConfusionMatrix from '../components/auditing/LabelConfusionMatrix.vue'
 import DetectionDensityMap from '../components/auditing/DetectionDensityMap.vue'
-
 const store = useDashboardStore()
-const radarRef = ref(null)
-const lineRef = ref(null)
-let radarChart
-let lineChart
-
-const metrics = computed(() => {
-  const t = store.scoreThreshold
-  return [
-    { label: '准确率', value: Math.round(64 + t * 24) },
-    { label: '精确率', value: Math.round(58 + t * 31) },
-    { label: '召回率', value: Math.round(71 + t * 13) },
-    { label: 'F1 值', value: Math.round(62 + t * 25) }
-  ]
-})
-
-const falsePositiveRate = computed(() => Math.max(7, Math.round(48 - store.scoreThreshold * 42)))
-
-const renderCharts = () => {
-  if (!radarRef.value || !lineRef.value) return
-  if (!radarChart) radarChart = echarts.init(radarRef.value)
-  if (!lineChart) lineChart = echarts.init(lineRef.value)
-
-  radarChart.setOption({
-    backgroundColor: 'transparent',
-    tooltip: buildTooltip((params) => `
-      <strong>${params.name || '当前阈值'}</strong><br/>
-      准确率：${metrics.value[0].value}%<br/>
-      精确率：${metrics.value[1].value}%<br/>
-      召回率：${metrics.value[2].value}%<br/>
-      F1 值：${metrics.value[3].value}%
-    `),
-    radar: {
-      radius: '66%',
-      indicator: metrics.value.map((item) => ({ name: item.label, max: 100 })),
-      axisName: { color: chartPalette.muted },
-      splitLine: { lineStyle: { color: chartPalette.line } },
-      splitArea: { areaStyle: { color: ['rgba(47,125,246,0.03)', 'rgba(53,181,166,0.025)'] } },
-      axisLine: { lineStyle: { color: chartPalette.line } }
-    },
-    series: [{
-      type: 'radar',
-      symbol: 'circle',
-      symbolSize: 7,
-      data: [{
-        value: metrics.value.map((item) => item.value),
-        name: '当前阈值',
-        itemStyle: { color: chartPalette.accent },
-        lineStyle: { width: 3, color: chartPalette.accent },
-        areaStyle: { color: 'rgba(47,125,246,0.16)' }
-      }],
-      animationDuration: animationTiming.duration,
-      animationEasing: animationTiming.easing
-    }]
-  })
-
-  const thresholds = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
-  lineChart.setOption({
-    backgroundColor: 'transparent',
-    tooltip: {
-      ...buildTooltip((params) => {
-        const point = Array.isArray(params) ? params[0] : params
-        return `
-          <strong>阈值 ${point.axisValue}</strong><br/>
-          误报率：${point.data}%<br/>
-          说明：若误报先于召回快速下降，说明当前存在较多低质检测噪声。
-        `
-      }),
-      trigger: 'axis'
-    },
-    grid: { left: 46, right: 18, top: 28, bottom: 38 },
-    xAxis: {
-      type: 'category',
-      data: thresholds.map((v) => v.toFixed(1)),
-      ...buildAxis()
-    },
-    yAxis: {
-      type: 'value',
-      axisLabel: { color: chartPalette.muted, formatter: '{value}%' },
-      splitLine
-    },
-    series: [{
-      name: '误报率',
-      type: 'line',
-      smooth: true,
-      showSymbol: false,
-      data: thresholds.map((v) => Math.max(6, 50 - v * 43)),
-      lineStyle: { width: 3, color: chartPalette.danger || '#df6a6a' },
-      areaStyle: {
-        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-          { offset: 0, color: 'rgba(223,106,106,0.24)' },
-          { offset: 1, color: 'rgba(223,106,106,0.02)' }
-        ])
-      },
-      markLine: {
-        symbol: 'none',
-        label: { color: chartPalette.gold, formatter: '当前工作点' },
-        lineStyle: { color: chartPalette.gold, type: 'dashed' },
-        data: [{ xAxis: store.scoreThreshold.toFixed(1) }]
-      },
-      animationDuration: animationTiming.duration,
-      animationEasing: animationTiming.easing
-    }]
-  })
+const curveRef = ref(null)
+let chart
+const audit = computed(() => store.modelAudit || {})
+const hypothesis = computed(() => store.analysisSummary?.raw_hypothesis || {})
+const thresholdTicks = [.25, .35, .45, .55, .65, .75]
+const rows = computed(() => audit.value.threshold_curve || [])
+const currentPoint = computed(() => rows.value.reduce((best, row) =>
+  Math.abs(row.threshold - store.scoreThreshold) < Math.abs((best?.threshold ?? 99) - store.scoreThreshold) ? row : best, rows.value[0] || {}))
+const percent = (value = 0) => `${Math.round(value * 100)}%`
+const render = () => {
+  if (!curveRef.value) return
+  if (!chart) chart = echarts.init(curveRef.value)
+  chart.setOption({
+    color: [chartPalette.accent, chartPalette.green, chartPalette.gold, chartPalette.red],
+    tooltip: { ...buildTooltip(), trigger: 'axis' },
+    legend: { top: 4, left: 6, itemWidth: 18, itemHeight: 8, textStyle: { color: chartPalette.muted, fontSize: 11 },
+      data: ['精确率', '召回率', 'F1', `${audit.value.comparison_class || '原始假设'} 拥有者`] },
+    grid: { left: 56, right: 58, top: 58, bottom: 42 },
+    xAxis: { type: 'category', name: '阈值', data: rows.value.map((row) => row.threshold.toFixed(2)),
+      axisLabel: { color: chartPalette.muted }, axisLine: { lineStyle: { color: chartPalette.lineStrong } }, axisTick: { show: false } },
+    yAxis: [
+      { type: 'value', min: 0, max: 1, name: '人员级指标', axisLabel: { color: chartPalette.muted, formatter: (value) => `${Math.round(value * 100)}%` }, splitLine },
+      { type: 'value', min: 0, name: '拥有者人数', axisLabel: { color: chartPalette.muted }, splitLine: { show: false } }
+    ],
+    series: [
+      { name: '精确率', type: 'line', smooth: .25, symbolSize: 8, data: rows.value.map((row) => row.precision) },
+      { name: '召回率', type: 'line', smooth: .25, symbolSize: 8, data: rows.value.map((row) => row.recall) },
+      { name: 'F1', type: 'line', smooth: .25, symbolSize: 8, lineStyle: { width: 3 }, data: rows.value.map((row) => row.f1),
+        markLine: { symbol: 'none', label: { formatter: `工作点 ${store.scoreThreshold.toFixed(2)}`, color: chartPalette.red },
+          lineStyle: { color: chartPalette.red, type: 'dashed', width: 2 }, data: [{ xAxis: currentPoint.value.threshold?.toFixed(2) }] } },
+      { name: `${audit.value.comparison_class || '原始假设'} 拥有者`, type: 'bar', yAxisIndex: 1, barMaxWidth: 28, data: rows.value.map((row) => row.comparison_owners),
+        itemStyle: { color: 'rgba(207,86,86,.24)', borderColor: chartPalette.red, borderWidth: 1, borderRadius: [4,4,0,0] } }
+    ]
+  }, true)
 }
-
-const resizeCharts = () => {
-  radarChart?.resize()
-  lineChart?.resize()
-}
-
-watch(() => store.scoreThreshold, renderCharts)
-
-onMounted(() => {
-  store.fetchModelEvaluation()
-  renderCharts()
-  window.addEventListener('resize', resizeCharts)
-})
-
-onBeforeUnmount(() => {
-  window.removeEventListener('resize', resizeCharts)
-  radarChart?.dispose()
-  lineChart?.dispose()
-})
+watch(() => [rows.value, store.scoreThreshold], render, { deep: true })
+onMounted(() => { render(); window.addEventListener('resize', render) })
+onBeforeUnmount(() => { window.removeEventListener('resize', render); chart?.dispose() })
 </script>
 
 <style scoped>
-.audit-note h4 {
-  margin-bottom: 8px;
-}
-
-.audit-note p {
-  max-width: 960px;
-  margin-bottom: 0;
-  color: var(--muted);
-  line-height: 1.75;
-}
-
-.audit-extension-grid {
-  display: grid;
-  grid-template-columns: minmax(360px, 1.1fr) minmax(320px, 0.9fr);
-  grid-auto-rows: minmax(260px, auto);
-  gap: clamp(18px, 2.2vw, 28px);
-}
-
-.audit-extension-grid :deep(.chart-container) {
-  min-height: 420px;
-}
-
-.audit-extension-grid :deep(.component-wrapper) {
-  min-height: 260px;
-}
-
-.audit-extension-grid :deep(.chart-container),
-.audit-extension-grid :deep(.component-wrapper) {
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background:
-    radial-gradient(circle at top right, rgba(47, 125, 246, 0.08), transparent 28%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 251, 255, 0.92));
-  box-shadow: var(--shadow);
-  padding: var(--panel-padding);
-}
-
-.audit-extension-grid :deep(.chart-container:first-child) {
-  grid-row: span 2;
-}
-
-.audit-extension-grid :deep(.舱室标题) {
-  margin: 0 0 12px;
-  color: var(--text);
-  font-size: 1rem;
-}
-
-@media (max-width: 1120px) {
-  .audit-extension-grid {
-    grid-template-columns: 1fr;
-  }
-}
+.audit-page { gap: 24px; }.audit-status { position: relative; z-index: 1; min-width: 190px; padding: 16px; border: 1px solid var(--border); border-radius: 12px; background: rgba(255,255,255,.82); }
+.audit-status span,.audit-status small { display:block; color:var(--subtle); font-size:.72rem; }.audit-status strong { display:block; margin:7px 0; font-size:1.25rem; }
+.audit-command { display:grid; grid-template-columns: 190px minmax(280px,1fr) minmax(420px,1.2fr); align-items:center; gap:24px; }
+.section-kicker { color:var(--subtle); font-size:.72rem; font-weight:800; }.threshold-copy strong { display:block; margin:5px 0; color:var(--accent); font-size:2.2rem; font-variant-numeric:tabular-nums; }
+.threshold-copy p,.visible-subtitle { display:block!important; margin:0; color:var(--muted); font-size:.8rem; line-height:1.55; }.threshold-control input { width:100%; }
+.threshold-ticks { display:flex; justify-content:space-between; margin-top:7px; color:var(--subtle); font-size:.68rem; font-variant-numeric:tabular-nums; }
+.threshold-impact { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; }.threshold-impact article { padding:11px; border:1px solid var(--border); border-radius:8px; background:#f8fbff; }
+.threshold-impact span,.threshold-impact b { display:block; }.threshold-impact span { color:var(--subtle); font-size:.7rem; }.threshold-impact b { margin-top:6px; font-size:1.06rem; font-variant-numeric:tabular-nums; }
+.audit-main-grid { display:grid; grid-template-columns:minmax(520px,1.35fr) minmax(330px,.75fr); gap:18px; }.audit-side-stack { display:grid; gap:18px; }
+.audit-main-grid > *, .audit-side-stack > * { padding:var(--panel-padding); border:1px solid var(--border); border-radius:var(--radius); background:#fff; box-shadow:var(--shadow); }
+.threshold-chart { min-height:380px; }.hypothesis-badge { padding:8px 12px; border-radius:999px; font-size:.76rem; font-weight:800; }.hypothesis-badge.invalidated { color:#a94141; background:#fcecec; border:1px solid #efc6c6; }
+@media(max-width:1180px){.audit-command{grid-template-columns:1fr 1fr}.threshold-impact{grid-column:1/-1}.audit-main-grid{grid-template-columns:1fr}}
+@media(max-width:700px){.audit-command{grid-template-columns:1fr}.threshold-impact{grid-template-columns:repeat(2,1fr)}}
 </style>

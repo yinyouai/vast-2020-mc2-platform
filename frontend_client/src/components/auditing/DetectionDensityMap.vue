@@ -1,64 +1,49 @@
 <template>
-  <div class="apple-glass-card component-wrapper">
-    <h4 class="舱室标题">组件 3：原始 YOLO v2 检测框空间密度</h4>
-    <div class="density-viewport" ref="densityChartRef"></div>
+  <div class="component-wrapper">
+    <div class="density-head">
+      <div><span>空间偏差</span><h4>检测框中心分布</h4></div>
+      <b>{{ visibleCount }} / {{ allCount }}</b>
+    </div>
+    <p class="component-note">仅显示 score ≥ {{ store.scoreThreshold.toFixed(2) }}；圆点大小映射置信度。</p>
+    <div ref="chartRef" class="density-viewport"></div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import * as echarts from 'echarts'
-
-const densityChartRef = ref(null)
-
-onMounted(() => {
-  if (!densityChartRef.value) return
-  const chart = echarts.init(densityChartRef.value)
-
-  // 生成空间核密度散点
-  const points = Array.from({ length: 180 }, () => [
-    Math.random() * 800,
-    Math.random() * 600,
-    Math.random()
-  ])
-
+import { useDashboardStore } from '../../store/dashboard'
+import { buildTooltip, chartPalette } from '../../utils/chartTheme'
+const store = useDashboardStore()
+const chartRef = ref(null)
+let chart
+const allCount = computed(() => (store.modelAudit.density_points || []).length)
+const visibleCount = computed(() => (store.modelAudit.density_points || []).filter((item) => item.score >= store.scoreThreshold).length)
+const render = () => {
+  if (!chartRef.value) return
+  if (!chart) chart = echarts.init(chartRef.value)
+  const points = (store.modelAudit.density_points || []).filter((item) => item.score >= store.scoreThreshold).map((item) => ({
+    value: [item.x, item.y, item.score], name: `${item.person_id} / ${item.image_id}`, label: item.label
+  }))
   chart.setOption({
-    backgroundColor: 'transparent',
-    grid: { left: '4%', right: '4%', top: '4%', bottom: '4%' },
-    xAxis: { show: false, min: 0, max: 800 },
-    yAxis: { show: false, min: 0, max: 600 },
-    // 💡 修复核心：改用散点发光特效，完美契合数值轴，并达成 Apple 荧光色彩质感
-    series: [{
-      type: 'scatter',
-      data: points,
-      symbolSize: function (data) {
-        return data[2] * 20 + 5; // 动态大小映射不确定性
-      },
-      itemStyle: {
-        color: new echarts.graphic.RadialGradient(0.4, 0.3, 1, [{
-          offset: 0, color: 'rgba(223, 106, 106, 0.72)' // 误报高密度热点
-        }, {
-          offset: 1, color: 'rgba(47, 125, 246, 0.08)' // 渐变外扩
-        }]),
-        shadowBlur: 10,
-        shadowColor: 'rgba(223, 106, 106, 0.28)'
-      }
+    tooltip: buildTooltip(({ data }) => `<strong>${data.name}</strong><br/>类别：${data.label}<br/>置信度：${data.value[2].toFixed(3)}`),
+    grid: { left: 42, right: 16, top: 12, bottom: 34 },
+    xAxis: { type: 'value', name: 'x', axisLabel: { color: chartPalette.muted, fontSize: 10 }, splitLine: { lineStyle: { color: chartPalette.line } } },
+    yAxis: { type: 'value', name: 'y', inverse: true, axisLabel: { color: chartPalette.muted, fontSize: 10 }, splitLine: { lineStyle: { color: chartPalette.line } } },
+    series: [{ type: 'scatter', data: points, symbolSize: (value) => 4 + value[2] * 12,
+      itemStyle: { color: (params) => params.data.value[2] >= 0.55 ? chartPalette.red : chartPalette.accent, opacity: .52 }
     }]
-  })
-})
+  }, true)
+}
+watch(() => [store.modelAudit.density_points, store.scoreThreshold], render, { deep: true })
+onMounted(() => { render(); window.addEventListener('resize', render) })
+onBeforeUnmount(() => { window.removeEventListener('resize', render); chart?.dispose() })
 </script>
 
 <style scoped>
-.component-wrapper { display: flex; flex-direction: column; height: 100%; }
-.density-viewport {
-  width: 100%;
-  height: 210px;
-  border: 1px solid rgba(53, 89, 138, 0.1);
-  border-radius: 14px;
-  background:
-    linear-gradient(rgba(47, 125, 246, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(47, 125, 246, 0.05) 1px, transparent 1px),
-    linear-gradient(180deg, #ffffff, #f7fbff);
-  background-size: 100% 42px, 42px 100%, 100% 100%;
-}
+.component-wrapper { display: flex; flex-direction: column; min-height: 300px; }
+.density-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.density-head span { color: var(--subtle); font-size: .72rem; font-weight: 800; }.density-head h4 { margin: 5px 0 0; font-size: 1rem; }
+.density-head b { color: var(--accent); font-size: .86rem; font-variant-numeric: tabular-nums; }
+.component-note { margin: 8px 0 10px; color: var(--muted); font-size: .78rem; }.density-viewport { width: 100%; min-height: 230px; flex: 1; }
 </style>

@@ -1,276 +1,123 @@
 <template>
-  <div class="panel correction-panel">
-    <div class="panel-header">
-      <div>
-        <h4 class="panel-title">证据复核画布</h4>
-        <p class="panel-subtitle">当前对象：{{ caseItem.id }}；人工修正：{{ caseItem.humanLabel }}</p>
+  <section v-if="caseItem" class="correction-workbench">
+    <div class="image-column">
+      <div class="image-toolbar">
+        <div><span>{{ caseItem.person_id }}</span><strong>{{ caseItem.image_id }}</strong></div>
+        <div class="toolbar-badges">
+          <span :class="['layer-badge', `status-${caseItem.status}`]">{{ statusLabel }}</span>
+          <span v-if="caseItem.difficult" class="layer-badge difficult">困难样本</span>
+        </div>
       </div>
-      <span :class="['risk-pill', caseItem.risk === 'high' ? 'risk-high' : 'risk-low']">
-        {{ statusLabel }}
-      </span>
-    </div>
-
-    <div class="canvas-layout">
-      <div class="canvas-stage">
-        <img
-          :key="imageUrl"
-          :src="imageUrl"
-          :alt="`${caseItem.id} 复核证据图`"
-          :class="{ 'is-loaded': imageState === 'loaded', 'is-failed': imageState === 'failed' }"
-          @load="imageState = 'loaded'"
-          @error="imageState = 'failed'"
-        />
-        <canvas ref="canvasRef" width="720" height="460" aria-label="证据复核画布"></canvas>
-        <strong v-if="imageState === 'loading'" class="canvas-image-state">加载 {{ caseItem.id }} 图片</strong>
-        <strong v-else-if="imageState === 'failed'" class="canvas-image-state is-failed">图片未就绪，已保留标注画布</strong>
+      <div ref="stageRef" class="image-stage">
+        <img ref="imageRef" :src="imageUrl" :alt="`${caseItem.image_id} 人工复核证据图`" @load="updateOverlay" />
+        <div v-if="overlayStyle" class="real-detection-box" :style="overlayStyle">
+          <span>{{ caseItem.predicted_label }} · {{ Number(caseItem.score).toFixed(3) }}</span>
+        </div>
+        <div v-else class="missing-box-note"><b>无原始识别框</b><span>该样本来自人工漏检补标</span></div>
       </div>
-
-      <div class="evidence-side">
-        <article class="evidence-block">
-          <span>机器预测</span>
-          <strong>{{ caseItem.machineLabel }}</strong>
-          <small>冲突强度 {{ conflictPercent }}%</small>
-        </article>
-        <article class="evidence-block">
-          <span>文本语义</span>
-          <blockquote>{{ caseItem.textComment || caseItem.caption }}</blockquote>
-        </article>
-        <TextSemanticAnalysis :case-item="caseItem" />
-        <article class="evidence-block">
-          <span>人工判定</span>
-          <p>{{ caseItem.verdict }}</p>
-        </article>
+      <div class="box-legend">
+        <span><i></i>原始 YOLO 边界框</span>
+        <small v-if="caseItem.bbox">x {{ caseItem.bbox.x }} · y {{ caseItem.bbox.y }} · w {{ caseItem.bbox.width }} · h {{ caseItem.bbox.height }}</small>
       </div>
     </div>
-  </div>
+
+    <aside class="review-form">
+      <div class="review-layer raw">
+        <span>01 / 原始模型</span><strong>{{ caseItem.predicted_label }}</strong>
+        <small>box {{ caseItem.box_id }} · score {{ Number(caseItem.score || 0).toFixed(3) }}</small>
+      </div>
+      <div class="review-layer human">
+        <span>02 / 本次人工判断</span>
+        <label>校正标签
+          <select v-model="draftLabel">
+            <option v-for="label in labelOptions" :key="label" :value="label">{{ label }}</option>
+          </select>
+        </label>
+        <label class="check-row"><input v-model="draftDifficult" type="checkbox" />标记为困难样本</label>
+        <label>复核说明
+          <textarea v-model="draftNote" rows="3"></textarea>
+        </label>
+      </div>
+      <div class="review-context">
+        <span>图片说明</span><p>{{ caseItem.caption || '该图片没有配套 caption。' }}</p>
+        <template v-if="caseItem.text_snippets?.length"><span>文本证据</span><blockquote v-for="text in caseItem.text_snippets" :key="text">{{ text }}</blockquote></template>
+      </div>
+      <div class="review-actions">
+        <button type="button" class="confirm" :disabled="isBusy" @click="submit('confirmed')">
+          {{ caseItem.status === 'rejected' ? '恢复并确认' : '确认校正结果' }}
+        </button>
+        <button type="button" class="reject" :disabled="isBusy" @click="submit('rejected')">
+          {{ caseItem.status === 'added' ? '移除人工补标' : '判定为误报' }}
+        </button>
+      </div>
+    </aside>
+  </section>
 </template>
 
 <script setup>
-import { computed, nextTick, onMounted, ref, watch } from 'vue'
-import TextSemanticAnalysis from './TextSemanticAnalysis.vue'
-
-const props = defineProps({
-  caseItem: {
-    type: Object,
-    required: true
-  }
-})
-
-const canvasRef = ref(null)
-const imageState = ref('loading')
-const conflictPercent = computed(() => Math.round((props.caseItem.conflictScore || 0) * 100))
-const imageUrl = computed(
-  () => `http://localhost:5000/static/MC2-Image-Data/${props.caseItem.id}/${props.caseItem.id}_1.jpg`
-)
-const statusLabel = computed(() => {
-  if (props.caseItem.status === 'confirmed') return '已确认'
-  if (props.caseItem.status === 'corrected') return '已修正'
-  return '未复核'
-})
-
-const draw = () => {
-  const canvas = canvasRef.value
-  if (!canvas || !props.caseItem) return
-  const ctx = canvas.getContext('2d')
-  const item = props.caseItem
-  const accent = item.risk === 'high' ? '#df6a6a' : '#39a97d'
-
-  ctx.clearRect(0, 0, canvas.width, canvas.height)
-
-  if (imageState.value === 'failed') {
-    const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height)
-    gradient.addColorStop(0, '#f5f9ff')
-    gradient.addColorStop(1, '#eaf1fb')
-    ctx.fillStyle = gradient
-    ctx.fillRect(0, 0, canvas.width, canvas.height)
-
-    ctx.fillStyle = 'rgba(47, 125, 246, 0.06)'
-    for (let x = 0; x < canvas.width; x += 48) ctx.fillRect(x, 0, 1, canvas.height)
-    for (let y = 0; y < canvas.height; y += 48) ctx.fillRect(0, y, canvas.width, 1)
-  }
-
-  ctx.fillStyle = '#17324d'
-  ctx.font = '700 18px Microsoft YaHei UI, sans-serif'
-  ctx.fillText(`${item.id} / 图文冲突复核`, 28, 38)
-  ctx.fillStyle = '#56708f'
-  ctx.font = '13px Microsoft YaHei UI, sans-serif'
-  ctx.fillText(`队列 ${item.rank} · ${item.note} · 冲突强度 ${conflictPercent.value}%`, 28, 62)
-
-  const box = { x: 142, y: 128, w: 372, h: 208 }
-  ctx.save()
-  ctx.shadowBlur = 24
-  ctx.shadowColor = `${accent}55`
-  ctx.setLineDash(item.status === 'unreviewed' ? [10, 8] : [])
-  ctx.strokeStyle = accent
-  ctx.lineWidth = 4
-  ctx.strokeRect(box.x, box.y, box.w, box.h)
-  ctx.restore()
-
-  ctx.fillStyle = item.status === 'unreviewed' ? 'rgba(223,106,106,0.10)' : 'rgba(57,169,125,0.10)'
-  ctx.fillRect(box.x, box.y, box.w, box.h)
-
-  ctx.fillStyle = '#17324d'
-  ctx.font = '700 15px Microsoft YaHei UI, sans-serif'
-  ctx.fillText(item.humanLabel, box.x + 18, box.y + 34)
-  ctx.fillStyle = '#56708f'
-  ctx.font = '13px Microsoft YaHei UI, sans-serif'
-  ctx.fillText(`机器标签：${item.machineLabel}`, box.x + 18, box.y + 62)
-  ctx.fillText(`人工结论：${statusLabel.value}`, box.x + 18, box.y + 88)
-
-  ctx.fillStyle = 'rgba(240, 180, 76, 0.16)'
-  ctx.fillRect(548, 112, 126, 76)
-  ctx.strokeStyle = 'rgba(240, 180, 76, 0.48)'
-  ctx.lineWidth = 1.5
-  ctx.strokeRect(548, 112, 126, 76)
-  ctx.fillStyle = '#a56e1d'
-  ctx.font = '700 12px Microsoft YaHei UI, sans-serif'
-  ctx.fillText('复核状态', 562, 140)
-  ctx.fillStyle = '#17324d'
-  ctx.font = '12px Microsoft YaHei UI, sans-serif'
-  ctx.fillText(statusLabel.value, 562, 164)
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { STATIC_BASE, useDashboardStore } from '../../store/dashboard'
+const props = defineProps({ caseItem: { type: Object, default: null } })
+const emit = defineEmits(['submit-review'])
+const store = useDashboardStore()
+const stageRef = ref(null)
+const imageRef = ref(null)
+const overlayStyle = ref(null)
+const draftLabel = ref('')
+const draftDifficult = ref(false)
+const draftNote = ref('')
+let resizeObserver
+const imageUrl = computed(() => `${STATIC_BASE}${props.caseItem?.image_path || ''}`)
+const isBusy = computed(() => store.correctionInFlight === props.caseItem?.id)
+const labelOptions = computed(() => Array.from(new Set([
+  props.caseItem?.predicted_label,
+  props.caseItem?.corrected_label,
+  ...store.candidateRankings.map((item) => item.label)
+].filter((label) => label && label !== '未检出' && label !== '误报'))))
+const statusLabel = computed(() => ({ confirmed:'模型命中', added:'人工补标', rejected:'误报驳回', unreviewed:'待复核' }[props.caseItem?.status] || ''))
+const resetDraft = () => {
+  draftLabel.value = props.caseItem?.corrected_label === '误报' ? props.caseItem?.predicted_label : props.caseItem?.corrected_label || ''
+  draftDifficult.value = Boolean(props.caseItem?.difficult)
+  draftNote.value = props.caseItem?.reason || ''
+  nextTick(updateOverlay)
 }
-
-watch(
-  () => props.caseItem,
-  () => nextTick(draw),
-  { deep: true }
-)
-watch(
-  () => props.caseItem.id,
-  () => {
-    imageState.value = 'loading'
+const updateOverlay = () => {
+  const bbox = props.caseItem?.bbox
+  const image = imageRef.value
+  const stage = stageRef.value
+  if (!bbox || !image?.naturalWidth || !stage) { overlayStyle.value = null; return }
+  const scale = Math.min(stage.clientWidth / image.naturalWidth, stage.clientHeight / image.naturalHeight)
+  const renderedWidth = image.naturalWidth * scale
+  const renderedHeight = image.naturalHeight * scale
+  const offsetX = (stage.clientWidth - renderedWidth) / 2
+  const offsetY = (stage.clientHeight - renderedHeight) / 2
+  overlayStyle.value = {
+    left: `${offsetX + bbox.x * scale}px`, top: `${offsetY + bbox.y * scale}px`,
+    width: `${bbox.width * scale}px`, height: `${bbox.height * scale}px`
   }
-)
-watch(imageState, () => nextTick(draw))
-onMounted(draw)
+}
+const submit = (status) => emit('submit-review', {
+  id: props.caseItem.id,
+  patch: { status, humanLabel: draftLabel.value, difficult: draftDifficult.value, note: draftNote.value }
+})
+watch(() => props.caseItem, resetDraft, { immediate:true, deep:true })
+onMounted(() => { resizeObserver = new ResizeObserver(updateOverlay); if(stageRef.value) resizeObserver.observe(stageRef.value) })
+onBeforeUnmount(() => resizeObserver?.disconnect())
 </script>
 
 <style scoped>
-.correction-panel {
-  min-height: 0;
-  align-self: start;
-}
-
-.canvas-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1.25fr) minmax(250px, 0.82fr);
-  gap: 14px;
-  align-items: start;
-}
-
-.canvas-stage {
-  position: relative;
-  display: block;
-  overflow: hidden;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background:
-    linear-gradient(rgba(47, 125, 246, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(47, 125, 246, 0.06) 1px, transparent 1px),
-    #f9fbff;
-  background-size: 48px 48px, 48px 48px, 100% 100%;
-  aspect-ratio: 720 / 460;
-}
-
-.canvas-stage > img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0;
-  transition: opacity var(--motion-medium) ease;
-}
-
-.canvas-stage > img.is-loaded {
-  opacity: 1;
-}
-
-.canvas-stage > img.is-failed {
-  display: none;
-}
-
-canvas {
-  position: relative;
-  z-index: 2;
-  display: block;
-  width: 100%;
-  max-width: 720px;
-  height: auto;
-}
-
-.canvas-image-state {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  z-index: 3;
-  transform: translate(-50%, -50%);
-  display: inline-flex;
-  align-items: center;
-  min-height: 34px;
-  padding: 0 14px;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  color: var(--muted);
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: var(--shadow-soft);
-  font-size: 0.82rem;
-}
-
-.canvas-image-state.is-failed {
-  color: #9a6818;
-  border-color: rgba(240, 180, 76, 0.28);
-  background: rgba(255, 247, 219, 0.92);
-}
-
-.evidence-side {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 10px;
-}
-
-.evidence-block {
-  padding: 12px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: rgba(255, 255, 255, 0.86);
-}
-
-.evidence-block span {
-  display: block;
-  margin-bottom: 8px;
-  color: var(--subtle);
-  font-size: 0.78rem;
-  font-weight: 900;
-  letter-spacing: 0.08em;
-}
-
-.evidence-block strong {
-  display: block;
-  margin-bottom: 8px;
-}
-
-.evidence-block small {
-  color: var(--muted);
-  font-weight: 800;
-}
-
-.evidence-block p,
-blockquote {
-  display: block !important;
-  margin: 0;
-  color: var(--muted);
-  line-height: 1.7;
-}
-
-blockquote {
-  padding-left: 12px;
-  border-left: 3px solid var(--accent);
-}
-
-@media (max-width: 1180px) {
-  .canvas-layout {
-    grid-template-columns: 1fr;
-  }
-}
+.correction-workbench { display:grid; grid-template-columns:minmax(0,1.45fr) minmax(310px,.55fr); gap:14px; padding:14px; border:1px solid var(--border); border-radius:10px; background:#fff; box-shadow:var(--shadow); }
+.image-column { min-width:0; }.image-toolbar { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px; }.image-toolbar span,.image-toolbar strong { display:block; }.image-toolbar span { color:var(--subtle); font-size:.72rem; }.image-toolbar strong { margin-top:3px; }
+.toolbar-badges { display:flex; gap:6px; }.layer-badge { padding:6px 9px; border-radius:5px; font-size:.7rem; font-weight:800; }.status-confirmed{color:#187553;background:#eaf7f1}.status-added{color:#1d65c1;background:#ebf3ff}.status-rejected{color:#a94141;background:#fcecec}.difficult{color:#8a5a0a;background:#fff4d9}
+.image-stage { position:relative; display:grid; place-items:center; overflow:hidden; height:520px; border:1px solid var(--border); border-radius:8px; background:#eef2f6; }.image-stage img { display:block; width:100%; height:100%; object-fit:contain; }
+.real-detection-box { position:absolute; z-index:2; border:3px solid #cf5656; box-shadow:0 0 0 2px rgba(255,255,255,.8),0 8px 24px rgba(207,86,86,.22); pointer-events:none; }.real-detection-box span { position:absolute; left:-3px; top:-30px; padding:5px 8px; color:#fff; background:#b94646; font-size:.7rem; font-weight:800; white-space:nowrap; }
+.missing-box-note { position:absolute; left:14px; bottom:14px; display:flex; flex-direction:column; padding:9px 11px; border:1px dashed #2f7df6; border-radius:6px; color:#1d65c1; background:rgba(244,248,255,.94); }.missing-box-note span { margin-top:3px; font-size:.7rem; }
+.box-legend { display:flex; justify-content:space-between; gap:10px; margin-top:8px; color:var(--muted); font-size:.7rem; }.box-legend span{display:flex;align-items:center;gap:6px}.box-legend i{width:14px;height:9px;border:2px solid #cf5656}
+.review-form { display:grid; gap:10px; align-content:start; }.review-layer,.review-context { padding:13px; border:1px solid var(--border); border-radius:8px; }.review-layer.raw{background:#f5f8fc}.review-layer.human{background:#f2faf7;border-color:#cbe8dc}
+.review-layer > span,.review-context > span { display:block; color:var(--subtle); font-size:.7rem; font-weight:800; }.review-layer > strong { display:block; margin:7px 0; font-size:1.08rem; }.review-layer small { color:var(--muted); }
+.review-layer label { display:block; margin-top:11px; color:var(--muted); font-size:.75rem; font-weight:700; }.review-layer select,.review-layer textarea { width:100%; margin-top:5px; border:1px solid var(--border-strong); border-radius:6px; color:var(--text); background:#fff; }.review-layer select { min-height:40px; padding:0 9px; }.review-layer textarea { padding:8px; resize:vertical; }
+.check-row { display:flex!important; align-items:center; gap:8px; }.check-row input { width:17px;height:17px;margin:0;accent-color:var(--accent); }
+.review-context p,.review-context blockquote { display:block!important; margin:6px 0 12px; color:var(--muted); font-size:.75rem; line-height:1.55; }.review-context blockquote { padding-left:9px;border-left:2px solid var(--accent) }
+.review-actions { display:grid; grid-template-columns:1fr 1fr; gap:8px; }.review-actions button { min-height:44px; border-radius:7px; font-size:.78rem; font-weight:800; }.review-actions .confirm { color:#fff;background:#24956f }.review-actions .reject { color:#a94141;background:#fff4f4;border:1px solid #efc6c6 }.review-actions button:disabled{opacity:.5;cursor:wait}
+@media(max-width:1050px){.correction-workbench{grid-template-columns:1fr}.image-stage{height:430px}}
 </style>

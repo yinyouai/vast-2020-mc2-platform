@@ -1,156 +1,34 @@
 <template>
-  <div class="panel elimination-panel">
+  <section class="panel elimination-panel">
     <div class="panel-header">
-      <div>
-        <h4 class="panel-title">公共物品剔除</h4>
-        <p class="panel-subtitle">勾选覆盖率过高的物品，实时观察暗号物证是否仍然收敛。</p>
-      </div>
+      <div><span class="section-kicker">交互过滤器</span><h4 class="panel-title">公共物品剔除</h4><p class="visible-subtitle">同步到覆盖率、评分图、流动图和聚类矩阵。</p></div>
+      <b>{{ excludedCount }} / {{ items.length }}</b>
     </div>
-
+    <div class="bulk-actions"><button @click="$emit('auto-exclude')">剔除人数不匹配</button><button @click="$emit('clear')">全部恢复</button></div>
     <div class="filter-list">
-      <label v-for="item in items" :key="item.name" class="filter-row" :class="{ 'is-excluded': item.excluded }">
-        <input
-          type="checkbox"
-          :checked="item.excluded"
-          @change="$emit('toggle', item.name)"
-        />
-        <span>
-          <strong>{{ item.name }}</strong>
-          <small>{{ item.coverage }}% 覆盖率</small>
-        </span>
-        <b>{{ item.excluded ? '已剔除' : item.role }}</b>
+      <label v-for="item in items" :key="item.name" :class="['filter-row',item.excluded&&'is-excluded',item.name===selected&&'is-selected']">
+        <input type="checkbox" :checked="item.excluded" @change="$emit('toggle',item.name)" />
+        <button type="button" class="item-select" @click.prevent="$emit('select',item.name)">
+          <span><strong>{{ item.name }}</strong><small>{{ item.ownerCount }} 人 · 最少 {{ item.minOccurrence }} 次</small></span><b>{{ item.score.toFixed(3) }}</b>
+        </button>
       </label>
     </div>
-
-    <div class="live-explain">
-      <span>实时解释</span>
-      <strong>{{ explanation.title }}</strong>
-      <p>{{ explanation.detail }}</p>
-    </div>
-
-    <button class="primary-btn full" @click="$emit('open-evidence')">查看候选暗号物证</button>
-  </div>
+    <div class="filter-summary"><span>当前观察</span><strong>{{ selected || '未选择' }}</strong><p>{{ explanation }}</p></div>
+  </section>
 </template>
-
 <script setup>
 import { computed } from 'vue'
-
-const props = defineProps({
-  items: {
-    type: Array,
-    default: () => []
-  }
-})
-
-defineEmits(['toggle', 'open-evidence'])
-
-const explanation = computed(() => {
-  const excluded = props.items.filter((item) => item.excluded)
-  const candidate = props.items.find((item) => item.role === '候选暗号')
-
-  if (!excluded.length) {
-    return {
-      title: '尚未剔除公共噪声',
-      detail: 'Notebook、Badge 等高覆盖物仍在网络里，会把普通参会者和核心嫌疑组混在一起。'
-    }
-  }
-
-  return {
-    title: `已剔除 ${excluded.length} 个公共物品`,
-    detail: `${excluded.map((item) => item.name).join('、')} 被移出背景流后，${candidate?.name || '候选物证'} 的低覆盖但高收敛特征会更明显。`
-  }
-})
+const props=defineProps({items:{type:Array,default:()=>[]},selected:{type:String,default:''}})
+defineEmits(['toggle','select','auto-exclude','clear'])
+const excludedCount=computed(()=>props.items.filter((item)=>item.excluded).length)
+const explanation=computed(()=>{const item=props.items.find((entry)=>entry.name===props.selected);if(!item)return'选择一个候选查看其覆盖和稳定性。'
+  if(item.excluded)return'该候选已从当前可视分析中隐藏，可随时恢复。'
+  return `${item.ownerCount} 位拥有者，稳定率 ${Math.round(item.stability*100)}%，${item.role}。`})
 </script>
-
 <style scoped>
-.elimination-panel {
-  align-self: start;
-}
-
-.filter-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 14px;
-}
-
-.filter-row {
-  display: grid;
-  grid-template-columns: 24px minmax(0, 1fr) auto;
-  gap: 10px;
-  align-items: center;
-  min-height: 58px;
-  padding: 10px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: rgba(255, 255, 255, 0.82);
-  transition:
-    border-color var(--motion-fast) ease,
-    background var(--motion-fast) ease,
-    transform var(--motion-fast) var(--ease-spring);
-}
-
-.filter-row:hover {
-  transform: translateY(-2px);
-  border-color: rgba(47, 125, 246, 0.2);
-}
-
-.filter-row.is-excluded {
-  background: rgba(232, 238, 246, 0.78);
-}
-
-.filter-row input {
-  width: 20px;
-  height: 20px;
-  accent-color: var(--accent);
-}
-
-.filter-row strong,
-.filter-row small {
-  display: block;
-}
-
-.filter-row small {
-  margin-top: 4px;
-  color: var(--subtle);
-}
-
-.filter-row b {
-  color: var(--subtle);
-  font-size: 0.76rem;
-}
-
-.live-explain {
-  margin-bottom: 14px;
-  padding: 14px;
-  border: 1px solid rgba(47, 125, 246, 0.16);
-  border-radius: var(--radius-sm);
-  background:
-    radial-gradient(circle at top right, rgba(47, 125, 246, 0.1), transparent 28%),
-    rgba(247, 250, 255, 0.88);
-}
-
-.live-explain span {
-  display: block;
-  color: var(--subtle);
-  font-size: 0.76rem;
-  font-weight: 900;
-  letter-spacing: 0.08em;
-}
-
-.live-explain strong {
-  display: block;
-  margin-top: 6px;
-}
-
-.live-explain p {
-  display: block !important;
-  margin: 8px 0 0;
-  color: var(--muted);
-  line-height: 1.6;
-}
-
-.full {
-  width: 100%;
-}
+.section-kicker{color:var(--subtle);font-size:.7rem;font-weight:800}.visible-subtitle{display:block!important;margin:5px 0 0;color:var(--muted);font-size:.76rem}.panel-header>b{color:var(--accent);font-variant-numeric:tabular-nums}
+.bulk-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px}.bulk-actions button{min-height:38px;border:1px solid var(--border);border-radius:6px;color:var(--text);background:#f8fafc;font-size:.72rem;font-weight:800}
+.filter-list{display:grid;gap:6px;max-height:420px;overflow:auto}.filter-row{display:grid;grid-template-columns:22px 1fr;align-items:center;gap:7px;padding:7px;border:1px solid var(--border);border-radius:7px;background:#fff}.filter-row.is-selected{border-color:var(--accent);box-shadow:0 0 0 2px rgba(47,125,246,.1)}.filter-row.is-excluded{opacity:.45;background:#eef1f4}
+.filter-row input{width:17px;height:17px;accent-color:var(--accent)}.item-select{display:flex;align-items:center;justify-content:space-between;gap:9px;min-width:0;min-height:42px;padding:0;color:inherit;text-align:left;background:transparent}.item-select span{min-width:0}.item-select strong,.item-select small{display:block}.item-select small{margin-top:3px;color:var(--muted);font-size:.68rem}.item-select>b{color:var(--accent);font-size:.78rem;font-variant-numeric:tabular-nums}
+.filter-summary{margin-top:10px;padding:12px;border:1px solid #cfe0f5;border-radius:7px;background:#f3f8ff}.filter-summary span{color:var(--subtle);font-size:.68rem;font-weight:800}.filter-summary strong{display:block;margin:5px 0}.filter-summary p{display:block!important;margin:0;color:var(--muted);font-size:.74rem;line-height:1.5}
 </style>
