@@ -5,7 +5,7 @@
         <span class="section-kicker">综合评分构成</span>
         <h4 class="panel-title">候选暗号排名</h4>
         <p class="visible-subtitle">
-          每段长度是该指标对综合分的实际贡献；人工证据与模型命中分开统计。
+          每段长度是该指标对综合分的实际贡献；全量图片先由模型分析，人工仅覆盖关键误报与漏检。
         </p>
       </div>
       <span class="data-chip live-chip">
@@ -120,7 +120,7 @@ const rawFactorValue = (row, key) => {
   if (key === 'specificity') return `${row.owner_count} 人 / 目标 ${targetGroupSize.value} 人`
   if (key === 'stability') return `${Math.round(row.stable_owner_ratio * row.owner_count)} / ${row.owner_count} 人稳定`
   if (key === 'visual') {
-    return `${row.verified_image_count} 张人工核验 / ${row.raw_detection_image_count} 张模型命中`
+    return `${row.evidence_image_count} 张组内支持 / ${row.non_owner_raw_detection_image_count} 张组外命中（全量 ${row.evaluated_image_count} 张已分析）`
   }
   return `${row.text_support_count} / ${row.owner_count} 人，${row.text_evidence_count} 条直接文本`
 }

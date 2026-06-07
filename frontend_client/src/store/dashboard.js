@@ -224,7 +224,7 @@ export const useDashboardStore = defineStore('dashboard', {
             score_threshold: this.scoreThreshold,
             review_mode: this.reviewQueueMode,
             batch: this.reviewQueueBatch,
-            search_limit_per_owner: 3
+            search_limit_per_owner: 1
           }
         })
         if (response.data.status === 'success') {

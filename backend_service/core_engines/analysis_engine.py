@@ -191,6 +191,10 @@ class ForensicAnalysisEngine:
 
     def candidate_rankings(self, threshold=0.45):
         rankings = []
+        evaluated_image_count = sum(
+            len(person.get("images", {}))
+            for person in self.master_data.values()
+        )
         for label, label_node in self.corrected_labels.items():
             people = label_node.get("persons", {})
             if not people:
@@ -203,15 +207,38 @@ class ForensicAnalysisEngine:
                 len(set(person_node.get("image_ids", [])))
                 for person_node in people.values()
             )
-            raw_detection_images = sum(
-                len(self._candidate_raw_detection_images(person_id, label, threshold))
-                for person_id in people
-            )
-            visual_ratio = min(
+            verified_image_keys = {
+                (person_id, image_id)
+                for person_id, person_node in people.items()
+                for image_id in person_node.get("image_ids", [])
+            }
+            raw_image_keys = {
+                (person_id, image_id)
+                for person_id in self.master_data
+                for image_id in self._candidate_raw_detection_images(
+                    person_id,
+                    label,
+                    threshold,
+                )
+            }
+            owner_raw_image_keys = {
+                key for key in raw_image_keys
+                if key[0] in people
+            }
+            non_owner_raw_image_keys = raw_image_keys - owner_raw_image_keys
+            supporting_image_keys = verified_image_keys | owner_raw_image_keys
+            visual_coverage = min(
                 1.0,
-                verified_images
+                len(supporting_image_keys)
                 / max(owner_count * self.visual_images_per_owner, 1),
             )
+            visual_precision = (
+                len(supporting_image_keys)
+                / (len(supporting_image_keys) + len(non_owner_raw_image_keys))
+                if supporting_image_keys or non_owner_raw_image_keys
+                else 0
+            )
+            visual_ratio = visual_coverage * visual_precision
             text_snippets = {
                 person_id: self._text_snippets(person_id, label)
                 for person_id in people
@@ -242,9 +269,12 @@ class ForensicAnalysisEngine:
                 "stable_owner_ratio": round(stable_ratio, 4),
                 "text_support_count": text_support,
                 "text_evidence_count": text_evidence_count,
-                "evidence_image_count": verified_images,
+                "evidence_image_count": len(supporting_image_keys),
                 "verified_image_count": verified_images,
-                "raw_detection_image_count": raw_detection_images,
+                "raw_detection_image_count": len(raw_image_keys),
+                "owner_raw_detection_image_count": len(owner_raw_image_keys),
+                "non_owner_raw_detection_image_count": len(non_owner_raw_image_keys),
+                "evaluated_image_count": evaluated_image_count,
                 "exact_target_size": exact_group,
                 "score": round(score, 4),
                 "score_components": {
@@ -270,6 +300,8 @@ class ForensicAnalysisEngine:
                     "specificity": round(specificity, 4),
                     "stability": round(stable_ratio, 4),
                     "visual": round(visual_ratio, 4),
+                    "visual_coverage": round(visual_coverage, 4),
+                    "visual_precision": round(visual_precision, 4),
                     "text": round(text_ratio, 4),
                 },
                 "source": label_node.get("source", "人工纠正"),
@@ -376,26 +408,37 @@ class ForensicAnalysisEngine:
             "density_points": self.detection_density(),
         }
 
-    def evidence_for(self, label, owners):
+    def evidence_for(self, label, owners, threshold=0.45):
         people = self.corrected_labels[label]["persons"]
         evidence = []
         for person_id in owners:
             person_node = people[person_id]
             scores = self._raw_label_scores(person_id, label)
-            image_ids = person_node.get("image_ids", [])
+            verified_image_ids = list(dict.fromkeys(person_node.get("image_ids", [])))
+            model_image_ids = self._candidate_raw_detection_images(
+                person_id,
+                label,
+                threshold,
+            )
+            image_ids = list(dict.fromkeys(verified_image_ids + model_image_ids))
             evidence.append({
                 "person_id": person_id,
                 "image_ids": image_ids,
+                "verified_image_ids": verified_image_ids,
+                "model_image_ids": model_image_ids,
                 "primary_image_id": image_ids[0] if image_ids else None,
                 "image_paths": [
                     self.master_data[person_id]["images"][image_id]["image_path"]
                     for image_id in image_ids
                     if image_id in self.master_data[person_id]["images"]
                 ],
-                "occurrence_count": int(person_node.get("occurrence_count", 0)),
-                "raw_detected": bool(scores),
+                "occurrence_count": max(
+                    int(person_node.get("occurrence_count", 0)),
+                    len(image_ids),
+                ),
+                "raw_detected": bool(model_image_ids),
                 "raw_max_score": round(scores[0][1], 4) if scores else 0,
-                "raw_detection_images": [row[0] for row in scores],
+                "raw_detection_images": model_image_ids,
                 "text_snippets": self._text_snippets(person_id, label),
                 "source": person_node.get("source", "人工视觉复核"),
                 "difficult": bool(person_node.get("difficult", False)),
@@ -425,7 +468,7 @@ class ForensicAnalysisEngine:
             if item["exact_target_size"] and item["min_occurrence"] >= 2
         ]
         winner = valid[0] if valid else rankings[0]
-        evidence = self.evidence_for(winner["label"], winner["owners"])
+        evidence = self.evidence_for(winner["label"], winner["owners"], threshold)
         image_count = sum(
             len(person.get("images", {}))
             for person in self.master_data.values()
@@ -482,8 +525,8 @@ class ForensicAnalysisEngine:
                         "name": "图片证据",
                         "weight": self.scoring_weights["visual"],
                         "description": (
-                            "人工核验图片数 / (拥有者人数 × "
-                            f"{self.visual_images_per_owner})，最高记为 100%"
+                            "全量图片中的模型命中与人工补标共同形成支持证据；"
+                            "非拥有者模型命中作为误报惩罚"
                         ),
                     },
                     {
@@ -494,8 +537,8 @@ class ForensicAnalysisEngine:
                     },
                 ],
                 "evidence_source": (
-                    "图片评分仅使用人工校正层中可追溯的 image_ids；"
-                    "当前阈值下的原始模型命中单独展示，不进入图片分"
+                    "全部图片均进入模型分析；阈值内且未被人工驳回的模型命中参与图片分，"
+                    "人工补标增加支持证据，人工驳回覆盖对应模型框"
                 ),
                 "text_source": (
                     "文本评分仅统计候选拥有者中的直接短语命中人数；"
@@ -510,7 +553,10 @@ class ForensicAnalysisEngine:
                     f"纠正后恰好由 {winner['owner_count']} 人持有",
                     f"每位成员至少在 {winner['min_occurrence']} 张图片中出现",
                     f"组内稳定拥有者比例为 {winner['stable_owner_ratio']:.0%}",
-                    f"已核验 {winner['evidence_image_count']} 张图片证据",
+                    (
+                        f"全量图片分析形成 {winner['evidence_image_count']} 张组内支持证据，"
+                        f"并识别 {winner['non_owner_raw_detection_image_count']} 张组外模型命中"
+                    ),
                     f"{winner['text_support_count']} 位成员具有直接文本支持",
                 ],
                 "evidence": evidence,

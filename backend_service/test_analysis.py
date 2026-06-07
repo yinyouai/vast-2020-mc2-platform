@@ -43,7 +43,14 @@ class AnalysisEngineTests(unittest.TestCase):
         self.assertGreater(winner["evidence_image_count"], 0)
         self.assertEqual(
             set(winner["score_factors"]),
-            {"specificity", "stability", "visual", "text"},
+            {
+                "specificity",
+                "stability",
+                "visual",
+                "visual_coverage",
+                "visual_precision",
+                "text",
+            },
         )
         comparison = next(
             item
@@ -51,8 +58,9 @@ class AnalysisEngineTests(unittest.TestCase):
             if item["label"] == "blueSunglasses"
         )
         self.assertEqual(comparison["verified_image_count"], 0)
-        self.assertEqual(comparison["score_components"]["visual"], 0)
+        self.assertGreater(comparison["score_components"]["visual"], 0)
         self.assertGreater(comparison["raw_detection_image_count"], 0)
+        self.assertGreater(comparison["evidence_image_count"], 0)
         self.assertEqual(comparison["text_support_count"], 2)
 
     def test_audit_threshold_curve_covers_all_raw_predictions(self):
@@ -151,7 +159,7 @@ class AnalysisEngineTests(unittest.TestCase):
             self.assertEqual(payload["status"], "success")
             self.assertEqual(payload["data_source"], source)
 
-    def test_threshold_changes_model_hits_not_verified_evidence(self):
+    def test_threshold_changes_model_evidence_and_final_score(self):
         client = app.test_client()
         low = client.get("/api/analysis_summary?score_threshold=0.25").get_json()["data"]
         high = client.get("/api/analysis_summary?score_threshold=0.75").get_json()["data"]
@@ -167,34 +175,76 @@ class AnalysisEngineTests(unittest.TestCase):
             low_rows["blueSunglasses"]["verified_image_count"],
             high_rows["blueSunglasses"]["verified_image_count"],
         )
-        self.assertEqual(
+        self.assertNotEqual(
+            low_rows["blueSunglasses"]["score_components"]["visual"],
+            high_rows["blueSunglasses"]["score_components"]["visual"],
+        )
+        self.assertNotEqual(
             low_rows["blueSunglasses"]["score"],
             high_rows["blueSunglasses"]["score"],
         )
 
-    def test_candidate_evidence_sources_are_separated(self):
+    def test_candidate_scoring_combines_model_and_human_image_evidence(self):
         engine = build_analysis_engine()
         summary = engine.analysis_summary(0.45)
         rows = {item["label"]: item for item in summary["candidate_rankings"]}
+        expected_images = sum(
+            len(person.get("images", {}))
+            for person in engine.master_data.values()
+        )
         for label, label_node in engine.corrected_labels.items():
             expected_verified = sum(
                 len(set(person_node.get("image_ids", [])))
                 for person_node in label_node.get("persons", {}).values()
             )
             self.assertEqual(rows[label]["verified_image_count"], expected_verified)
-            self.assertEqual(rows[label]["evidence_image_count"], expected_verified)
+            self.assertGreaterEqual(
+                rows[label]["evidence_image_count"],
+                expected_verified,
+            )
+            self.assertEqual(
+                rows[label]["evaluated_image_count"],
+                expected_images,
+            )
+            self.assertEqual(
+                rows[label]["raw_detection_image_count"],
+                (
+                    rows[label]["owner_raw_detection_image_count"]
+                    + rows[label]["non_owner_raw_detection_image_count"]
+                ),
+            )
             self.assertLessEqual(
                 rows[label]["text_support_count"],
                 rows[label]["owner_count"],
             )
 
-        expected_images = sum(
-            len(person.get("images", {}))
-            for person in engine.master_data.values()
-        )
         self.assertEqual(
             summary["candidate_scoring"]["data_scope"]["image_count"],
             expected_images,
+        )
+
+    def test_focused_review_queue_keeps_model_hits_and_limits_search(self):
+        payload = app.test_client().get(
+            "/api/review_queue?label=canadaPencil"
+            "&score_threshold=0.45&review_mode=focused"
+            "&search_limit_per_owner=1"
+        ).get_json()
+        items = payload["data"]
+        meta = payload["meta"]
+        self.assertTrue(
+            any(
+                item["review_kind"] in {"model_hit", "weak_model_hit", "verified"}
+                and item["box_id"] >= 0
+                for item in items
+            )
+        )
+        self.assertLessEqual(
+            meta["returned_search_images"],
+            meta["owner_count"],
+        )
+        self.assertLess(
+            meta["returned_search_images"],
+            meta["total_search_images"],
         )
 
     def test_review_priorities_are_ranked_and_explainable(self):

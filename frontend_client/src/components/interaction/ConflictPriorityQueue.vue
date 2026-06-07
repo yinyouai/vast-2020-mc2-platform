@@ -19,9 +19,9 @@
           </button>
           <div class="card-actions">
             <button type="button" @click="$emit('select', item.id)">查看证据</button>
-            <button v-if="lane.key === 'confirmed'" type="button" class="danger"
+            <button v-if="item.status === 'confirmed'" type="button" class="danger"
               :disabled="busyId === item.id" @click="$emit('update-case', { id: item.id, patch: { status: 'rejected' } })">改判误报</button>
-            <button v-else-if="lane.key === 'added'" type="button" class="danger"
+            <button v-else-if="item.status === 'added'" type="button" class="danger"
               :disabled="busyId === item.id" @click="$emit('update-case', { id: item.id, patch: { status: 'rejected' } })">移除补标</button>
             <button v-else-if="item.status === 'rejected'" type="button" class="restore"
               :disabled="busyId === item.id" @click="$emit('update-case', { id: item.id, patch: { status: 'confirmed', humanLabel: item.predicted_label } })">恢复预测</button>
@@ -46,9 +46,36 @@ const props = defineProps({
 })
 defineEmits(['select', 'update-case'])
 const lanes = computed(() => [
-  { key: 'added', eyebrow: 'Human annotation', title: '人工标注', description: '模型在该图片漏检，由人工添加到校正层。', items: props.items.filter((item) => item.status === 'added') },
-  { key: 'confirmed', eyebrow: 'Model hit', title: '模型命中', description: '模型框与人工判断一致，可再次改判。', items: props.items.filter((item) => item.status === 'confirmed') },
-  { key: 'rejected', eyebrow: 'Needs review', title: '待核验与排除', description: '包括模型待确认、无检测框的图片搜索任务和已排除样本。', items: props.items.filter((item) => ['rejected','unreviewed','dismissed'].includes(item.status)) }
+  {
+    key: 'review',
+    eyebrow: 'Recommended review',
+    title: '建议人工复核',
+    description: '仅展示最不确定或最可能漏检的高优先图片。',
+    items: props.items.filter((item) =>
+      item.status === 'unreviewed'
+      && ['evidence_search'].includes(item.review_kind)
+    )
+  },
+  {
+    key: 'model',
+    eyebrow: 'Model detections',
+    title: '模型命中',
+    description: '原始模型命中无需全部人工确认，未被驳回时会参与最终评分。',
+    items: props.items.filter((item) =>
+      item.box_id >= 0
+      && ['model_hit','weak_model_hit','verified'].includes(item.review_kind)
+      && item.status !== 'rejected'
+    )
+  },
+  {
+    key: 'human',
+    eyebrow: 'Human overrides',
+    title: '人工修正',
+    description: '只记录人工补标、误报驳回与其他明确覆盖操作。',
+    items: props.items.filter((item) =>
+      ['added','rejected','dismissed'].includes(item.status)
+    )
+  }
 ])
 const personNumber = (personId = '') => personId.replace('Person', '').padStart(2, '0')
 </script>
@@ -56,7 +83,7 @@ const personNumber = (personId = '') => personId.replace('Person', '').padStart(
 <style scoped>
 .triage-board { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
 .review-lane { min-width:0; padding:14px; border:1px solid var(--border); border-top:4px solid var(--lane-color); border-radius:10px; background:#fff; box-shadow:var(--shadow-soft); }
-.lane-added { --lane-color:#2f7df6; --lane-soft:#edf5ff; }.lane-confirmed { --lane-color:#24956f; --lane-soft:#ecf8f3; }.lane-rejected { --lane-color:#cf5656; --lane-soft:#fdf0f0; }
+  .lane-review { --lane-color:#d18a22; --lane-soft:#fff6e5; }.lane-model { --lane-color:#24956f; --lane-soft:#ecf8f3; }.lane-human { --lane-color:#2f7df6; --lane-soft:#edf5ff; }
 .review-lane header { display:flex; align-items:flex-start; justify-content:space-between; gap:10px; }.review-lane header span { color:var(--subtle); font-size:.68rem; font-weight:800; text-transform:uppercase; }
 .review-lane h4 { margin:4px 0 0; font-size:1.02rem; }.review-lane header b { display:grid; place-items:center; min-width:34px; height:28px; border-radius:6px; color:var(--lane-color); background:var(--lane-soft); font-variant-numeric:tabular-nums; }
 .review-lane > p { display:block!important; min-height:38px; margin:9px 0 12px; color:var(--muted); font-size:.75rem; line-height:1.5; }

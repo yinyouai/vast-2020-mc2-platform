@@ -1,8 +1,8 @@
 <template>
   <section class="view-grid-layout review-page">
     <div class="page-intro">
-      <div><p class="eyebrow">任务 2 / 人在回路复核</p><h3>选择候选物品，逐张确认模型命中或寻找漏检证据。</h3>
-        <div class="intro-pills"><span class="data-chip">已核验 {{ counts.verified }}</span><span class="data-chip">待人工判断 {{ counts.pending }}</span><span class="data-chip">已排除 {{ counts.excluded }}</span></div></div>
+      <div><p class="eyebrow">任务 2 / 人在回路复核</p><h3>只复核最需要人工判断的样本，其余图片继续由模型参与评分。</h3>
+        <div class="intro-pills"><span class="data-chip">模型命中 {{ counts.modelHits }}</span><span class="data-chip">建议人工复核 {{ counts.pending }}</span><span class="data-chip">人工修正 {{ counts.corrected }}</span></div></div>
     </div>
     <div v-if="store.correctionMessage" class="save-feedback" role="status">{{ store.correctionMessage }}</div>
     <section class="review-scope panel">
@@ -10,7 +10,7 @@
         <span>当前核验候选</span>
         <strong>{{ store.reviewCandidateLabel || store.activeTotem }}</strong>
         <small>
-          队列动态包含人工核验图片、阈值 {{ store.scoreThreshold.toFixed(2) }} 下的模型命中，以及候选拥有者的待查图片。
+          全量图片都会进入后续评分；这里只抽取最不确定、最冲突或最可能漏检的图片供人工纠偏。
         </small>
       </div>
       <div class="candidate-switcher" role="group" aria-label="选择要人工核验的候选物品">
@@ -26,32 +26,19 @@
         </button>
       </div>
     </section>
-    <section class="batch-control panel">
+    <section class="review-policy panel">
       <div class="batch-copy">
-        <span>渐进式核验</span>
-        <strong>
-          {{ store.reviewQueueMode === 'focused' ? `智能批次 ${store.reviewQueueMeta.batch || 1} / ${store.reviewQueueMeta.max_batch || 1}` : '全部图片模式' }}
-        </strong>
+        <span>最小人工复核集</span>
+        <strong>每位候选拥有者仅推荐 1 张最高优先图片</strong>
         <small>
-          当前显示 {{ store.reviewQueueMeta.returned_items || store.reviewQueue.length }} 条；
-          待搜索图片总量 {{ store.reviewQueueMeta.total_search_images || 0 }} 张。
-          智能批次每位拥有者只取 3 张高优先图片。
+          当前建议人工判断 {{ counts.pending }} 张；其余
+          {{ Math.max(0, (store.reviewQueueMeta.total_search_images || 0) - (store.reviewQueueMeta.returned_search_images || 0)) }}
+          张不要求逐图复核，但模型结果仍进入最终候选评分。
         </small>
       </div>
-      <div class="mode-switch" role="group" aria-label="人工核验队列范围">
-        <button :class="{ active: store.reviewQueueMode === 'focused' }" @click="store.setReviewQueueMode('focused')">智能批次</button>
-        <button :class="{ active: store.reviewQueueMode === 'all' }" @click="store.setReviewQueueMode('all')">查看全部</button>
-      </div>
-      <div v-if="store.reviewQueueMode === 'focused'" class="batch-actions">
-        <button
-          :disabled="(store.reviewQueueMeta.batch || 1) <= 1"
-          @click="store.setReviewQueueBatch((store.reviewQueueMeta.batch || 1) - 1)"
-        >上一批</button>
-        <span>{{ store.reviewQueueMeta.returned_search_images || 0 }} 张搜索图</span>
-        <button
-          :disabled="(store.reviewQueueMeta.batch || 1) >= (store.reviewQueueMeta.max_batch || 1)"
-          @click="store.setReviewQueueBatch((store.reviewQueueMeta.batch || 1) + 1)"
-        >下一批</button>
+      <div class="policy-stats">
+        <span><b>{{ store.reviewQueueMeta.returned_search_images || 0 }}</b>张候选图</span>
+        <span><b>{{ store.reviewQueueMeta.total_search_images || 0 }}</b>张模型持续分析</span>
       </div>
     </section>
     <PersonReviewRadar
@@ -81,9 +68,9 @@ const rawRecommendedCase=ref(null)
 let refreshTimer
 const activeCase=computed(()=>store.reviewQueue.find((item)=>item.id===activeCaseId.value)||rawRecommendedCase.value||store.reviewQueue[0]||null)
 const counts=computed(()=>({
-  verified:store.reviewQueue.filter((item)=>['confirmed','added'].includes(item.status)).length,
+  modelHits:store.reviewQueue.filter((item)=>['model_hit','weak_model_hit','verified'].includes(item.review_kind)&&item.box_id>=0&&item.status!=='rejected').length,
   pending:store.reviewQueue.filter((item)=>item.status==='unreviewed').length,
-  excluded:store.reviewQueue.filter((item)=>['rejected','dismissed'].includes(item.status)).length
+  corrected:store.reviewQueue.filter((item)=>['confirmed','added','rejected','dismissed'].includes(item.status)).length
 }))
 const selectCase=(id)=>{activeCaseId.value=id;const item=store.reviewQueue.find((entry)=>entry.id===id);if(item)store.selectReviewTarget(item)}
 const selectPriorityPerson=(person)=>{
@@ -110,7 +97,7 @@ onBeforeUnmount(()=>window.clearInterval(refreshTimer))
 .review-page{gap:20px}.save-feedback{padding:10px 13px;border:1px solid #bfe2d4;border-radius:7px;color:#187553;background:#effaf5;font-size:.78rem;font-weight:700}
 .review-scope{display:grid;grid-template-columns:minmax(220px,.35fr) minmax(0,1.65fr);align-items:center;gap:18px}.review-scope>div:first-child span,.review-scope>div:first-child strong,.review-scope>div:first-child small{display:block}.review-scope>div:first-child span{color:var(--subtle);font-size:.68rem;font-weight:800}.review-scope>div:first-child strong{margin:5px 0;font-size:1.08rem}.review-scope>div:first-child small{color:var(--muted);font-size:.7rem;line-height:1.5}
 .candidate-switcher{display:flex;gap:7px;overflow-x:auto;padding:3px}.candidate-switcher button{flex:0 0 auto;min-height:48px;padding:7px 10px;border:1px solid var(--border);border-radius:7px;color:var(--muted);background:#fff;font-size:.7rem;font-weight:800}.candidate-switcher button small{display:block;margin-top:3px;color:var(--subtle);font-size:.6rem}.candidate-switcher button.active{border-color:var(--accent);color:var(--accent);background:#f1f6ff;box-shadow:0 0 0 2px rgba(47,125,246,.1)}
-.batch-control{display:grid;grid-template-columns:minmax(260px,1fr) auto auto;align-items:center;gap:14px}.batch-copy span,.batch-copy strong,.batch-copy small{display:block}.batch-copy span{color:var(--subtle);font-size:.68rem;font-weight:800}.batch-copy strong{margin:4px 0;font-size:.9rem}.batch-copy small{color:var(--muted);font-size:.68rem;line-height:1.5}.mode-switch{display:flex;padding:3px;border:1px solid var(--border);border-radius:7px;background:#eef3f8}.mode-switch button,.batch-actions button{min-height:36px;padding:0 11px;border-radius:5px;color:var(--muted);background:transparent;font-size:.7rem;font-weight:800}.mode-switch button.active{color:var(--accent);background:#fff;box-shadow:var(--shadow-soft)}.batch-actions{display:flex;align-items:center;gap:8px}.batch-actions button{border:1px solid var(--border);background:#fff}.batch-actions button:disabled{opacity:.42}.batch-actions span{color:var(--muted);font-size:.68rem;white-space:nowrap}
+.review-policy{display:flex;align-items:center;justify-content:space-between;gap:18px}.batch-copy span,.batch-copy strong,.batch-copy small{display:block}.batch-copy span{color:var(--subtle);font-size:.68rem;font-weight:800}.batch-copy strong{margin:4px 0;font-size:.9rem}.batch-copy small{max-width:760px;color:var(--muted);font-size:.68rem;line-height:1.5}.policy-stats{display:flex;gap:8px}.policy-stats span{min-width:112px;padding:10px;border:1px solid var(--border);border-radius:7px;color:var(--muted);background:#f7f9fc;font-size:.68rem}.policy-stats b{display:block;margin-bottom:4px;color:var(--text);font-size:1.05rem}
 @media(max-width:800px){.review-scope{grid-template-columns:1fr}}
-@media(max-width:950px){.batch-control{grid-template-columns:1fr}.mode-switch{width:max-content}}
+@media(max-width:950px){.review-policy{align-items:stretch;flex-direction:column}.policy-stats{flex-wrap:wrap}}
 </style>
