@@ -1,5 +1,10 @@
 # VAST 2020 Mini-Challenge 2 多模态取证分析平台
 
+[![Framework: Vue 3](https://img.shields.io/badge/Framework-Vue_3-35495e?logo=vue.js)](https://vuejs.org/)
+[![Bundler: Vite](https://img.shields.io/badge/Bundler-Vite-646CFF?logo=vite)](https://vitejs.dev/)
+[![Graphics: ECharts 5](https://img.shields.io/badge/Graphics-ECharts_5-AA344D?logo=apache-echarts)](https://echarts.apache.org/)
+[![State: Pinia](https://img.shields.io/badge/State-Pinia-60B5CC)](https://pinia.vuejs.org/)
+
 面向 IEEE VAST Challenge 2020 Mini-Challenge 2 的可解释分析与交互式复核系统。
 
 本项目基于 [huyen-nguyen/VAST2020mc2](https://github.com/huyen-nguyen/VAST2020mc2) 的分析思路进行了工程化重构，将原始图片、YOLO v2 检测结果、图片描述文本、人工校正记录、人物-物品矩阵和最终结论组织为一条可回溯的证据链。
