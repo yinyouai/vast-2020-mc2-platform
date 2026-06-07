@@ -10,6 +10,16 @@ app = Flask(__name__)
 CORS(app)
 
 
+@app.route("/", methods=["GET"])
+@app.route("/api/health", methods=["GET"])
+def health_check():
+    return jsonify({
+        "status": "success",
+        "service": "VAST 2020 MC2 analysis backend",
+        "api_base": "/api",
+    })
+
+
 def build_analysis_engine():
     training_dir = AppConfig.IMAGE_ASSETS_DIR / "TrainingImages"
     training_labels = [
@@ -45,7 +55,7 @@ def get_model_evaluation():
 def get_distribution_matrix():
     try:
         payload = request.get_json() or {}
-        threshold = float(payload.get("score_threshold", 0.25))
+        threshold = float(payload.get("score_threshold", 0.45))
         excluded_items = list(payload.get("excluded_items", []))
         data_source = payload.get("data_source", "corrected")
         engine = build_analysis_engine()
@@ -69,9 +79,10 @@ def get_distribution_matrix():
 @app.route("/api/analysis_summary", methods=["GET"])
 def get_analysis_summary():
     try:
+        threshold = float(request.args.get("score_threshold", 0.45))
         return jsonify({
             "status": "success",
-            "data": build_analysis_engine().analysis_summary(),
+            "data": build_analysis_engine().analysis_summary(threshold),
         })
     except Exception as exc:
         return jsonify({"status": "error", "message": str(exc)}), 500
@@ -80,9 +91,40 @@ def get_analysis_summary():
 @app.route("/api/review_queue", methods=["GET"])
 def get_review_queue():
     try:
+        label = request.args.get("label")
+        threshold = float(request.args.get("score_threshold", 0.45))
+        review_mode = request.args.get("review_mode", "focused")
+        batch = int(request.args.get("batch", 1))
+        search_limit = int(request.args.get("search_limit_per_owner", 3))
+        engine = build_analysis_engine()
+        rankings = engine.candidate_rankings(threshold)
+        available_labels = {item["label"] for item in rankings}
+        if label not in available_labels:
+            label = rankings[0]["label"] if rankings else ""
+        result = engine.review_queue(
+            label,
+            threshold,
+            review_mode,
+            batch,
+            search_limit,
+        )
         return jsonify({
             "status": "success",
-            "data": build_analysis_engine().review_queue(),
+            "candidate_label": label,
+            "score_threshold": threshold,
+            "data": result["items"],
+            "meta": result["meta"],
+        })
+    except Exception as exc:
+        return jsonify({"status": "error", "message": str(exc)}), 500
+
+
+@app.route("/api/review_priorities", methods=["GET"])
+def get_review_priorities():
+    try:
+        return jsonify({
+            "status": "success",
+            "data": build_analysis_engine().person_review_priorities(),
         })
     except Exception as exc:
         return jsonify({"status": "error", "message": str(exc)}), 500

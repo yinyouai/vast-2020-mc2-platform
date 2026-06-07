@@ -23,8 +23,12 @@
               :disabled="busyId === item.id" @click="$emit('update-case', { id: item.id, patch: { status: 'rejected' } })">改判误报</button>
             <button v-else-if="lane.key === 'added'" type="button" class="danger"
               :disabled="busyId === item.id" @click="$emit('update-case', { id: item.id, patch: { status: 'rejected' } })">移除补标</button>
-            <button v-else type="button" class="restore"
+            <button v-else-if="item.status === 'rejected'" type="button" class="restore"
               :disabled="busyId === item.id" @click="$emit('update-case', { id: item.id, patch: { status: 'confirmed', humanLabel: item.predicted_label } })">恢复预测</button>
+            <button v-else type="button" class="restore"
+              :disabled="busyId === item.id" @click="$emit('update-case', { id: item.id, patch: { status: 'confirmed', humanLabel: item.corrected_label } })">
+              {{ item.status === 'dismissed' ? '改为补标' : item.box_id === -1 ? '确认有此物品' : '确认模型命中' }}
+            </button>
           </div>
         </div>
         <div v-if="!lane.items.length" class="lane-empty">当前没有此类样本</div>
@@ -44,7 +48,7 @@ defineEmits(['select', 'update-case'])
 const lanes = computed(() => [
   { key: 'added', eyebrow: 'Human annotation', title: '人工标注', description: '模型在该图片漏检，由人工添加到校正层。', items: props.items.filter((item) => item.status === 'added') },
   { key: 'confirmed', eyebrow: 'Model hit', title: '模型命中', description: '模型框与人工判断一致，可再次改判。', items: props.items.filter((item) => item.status === 'confirmed') },
-  { key: 'rejected', eyebrow: 'False positive', title: '误报驳回', description: '原始框被排除，也可恢复并重新进入计算。', items: props.items.filter((item) => item.status === 'rejected' || item.status === 'unreviewed') }
+  { key: 'rejected', eyebrow: 'Needs review', title: '待核验与排除', description: '包括模型待确认、无检测框的图片搜索任务和已排除样本。', items: props.items.filter((item) => ['rejected','unreviewed','dismissed'].includes(item.status)) }
 ])
 const personNumber = (personId = '') => personId.replace('Person', '').padStart(2, '0')
 </script>

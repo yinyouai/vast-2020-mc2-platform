@@ -92,6 +92,19 @@ class DataProviderEngine:
         corrected_image_exists = bool(
             corrected_person and image_id in corrected_person.get("image_ids", [])
         )
+        if action == "dismiss":
+            corrections.setdefault("audit_log", []).append({
+                "person_id": person_id,
+                "image_id": image_id,
+                "box_id": int(box_id),
+                "action": action,
+                "new_label": new_label,
+                "difficult": bool(difficult),
+                "note": note or "人工检查后未在该图片中确认候选物品"
+            })
+            DataProviderEngine.save_corrections(corrections)
+            return True
+
         if action == "restore":
             rejected = corrections.setdefault("rejected_predictions", [])
             rejected[:] = [

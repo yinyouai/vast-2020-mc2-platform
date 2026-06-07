@@ -5,7 +5,7 @@ from scipy.cluster.hierarchy import linkage, leaves_list
 
 class CyberClusteringEngine:
     @staticmethod
-    def compute_matrix_reordering(master_data, score_threshold=0.25, excluded_items=None):
+    def compute_matrix_reordering(master_data, score_threshold=0.45, excluded_items=None):
         """
         核心高内聚算法：动态响应门限与黑客组织排除，重排列矩阵
         """

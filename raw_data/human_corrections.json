@@ -2,14 +2,18 @@
   "version": 1,
   "target_group_size": 8,
   "method": "人工纠正分布与逐图视觉复核；原始 YOLO 预测仅用于定位候选，不作为真实标签",
+  "candidate_scoring": {
+    "specificity_weight": 0.4,
+    "stability_weight": 0.35,
+    "visual_weight": 0.15,
+    "text_weight": 0.1,
+    "non_target_penalty": 0.72,
+    "visual_images_per_owner": 2
+  },
   "corrected_labels": {
     "rainbowPens": {
       "source": "人工纠正后的候选物品分布",
       "persons": {
-        "Person1": {
-          "image_ids": [],
-          "occurrence_count": 1
-        },
         "Person3": {
           "image_ids": [],
           "occurrence_count": 1
@@ -87,16 +91,16 @@
             "Person4_24"
           ],
           "occurrence_count": 3,
-          "source": "人工视觉复核"
+          "source": "人工视觉复核",
+          "difficult": false
         },
         "Person7": {
           "image_ids": [
-            "Person7_1",
-            "Person7_14",
             "Person7_15"
           ],
-          "occurrence_count": 3,
-          "source": "人工视觉复核"
+          "occurrence_count": 1,
+          "source": "人工视觉复核",
+          "difficult": true
         },
         "Person14": {
           "image_ids": [
@@ -514,6 +518,14 @@
       "predicted_label": "canadaPencil",
       "score": 0.51787,
       "reason": "人工视觉复核确认；模型漏检时作为新增标签写入纠正层"
+    },
+    {
+      "person_id": "Person7",
+      "image_id": "Person7_14",
+      "box_id": 1,
+      "predicted_label": "canadaPencil",
+      "score": 0.4634,
+      "reason": "人工视觉复核确认；模型漏检时作为新增标签写入纠正层"
     }
   ],
   "audit_log": [
@@ -542,6 +554,87 @@
       "action": "reject",
       "new_label": "canadaPencil",
       "difficult": false,
+      "note": "人工视觉复核确认；模型漏检时作为新增标签写入纠正层"
+    },
+    {
+      "person_id": "Person7",
+      "image_id": "Person7_14",
+      "box_id": 1,
+      "action": "reject",
+      "new_label": "canadaPencil",
+      "difficult": false,
+      "note": "人工视觉复核确认；模型漏检时作为新增标签写入纠正层"
+    },
+    {
+      "person_id": "Person4",
+      "image_id": "Person4_22",
+      "box_id": 0,
+      "action": "confirm",
+      "new_label": "canadaPencil",
+      "difficult": false,
+      "note": "人工视觉复核确认；模型漏检时作为新增标签写入纠正层"
+    },
+    {
+      "person_id": "Person4",
+      "image_id": "Person4_23",
+      "box_id": 0,
+      "action": "confirm",
+      "new_label": "canadaPencil",
+      "difficult": false,
+      "note": "人工视觉复核确认；模型漏检时作为新增标签写入纠正层"
+    },
+    {
+      "person_id": "Person4",
+      "image_id": "Person4_24",
+      "box_id": 1,
+      "action": "confirm",
+      "new_label": "canadaPencil",
+      "difficult": false,
+      "note": "人工视觉复核确认；模型漏检时作为新增标签写入纠正层"
+    },
+    {
+      "person_id": "Person1",
+      "image_id": "Person1_1",
+      "box_id": -1,
+      "action": "add",
+      "new_label": "rainbowPens",
+      "difficult": false,
+      "note": "Person1 在人工候选分布中属于 rainbowPens 拥有者，但该图片尚未定位具体证据"
+    },
+    {
+      "person_id": "Person1",
+      "image_id": "Person1_1",
+      "box_id": -1,
+      "action": "reject",
+      "new_label": "rainbowPens",
+      "difficult": false,
+      "note": "人工视觉复核确认；模型漏检时作为新增标签写入纠正层"
+    },
+    {
+      "person_id": "Person7",
+      "image_id": "Person7_1",
+      "box_id": -1,
+      "action": "add",
+      "new_label": "canadaPencil",
+      "difficult": true,
+      "note": "人工视觉复核确认；模型漏检时作为新增标签写入纠正层"
+    },
+    {
+      "person_id": "Person7",
+      "image_id": "Person7_1",
+      "box_id": -1,
+      "action": "add",
+      "new_label": "canadaPencil",
+      "difficult": true,
+      "note": "人工视觉复核确认；模型漏检时作为新增标签写入纠正层"
+    },
+    {
+      "person_id": "Person7",
+      "image_id": "Person7_1",
+      "box_id": -1,
+      "action": "reject",
+      "new_label": "canadaPencil",
+      "difficult": true,
       "note": "人工视觉复核确认；模型漏检时作为新增标签写入纠正层"
     }
   ]

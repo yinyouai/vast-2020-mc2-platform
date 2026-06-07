@@ -25,6 +25,7 @@ const router = createRouter({
     },
     {
       path: '/task2_correction',
+      alias: '/task2_review',
       name: 'task2_correction',
       component: DataExplorationView,
       meta: {
@@ -74,7 +75,8 @@ const router = createRouter({
         storyTitle: '最后一层把群体统计下钻为每个人都能复查的具体证据。',
         storySummary: '每位成员至少由两张图片支撑，并区分模型命中、人工补标、文本支持和非成员排除依据。'
       }
-    }
+    },
+    { path: '/:pathMatch(.*)*', redirect: '/task1_auditing' }
   ]
 })
 

@@ -47,7 +47,7 @@
           {{ caseItem.status === 'rejected' ? '恢复并确认' : '确认校正结果' }}
         </button>
         <button type="button" class="reject" :disabled="isBusy" @click="submit('rejected')">
-          {{ caseItem.status === 'added' ? '移除人工补标' : '判定为误报' }}
+          {{ caseItem.status === 'added' ? '移除人工补标' : caseItem.box_id === -1 ? '该图无此物品' : '判定为误报' }}
         </button>
       </div>
     </aside>
@@ -74,7 +74,7 @@ const labelOptions = computed(() => Array.from(new Set([
   props.caseItem?.corrected_label,
   ...store.candidateRankings.map((item) => item.label)
 ].filter((label) => label && label !== '未检出' && label !== '误报'))))
-const statusLabel = computed(() => ({ confirmed:'模型命中', added:'人工补标', rejected:'误报驳回', unreviewed:'待复核' }[props.caseItem?.status] || ''))
+const statusLabel = computed(() => ({ confirmed:'模型命中', added:'人工补标', rejected:'误报驳回', unreviewed:'待复核', dismissed:'该图未确认' }[props.caseItem?.status] || ''))
 const resetDraft = () => {
   draftLabel.value = props.caseItem?.corrected_label === '误报' ? props.caseItem?.predicted_label : props.caseItem?.corrected_label || ''
   draftDifficult.value = Boolean(props.caseItem?.difficult)
@@ -108,7 +108,7 @@ onBeforeUnmount(() => resizeObserver?.disconnect())
 <style scoped>
 .correction-workbench { display:grid; grid-template-columns:minmax(0,1.45fr) minmax(310px,.55fr); gap:14px; padding:14px; border:1px solid var(--border); border-radius:10px; background:#fff; box-shadow:var(--shadow); }
 .image-column { min-width:0; }.image-toolbar { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px; }.image-toolbar span,.image-toolbar strong { display:block; }.image-toolbar span { color:var(--subtle); font-size:.72rem; }.image-toolbar strong { margin-top:3px; }
-.toolbar-badges { display:flex; gap:6px; }.layer-badge { padding:6px 9px; border-radius:5px; font-size:.7rem; font-weight:800; }.status-confirmed{color:#187553;background:#eaf7f1}.status-added{color:#1d65c1;background:#ebf3ff}.status-rejected{color:#a94141;background:#fcecec}.difficult{color:#8a5a0a;background:#fff4d9}
+.toolbar-badges { display:flex; gap:6px; }.layer-badge { padding:6px 9px; border-radius:5px; font-size:.7rem; font-weight:800; }.status-confirmed{color:#187553;background:#eaf7f1}.status-added{color:#1d65c1;background:#ebf3ff}.status-rejected{color:#a94141;background:#fcecec}.status-unreviewed{color:#8a5a0a;background:#fff4d9}.status-dismissed{color:#68788b;background:#edf1f5}.difficult{color:#8a5a0a;background:#fff4d9}
 .image-stage { position:relative; display:grid; place-items:center; overflow:hidden; height:520px; border:1px solid var(--border); border-radius:8px; background:#eef2f6; }.image-stage img { display:block; width:100%; height:100%; object-fit:contain; }
 .real-detection-box { position:absolute; z-index:2; border:3px solid #cf5656; box-shadow:0 0 0 2px rgba(255,255,255,.8),0 8px 24px rgba(207,86,86,.22); pointer-events:none; }.real-detection-box span { position:absolute; left:-3px; top:-30px; padding:5px 8px; color:#fff; background:#b94646; font-size:.7rem; font-weight:800; white-space:nowrap; }
 .missing-box-note { position:absolute; left:14px; bottom:14px; display:flex; flex-direction:column; padding:9px 11px; border:1px dashed #2f7df6; border-radius:6px; color:#1d65c1; background:rgba(244,248,255,.94); }.missing-box-note span { margin-top:3px; font-size:.7rem; }

@@ -1,125 +1,143 @@
-# VAST 2020 MC2 多模态取证分析平台
+# VAST 2020 Mini-Challenge 2 多模态取证分析平台
 
-本项目分析 IEEE VAST Challenge 2020 Mini-Challenge 2 的 40 名候选人数据。系统不把某个物品或 8 人名单写死在前端，而是沿着以下证据链逐步得到结论：
+面向 IEEE VAST Challenge 2020 Mini-Challenge 2 的可解释分析与交互式复核系统。
+
+本项目基于 [huyen-nguyen/VAST2020mc2](https://github.com/huyen-nguyen/VAST2020mc2) 的分析思路进行了工程化重构，将原始图片、YOLO v2 检测结果、图片描述文本、人工校正记录、人物-物品矩阵和最终结论组织为一条可回溯的证据链。
+
+系统的目标不是在页面中写死某个物品或 8 人名单，而是回答以下赛题分析问题：
+
+1. 原始目标检测模型是否足以直接支撑结论？
+2. 在不知道误判答案的前提下，哪些 Person 应优先接受人工复核？
+3. 人工校正前后，人物与物品的共现结构发生了什么变化？
+4. 哪个候选物品最符合“由目标小组稳定共有”的暗号物品特征？
+5. 最终结论能否下钻到每位成员的图片、文本和非成员排除证据？
+
+---
+
+## 1. 当前分析结论
+
+在当前人工校正层、默认置信度阈值 `0.45` 和评分配置下，系统计算得到：
 
 ```text
-原始 YOLO 预测
-  -> 模型能力审计
-  -> 人工确认、误报驳回与漏检补标
-  -> 校正后人物-物品矩阵
-  -> 候选物品评分
-  -> 逐人图片与文本验证
-  -> 最终 8 人组
+暗号物品：canadaPencil
+
+成员：
+Person4
+Person7
+Person14
+Person15
+Person22
+Person25
+Person35
+Person39
 ```
 
-## 最终结论
+主要依据：
 
-当前校正数据和评分规则得到：
-
-```text
-暗号物品：canadaPencil（加拿大枫叶铅笔）
-
-8 位嫌疑人：
-Person4, Person7, Person14, Person15,
-Person22, Person25, Person35, Person39
-```
-
-该结果不是由前端常量返回。`ForensicAnalysisEngine.analysis_summary()` 会遍历所有校正候选，先筛选“拥有者人数恰好为 8 且每位至少出现 2 次”的候选，再按综合分排序。当前只有 `canadaPencil` 同时满足两项硬条件。
-
-当前可复算的关键结果：
-
-| 指标 | 结果 |
+| 指标 | 当前结果 |
 |---|---:|
-| 候选人数 | 40 |
-| 人员图片 | 907 |
-| 训练图片及人员图片合计 | 1423 |
-| YOLO 检测 CSV | 907 |
-| 文本文件 | 193 |
+| 目标组织规模 | 8 人 |
+| `canadaPencil` 校正后拥有者 | 8 人 |
+| 每位拥有者最少出现次数 | 2 次 |
+| 稳定拥有者比例 | 100% |
+| 当前阈值下证据图片 | 23 张 |
+| 具有直接文本支持的成员 | 3 人 |
+| 综合评分 | 0.9375 |
+
+该结论由 `ForensicAnalysisEngine.analysis_summary()` 动态生成。修改人工校正记录、评分配置或置信度阈值后，候选图片证据、评分和排名会重新计算。
+
+### 1.1 为什么不是 `yellowBag`
+
+原始模型在阈值 `0.55` 下生成过一个非常有迷惑性的假设：
+
+```text
+yellowBag
+8 位预测拥有者
+12 个高置信度检测框
+```
+
+“恰好 8 人”看起来符合题目先验，但逐框人工复核后，12 个检测框全部被判定为误报。系统因此将该原始假设标记为：
+
+```text
+invalidated
+```
+
+这说明：
+
+- 高置信度不等于分类正确；
+- 人数恰好匹配不等于群体特征成立；
+- 必须同时检查重复稳定性、图片证据、文本支持和非成员误检。
+
+---
+
+## 2. 从赛题角度理解项目
+
+### 2.1 赛题本质
+
+数据表面上是图片分类与目标检测问题，真正需要解决的是一个多模态取证问题：
+
+```text
+从 40 名候选人的图片和文本中，
+识别一个由 8 人组成的小组，
+并找出能够稳定区分该小组的共同物品。
+```
+
+困难不在于找到“模型预测过的物品”，而在于区分：
+
+- 会场或生活场景中的普通公共物品；
+- 模型偶然误判出的伪共现；
+- 只出现一次、缺乏稳定性的弱线索；
+- 被模型漏检，但经人工确认真实存在的关键物品；
+- 真正由目标小组重复、稳定共有的暗号物品。
+
+### 2.2 分析假设
+
+本项目使用以下可检验假设组织分析：
+
+1. **目标规模假设**：目标群体由 8 人构成。
+2. **稳定性假设**：暗号物品不应只在每人一张图片中偶然出现。
+3. **特异性假设**：拥有者人数越接近 8，越可能具有群体区分能力。
+4. **多证据假设**：图片重复出现是主要证据，文本语义可作为交叉支持。
+5. **反向验证假设**：必须解释模型为何把非成员误判为拥有者。
+6. **人在回路假设**：模型输出只能产生复核候选，不能直接充当最终真值。
+
+### 2.3 分析路径
+
+```mermaid
+flowchart LR
+    A["原始图片、CSV、文本"] --> B["模型能力审计"]
+    B --> C["复核优先级计算"]
+    C --> D["人工确认、驳回与补标"]
+    D --> E["原始/校正矩阵对照"]
+    E --> F["候选物品实时评分"]
+    F --> G["逐人图片与文本验证"]
+    G --> H["最终 8 人与暗号物品"]
+```
+
+---
+
+## 3. 数据概况
+
+当前本地数据统计如下：
+
+| 数据项 | 数量 |
+|---|---:|
+| Person | 40 |
+| Person 图片 | 907 |
+| Person 检测 CSV | 907 |
+| Person 文本文件 | 193 |
+| 图片 caption 文件 | 171 |
+| 独立文本文件 | 22 |
+| 训练图片 | 516 |
+| 人员图片与训练图片合计 | 1423 |
+| 有效原始检测框 | 4417 |
 | 训练类别 | 43 |
-| 原始预测实际出现类别 | 22 |
-| 缺失类别 | 21 |
-| `yellowBag` 高阈值框 | 12 |
-| `yellowBag` 复核结果 | 12 个均为误报，假设失效 |
-| `canadaPencil` 校正拥有者 | 8 |
-| `canadaPencil` 已核验图片 | 25 |
-| 每位成员最少图片数 | 2 |
-| 具有直接文本支持的成员 | 3 |
-| 综合分 | 0.9375 |
+| 原始预测实际输出类别 | 22 |
+| 模型未输出类别 | 21 |
 
-## 为什么旧结论是错的
+### 3.1 原始文件组织
 
-旧实现以 `score >= 0.55` 过滤原始 YOLO 预测，发现 `yellowBag` 恰好落到 8 人，于是直接把该标签和 8 人写进前端。这个过程有两个根本问题：
-
-1. 高置信度不等于分类正确。逐图检查后，12 个高阈值 `yellowBag` 框全部是误报。
-2. “恰好 8 人”不代表稳定暗号。若某候选只在每人一张图中偶然出现，证据强度不足。
-
-因此当前系统保留这条历史路径，但只把它显示为 `invalidated` 的原始假设，不再作为结论。
-
-## 与参考作品的差异
-
-项目改进参考了以下公开分析：
-
-- [TTU Nguyen MC2](https://huyen-nguyen.github.io/VAST2020mc2/TTU-Nguyen-MC2/)
-- [ASU VAST 2020 MC2](https://vacommunity.org/VAST+Challenge+2020+MC2)
-
-参考作品的重要启发是：不能只调检测阈值，而要人工修正候选物品分布，并检查每位拥有者是否重复出现。当前项目据此增加了独立校正层和逐图证据层。
-
-运行时不会请求参考网站，也不会从网页读取答案。参考分布被作为人工审核记录写入 `raw_data/human_corrections.json`；最终候选、分数和名单仍由本地代码重新计算。
-
-证据强度需要区分：
-
-- `canadaPencil`：已定位 8 人的 25 张具体图片，并核对模型命中与漏检。
-- 其余 8 至 10 人近邻候选：当前保存人工校正后的人员分布与出现次数，用于候选排除比较；尚未全部补齐逐图证据。
-
-## 数据分层
-
-系统明确区分三层数据，避免人工操作污染原始模型结果。
-
-### 1. 原始预测层
-
-文件：`raw_data/i3_new_data.json`
-
-包含：
-
-- 40 人的图片路径；
-- caption 与独立文本；
-- YOLO 检测框、标签和置信度；
-- 损坏框标记。
-
-该文件是只读分析输入。人工复核不会修改其中的标签或分数。
-
-### 2. 人工校正层
-
-文件：`raw_data/human_corrections.json`
-
-包含：
-
-- `corrected_labels`：人工确认的候选物品分布；
-- 每个人的 `image_ids` 和 `occurrence_count`；
-- `rejected_predictions`：被判定为误报的原始框；
-- `audit_log`：交互式确认、补标、修改或驳回记录；
-- `target_group_size`：题目给出的组织规模先验，当前为 8。
-
-### 3. 推断结果层
-
-文件：`raw_data/analysis_results.json`
-
-由流水线或 `/api/export_analysis` 生成，包含：
-
-- 原始假设状态；
-- 完整候选排名；
-- 最终物品和人员组；
-- 每位成员的图片、原始模型命中、文本支持；
-- 非成员排除记录；
-- 各分析阶段及其数据依据。
-
-该文件是输出，可以重新生成。
-
-## 计算过程
-
-### Step 1：读取原始多模态快照
-
-`backend_service/core_engines/data_provider.py` 的 `load_master_snapshot()` 读取 `i3_new_data.json`。清洗脚本 `challenge_analysis/data_cleaner.py` 可从原始人员目录重新构造该快照：
+每位 Person 的目录包含若干组多模态文件：
 
 ```text
 PersonX_N.jpg
@@ -128,368 +146,772 @@ PersonX_Ncaption.txt
 PersonX_textN.txt
 ```
 
-损坏或缺字段的检测框被标为 `unknown` 且分数归零，后续不会进入有效预测。
+其中：
 
-当前主流水线默认使用已经生成的快照，避免每次分析覆盖人工整理后的 caption。只有需要从原始目录重建数据时，才单独运行 `data_cleaner.py` 和 `text_mining.py`。
+- `.jpg` 是原始图片；
+- `.csv` 是 YOLO v2 边界框、标签和置信度；
+- `caption.txt` 是图片描述；
+- `textN.txt` 是与该 Person 相关的独立文本。
 
-### Step 2：审计原始模型
+---
 
-核心文件：`backend_service/core_engines/analysis_engine.py`
+## 4. 三层数据设计
 
-`model_audit()` 完成：
+系统严格区分原始预测、人工校正和推断结果，防止人工操作直接污染原始数据。
 
-1. 统计各标签置信度五数概括；
-2. 比较 43 个训练类别与 22 个实际输出类别；
-3. 列出 21 个模型完全未输出的类别；
-4. 计算真实检测框中心分布；
-5. 以当前候选排名第一名（本数据为 `canadaPencil`）的人工校正拥有者为人员级真值，计算 precision、recall 和 F1；
-6. 生成多个阈值下的真实指标曲线。
+### 4.1 原始预测层
 
-当前未阈值过滤的人员级结果为：
+文件：
 
 ```text
-canadaPencil precision = 0.1935
-canadaPencil recall    = 0.7500
+raw_data/i3_new_data.json
 ```
 
-这说明模型找到了 8 位真实拥有者中的 6 位，但同时把许多非成员也预测为 `canadaPencil`。因此不能直接使用原始预测人员集合。
+包含：
 
-### Step 3：否定 `yellowBag` 原始假设
+- Person 与图片索引；
+- 图片静态路径；
+- caption 和独立文本；
+- YOLO 检测框；
+- 标签与置信度；
+- 损坏数据标记。
 
-`raw_hypothesis(threshold=0.55)` 自动寻找拥有者人数最接近目标规模的高阈值原始候选；当前数据选中 `yellowBag`：
+该文件作为只读输入使用。人工复核不会覆盖其中的标签和分数。
+
+### 4.2 人工校正层
+
+文件：
 
 ```text
-8 位人员
-12 个检测框
+raw_data/human_corrections.json
 ```
 
-`human_corrections.json` 中逐框保存了复核结果。12 个框全部位于 `rejected_predictions`，所以状态计算为：
+包含：
 
-```python
-status = "invalidated"
+- `target_group_size`：题目先验中的目标人数；
+- `candidate_scoring`：候选评分权重与惩罚配置；
+- `corrected_labels`：人工确认后的候选物品分布；
+- `rejected_predictions`：被驳回的原始检测框；
+- `audit_log`：确认、补标、修改、恢复和驳回操作记录。
+
+评分配置当前为：
+
+```json
+{
+  "specificity_weight": 0.4,
+  "stability_weight": 0.35,
+  "visual_weight": 0.15,
+  "text_weight": 0.1,
+  "non_target_penalty": 0.72,
+  "visual_images_per_owner": 2
+}
 ```
 
-这一步保留旧方案的可追溯性，但阻止其继续进入校正矩阵。
+这些参数由后端读取并返回前端，不在评分组件中写死。
 
-### Step 4：建立人工校正分布
+### 4.3 推断结果层
 
-校正层记录 9 个接近目标人数的候选：
+文件：
 
-| 候选 | 拥有者 | 最少出现次数 | 是否恰好 8 人 |
-|---|---:|---:|---|
-| `canadaPencil` | 8 | 2 | 是 |
-| `rainbowPens` | 8 | 1 | 是 |
-| `rubiksCube` | 8 | 1 | 是 |
-| `blueSunglasses` | 9 | 2 | 否 |
-| `noisemaker` | 9 | 1 | 否 |
-| `pinkEraser` | 9 | 1 | 否 |
-| `lavenderDie` | 9 | 1 | 否 |
-| `metalKey` | 10 | 1 | 否 |
-| `miniCards` | 10 | 1 | 否 |
+```text
+raw_data/analysis_results.json
+```
 
-`Person15` 与 `Person22` 的加拿大铅笔属于重要漏检补标。它们说明只依赖模型召回会丢失真实成员。
+可通过分析流水线或导出接口重新生成，包含：
 
-### Step 5：构造两种人物-物品矩阵
+- 模型审计结果；
+- 失效的原始假设；
+- 候选物品排名；
+- 当前评分配置；
+- 最终暗号物品和成员；
+- 逐人图片与文本证据；
+- 非成员排除证据；
+- 分析阶段及数据来源。
 
-系统提供两套矩阵。
+---
 
-#### 原始矩阵
+## 5. 五阶段赛题分析流程
 
-`raw_matrix(threshold, excluded_items)` 使用：
+前端使用五个页面对应五个分析阶段。页面不是彼此独立的图表集合，而是同一条证据链的连续步骤。
 
-```math
-R_{p,i}(\tau)=
-\sum_b 1[label(b)=i \land score(b)\ge\tau \land b\notin rejected]
+### 5.1 第一阶段：模型不确定性审计
+
+路由：
+
+```text
+/task1_auditing
+```
+
+分析目标：
+
+> 在寻找答案之前，先确定自动检测结果能信到什么程度。
+
+主要分析：
+
+- 训练类别与实际输出类别覆盖；
+- 各标签置信度分布；
+- 检测框空间分布；
+- 人员级 Precision、Recall 和 F1；
+- 不同阈值对候选拥有者人数的影响；
+- `yellowBag` 原始假设的复核状态。
+
+当前 `canadaPencil` 人员级阈值曲线：
+
+| 阈值 | Precision | Recall | F1 | 预测拥有者 |
+|---:|---:|---:|---:|---:|
+| 0.25 | 0.1935 | 0.7500 | 0.3077 | 31 |
+| 0.35 | 0.3636 | 0.5000 | 0.4211 | 11 |
+| 0.45 | 0.6667 | 0.5000 | **0.5714** | 6 |
+| 0.55 | 0.0000 | 0.0000 | 0.0000 | 1 |
+| 0.65 | 0.0000 | 0.0000 | 0.0000 | 0 |
+| 0.75 | 0.0000 | 0.0000 | 0.0000 | 0 |
+
+因此默认工作阈值设为 `0.45`。它是当前离散测试点中 F1 最高的阈值，不代表适用于所有数据的固定最优值。用户仍可通过滑块切换阈值：
+
+- 较低阈值：保留更多候选，提高召回，但误报更多；
+- 较高阈值：保留更可靠的检测，但可能丢失真实成员。
+
+### 5.2 第二阶段：人工复核与图文校准
+
+路由：
+
+```text
+/task2_correction
+```
+
+分析目标：
+
+> 在尚不知道哪些预测是误判时，先用复核前可获得的异常信号决定检查顺序。
+
+系统不会使用“已经知道最终误判”的结果为人工复核排序。`person_review_priorities()` 只使用原始图片元数据和未经人工修正的 YOLO 输出。
+
+复核优先级由以下信号组成：
+
+| 信号 | 规则 | 最高贡献 |
+|---|---|---:|
+| 不确定性 | 置信度低于 0.35 的检测比例 | 35 |
+| 框冲突 | 不同类别检测框 IoU ≥ 0.45 | 25 |
+| 覆盖缺口 | 图片没有有效检测 | 20 |
+| 标签不稳定 | 同一 Person 的标签过于分散 | 15 |
+| 数据质量 | 图片或 CSV 损坏、解析异常 | 20 |
+
+当前策略：
+
+- 对 40 人计算异常分；
+- 推荐前 25%，即 10 人进入重点复核；
+- 其中前 5 人标记为高优先级；
+- 前端每 10 秒刷新复核优先级；
+- 点击 Person 后进入推荐图片和检测框；
+- 用户在画布中执行确认、修改、补标、驳回或恢复。
+
+人工操作通过：
+
+```text
+POST /api/update_label
+```
+
+写入独立校正层。操作完成后，系统会重新获取：
+
+- 分析摘要；
+- 复核队列；
+- 复核优先级；
+- 原始和校正矩阵；
+- 模型审计数据；
+- 候选排名和最终结果。
+
+### 5.3 第三阶段：人物-物品共现聚类
+
+路由：
+
+```text
+/task3_clustering
+```
+
+分析目标：
+
+> 从单个预测框转向整体结构，观察哪些物品集中在稳定的小群体中。
+
+系统提供两套人物-物品矩阵。
+
+#### 原始预测矩阵
+
+对 Person `p` 和物品 `i`：
+
+```text
+R(p, i, τ) =
+满足 label=i、score≥τ、且未被人工驳回的原始检测数量
 ```
 
 特点：
 
-- 受前端阈值影响；
-- 保留原始模型不确定性；
-- 已确认误报不再计入；
-- 用于比较模型修正前结构。
+- 受当前阈值影响；
+- 保留模型的不确定性；
+- 已驳回误报不会再次进入矩阵；
+- 用于观察校正前结构。
 
-#### 校正矩阵
+#### 人工校正矩阵
 
-`corrected_matrix(excluded_items)` 使用人工记录的 `occurrence_count`：
-
-```math
-C_{p,i}=corrected\_occurrence\_count(p,i)
+```text
+C(p, i) = corrected_occurrence_count(p, i)
 ```
 
 特点：
 
-- 不使用置信度阈值；
-- 包含人工漏检补标；
-- 用于候选评分和最终推断。
+- 直接读取人工校正分布；
+- 包含模型漏检后的人工补标；
+- 不因原始模型阈值变化而丢失已确认事实；
+- 用于最终候选筛选。
 
-两种矩阵都对人员轴和物品轴执行 Ward 层次聚类重排。聚类仅改变展示顺序，不决定谁进入最终 8 人组。
+#### Ward 重排
 
-### Step 6：候选评分
+系统分别对人员轴和物品轴执行：
 
-`candidate_rankings()` 为每个校正候选计算：
-
-```math
-specificity = max(0, 1 - |ownerCount-8|/8)
+```text
+欧氏距离 + Ward 层次聚类
 ```
 
-```math
-stability = count(occurrenceCount >= 2) / ownerCount
+聚类只改变矩阵展示顺序，帮助发现块状结构，不直接决定最终成员。
+
+页面同时展示：
+
+- 原始矩阵与校正矩阵；
+- 同一候选校正前后的拥有者变化；
+- 候选拥有者人数与稳定率分布；
+- 证据图片数量对应的点大小；
+- 点击候选后与第四页评分联动。
+
+### 5.4 第四阶段：候选暗号物品评分
+
+路由：
+
+```text
+/task4_totem
 ```
 
-```math
-visual = min(1, evidenceImageCount / (ownerCount * 2))
+分析目标：
+
+> 将“看起来像一个群体”转化为可以解释、比较和重新计算的候选评分。
+
+#### 人数特异性
+
+```text
+specificity =
+max(0, 1 - |owner_count - target_group_size| / target_group_size)
 ```
 
-```math
-text = textSupportedOwnerCount / ownerCount
+拥有者人数越接近目标规模，得分越高。
+
+#### 重复稳定性
+
+```text
+stability =
+出现次数至少为 2 的拥有者人数 / 拥有者总人数
 ```
 
-综合分：
+该指标避免将“每人只出现一次”的偶然共现误认为稳定暗号。
 
-```math
+#### 图片证据
+
+项目共有 907 张 Person 图片，但全量图片数不能直接作为任何候选的证据数。图片数据被严格拆成：
+
+```text
+人工核验图片：
+human_corrections.json 中可追溯的 image_ids
+用于图片评分
+
+原始模型命中图片：
+当前阈值下、未被人工驳回的 YOLO 检测图片
+只用于模型对照，不进入图片评分
+```
+
+归一化公式：
+
+```text
+visual =
+min(1, verified_image_count / (owner_count × visual_images_per_owner))
+```
+
+当前配置将“平均每位拥有者 2 张证据图”视为图片项满分。
+
+这种拆分避免使用模型自身的预测再次证明模型正确。例如阈值 `0.45` 下，`blueSunglasses` 有 18 张原始模型命中图片，但没有记录具体人工核验图片，因此其图片贡献必须为 0。
+
+#### 文本支持
+
+```text
+text =
+具有直接文本命中的拥有者人数 / 拥有者总人数
+```
+
+文本按支持人数计分，同时返回命中文本条数供核查。文本通过严格的受控别名匹配，例如：
+
+- `canada pencil`
+- `canadian pencil`
+- `maple leaf pencil`
+- `souvenir from canada`
+
+泛化词不会自动作为直接支持。例如 `blueSunglasses` 只匹配 `blue sunglasses`，不会将所有只出现 `sunglasses` 的文本都计入。
+
+#### 综合评分
+
+评分公式由 API 返回的配置实时构造：
+
+```text
 score =
-0.40*specificity +
-0.35*stability +
-0.15*visual +
-0.10*text
+specificity × 40%
++ stability × 35%
++ visual × 15%
++ text × 10%
 ```
 
-若拥有者人数不等于 8：
+如果拥有者人数不等于目标规模：
 
-```math
-score = score * 0.72
+```text
+score = score × 72%
 ```
 
-当前排名：
+第四页会同时展示：
 
-| 排名 | 候选 | 人数 | 最少次数 | 分数 |
-|---:|---|---:|---:|---:|
-| 1 | `canadaPencil` | 8 | 2 | 0.9375 |
-| 2 | `blueSunglasses` | 9 | 2 | 0.5280 |
-| 3 | `rainbowPens` | 8 | 1 | 0.4000 |
-| 4 | `rubiksCube` | 8 | 1 | 0.4000 |
-| 5 | `noisemaker` | 9 | 1 | 0.2680 |
-| 6 | `lavenderDie` | 9 | 1 | 0.2600 |
-| 7 | `pinkEraser` | 9 | 1 | 0.2600 |
-| 8 | `metalKey` | 10 | 1 | 0.2160 |
-| 9 | `miniCards` | 10 | 1 | 0.2160 |
+- 每个候选的堆叠贡献；
+- 当前使用的置信度阈值；
+- 后端返回的评分权重；
+- 每项原始指标；
+- 归一化值；
+- 惩罚系数；
+- 每项对最终分数的真实贡献。
 
-最终选择先应用硬条件：
+#### 实时更新
 
-```python
-exact_target_size is True
+阈值变化时：
+
+```text
+阈值改变
+  -> GET /api/analysis_summary?score_threshold=新阈值
+  -> 重新筛选原始模型命中图片
+  -> 更新模型命中对照
+  -> 更新第一层指标和第三层原始矩阵
+```
+
+人工核验图片和候选评分不会因为模型阈值变化而改变。它们只在以下数据变化时重算：
+
+```text
+人工确认、补标、修改、驳回或恢复
+candidate_scoring 配置变化
+corrected_labels 分布变化
+```
+
+模型命中对照会实时变化，例如：
+
+| 候选 | 阈值 0.25 模型命中 | 阈值 0.45 模型命中 | 阈值 0.75 模型命中 |
+|---|---:|---:|---:|
+| `canadaPencil` | 17 | 2 | 0 |
+| `blueSunglasses` | 97 | 18 | 0 |
+| `lavenderDie` | 31 | 11 | 3 |
+| `metalKey` | 41 | 12 | 0 |
+
+这些数值描述的是模型检测行为，不是已确认的图片证据。
+
+#### 当前阈值 0.45 下的候选排名
+
+| 排名 | 候选 | 拥有者 | 稳定率 | 人工核验图片 | 模型命中图片 | 直接文本 | 综合分 |
+|---:|---|---:|---:|---:|---:|---:|---:|
+| 1 | `canadaPencil` | 8 | 100% | 23 | 2 | 3 人 / 3 条 | 0.9375 |
+| 2 | `blueSunglasses` | 9 | 100% | 0 | 18 | 2 人 / 2 条 | 0.5200 |
+| 3 | `rainbowPens` | 8 | 0% | 0 | 0 | 0 人 / 0 条 | 0.4000 |
+| 4 | `rubiksCube` | 8 | 0% | 0 | 0 | 0 人 / 0 条 | 0.4000 |
+| 5 | `noisemaker` | 9 | 0% | 0 | 4 | 2 人 / 2 条 | 0.2680 |
+| 6 | `lavenderDie` | 9 | 0% | 0 | 11 | 1 人 / 1 条 | 0.2600 |
+| 7 | `pinkEraser` | 9 | 0% | 0 | 0 | 1 人 / 1 条 | 0.2600 |
+| 8 | `metalKey` | 10 | 0% | 0 | 12 | 0 人 / 0 条 | 0.2160 |
+| 9 | `miniCards` | 10 | 0% | 0 | 0 | 0 人 / 0 条 | 0.2160 |
+
+人工核验图片为 0 表示校正层没有保存可追溯 `image_ids`。系统不会将原始模型命中或 `occurrence_count` 冒充人工图片证据。
+
+#### 最终候选硬条件
+
+综合分用于排序，但最终候选还必须先满足：
+
+```text
+owner_count == target_group_size
 min_occurrence >= 2
 ```
 
-再从通过者中取最高分。这里不是简单把最高分标签写死为 `canadaPencil`；修改校正分布后，候选排名和最终结果会自动重算。
+也就是说，“分数最高”不是唯一条件。当前只有 `canadaPencil` 同时满足目标人数和最低重复次数要求。
 
-### Step 7：逐人证据验证
+### 5.5 第五阶段：逐人证据验证与最终定案
 
-`evidence_for()` 对最终候选的每位成员生成：
-
-- 人员 ID；
-- 全部核验图片 ID 和静态路径；
-- 重复出现次数；
-- 模型是否曾检出；
-- 模型最高分；
-- 模型实际命中的图片；
-- caption 或独立文本中的直接支持；
-- 标注来源和困难样本标记。
-
-当前图片证据：
-
-| 人员 | 图片 ID | 数量 |
-|---|---|---:|
-| Person4 | 21, 22, 23, 24 | 4 |
-| Person7 | 1, 14, 15 | 3 |
-| Person14 | 8, 9, 10, 16, 17 | 5 |
-| Person15 | 1, 2 | 2 |
-| Person22 | 3, 5 | 2 |
-| Person25 | 9, 10, 11 | 3 |
-| Person35 | 7, 8 | 2 |
-| Person39 | 3, 4, 11, 12 | 4 |
-
-文本直接支持包括：
-
-- Person14 caption 提到 maple leaf pencil；
-- Person35 独立文本提到 maple leaf pencil；
-- Person39 独立文本提到 Canada souvenir 与削铅笔。
-
-文本不是每位成员都必须具备的硬条件，因为图片已经是主要证据；它作为额外交叉验证进入 10% 评分项。
-
-### Step 8：非成员排除
-
-`exclusion_evidence()` 检查不在最终组中、但模型曾预测过 `canadaPencil` 的人员。前端展示其最高分和图片 ID，并明确说明：
+路由：
 
 ```text
-模型曾预测该物品，但人工校正分布未确认其为真实拥有者。
+/task5_verdict
 ```
 
-这比只展示正例更完整，因为它同时回答“为什么不是其他人”。
+分析目标：
 
-## 项目结构
+> 将群体级结论下钻到每一位成员，并同时说明为什么其他人不属于该组。
+
+最终成员证据：
+
+| Person | 人工确认图片 | 次数 | 原始模型曾检出 | 最高模型分 | 文本支持 |
+|---|---|---:|---|---:|---:|
+| Person4 | 22, 23, 24 | 3 | 是 | 0.5179 | 0 |
+| Person7 | 1, 15 | 2 | 是 | 0.4634 | 0 |
+| Person14 | 8, 9, 10, 16, 17 | 5 | 是 | 0.4547 | 1 |
+| Person15 | 1, 2 | 2 | 否，人工补标 | 0 | 0 |
+| Person22 | 3, 5 | 2 | 否，人工补标 | 0 | 0 |
+| Person25 | 9, 10, 11 | 3 | 是 | 0.4525 | 0 |
+| Person35 | 7, 8 | 2 | 是 | 0.2795 | 1 |
+| Person39 | 3, 4, 11, 12 | 4 | 是 | 0.3359 | 1 |
+
+其中 Person15 和 Person22 是重要的模型漏检案例。如果只使用原始预测，它们会被错误排除。
+
+第五页包括：
+
+- 最终候选与综合分；
+- 8 位成员关系视图；
+- 人物-证据矩阵；
+- 每位成员的全部核验图片；
+- 模型命中与人工补标标识；
+- caption 和独立文本；
+- 非成员模型误检条形图；
+- 原始预测、人工校正和最终推断的来源说明。
+
+#### 非成员反向验证
+
+`exclusion_evidence()` 查找：
+
+```text
+不在最终组中
+但原始模型曾预测其拥有 canadaPencil
+```
+
+当前最高的非成员误检包括：
+
+| Person | 最高置信度 | 图片 |
+|---|---:|---|
+| Person3 | 0.5706 | Person3_8 |
+| Person23 | 0.4812 | Person23_34 |
+| Person9 | 0.4259 | Person9_2 |
+| Person32 | 0.4026 | Person32_47 |
+| Person37 | 0.3977 | Person37_1 |
+
+这些记录用于回答“为什么模型认为他是成员，但人工证据没有确认”。
+
+---
+
+## 6. 实时因果链
+
+系统中的关键交互会重新触发后端分析，而不是只修改前端展示。
+
+### 6.1 修改置信度阈值
+
+```text
+setScoreThreshold()
+  -> 重算原始矩阵
+  -> 请求原始/校正矩阵快照
+  -> 请求带 score_threshold 的 analysis_summary
+  -> 动态汇总候选的原始模型命中图片
+  -> 保持人工核验图片和候选评分不变
+  -> 更新模型审计、矩阵和评分页对照信息
+```
+
+### 6.2 提交人工复核
+
+```text
+POST /api/update_label
+  -> 写入 human_corrections.json
+  -> 重建分析引擎
+  -> 重算候选分布
+  -> 重算复核队列
+  -> 重算复核优先级
+  -> 重算矩阵
+  -> 重算候选评分
+  -> 重算最终结果
+```
+
+### 6.3 切换原始/校正矩阵
+
+```text
+原始预测：
+使用当前阈值和 rejected_predictions
+
+人工校正：
+使用 corrected_labels 和 occurrence_count
+```
+
+切换只改变观察的数据层，不会混合或覆盖两种数据。
+
+---
+
+## 7. 系统架构
+
+```text
+Vue 3 + Pinia + ECharts
+          |
+          | Axios / JSON API
+          v
+Flask API
+          |
+          v
+ForensicAnalysisEngine
+  |-- 模型审计
+  |-- 复核优先级
+  |-- 原始/校正矩阵
+  |-- Ward 重排
+  |-- 候选评分
+  |-- 逐人证据
+  `-- 非成员排除
+          |
+          v
+i3_new_data.json
+human_corrections.json
+analysis_results.json
+MC2-Image-Data/
+```
+
+### 7.1 技术栈
+
+前端：
+
+- Vue 3
+- Vite 5
+- Pinia
+- Vue Router
+- Axios
+- ECharts 6
+- D3
+
+后端：
+
+- Python 3
+- Flask
+- Flask-CORS
+- NumPy
+- Pandas
+- SciPy
+
+---
+
+## 8. 项目结构
 
 ```text
 vast-2020-mc2/
 ├── README.md
 ├── challenge_analysis/
-│   ├── run_pipeline.py           # 可复现总调度
-│   ├── data_cleaner.py           # 原始目录转主快照
-│   ├── text_mining.py            # caption 文本写入与简单锚定
-│   ├── model_auditor.py          # 调用统一引擎输出模型审计
-│   ├── community_clustering.py   # 输出校正或原始矩阵
-│   └── totem_elimination.py      # 输出候选排名与最终结果
+│   ├── run_pipeline.py
+│   ├── data_cleaner.py
+│   ├── text_mining.py
+│   ├── model_auditor.py
+│   ├── community_clustering.py
+│   └── totem_elimination.py
 ├── backend_service/
-│   ├── app.py                    # Flask API 与图片静态服务
-│   ├── config.py                 # 统一绝对路径配置
+│   ├── app.py
+│   ├── config.py
 │   ├── requirements.txt
-│   ├── test_analysis.py          # 核心结论与 API 回归测试
+│   ├── test_analysis.py
 │   └── core_engines/
-│       ├── analysis_engine.py    # 审计、矩阵、评分、证据主引擎
-│       ├── data_provider.py      # 原始层和校正层读写
-│       └── cluster_engine.py     # 旧矩阵引擎，保留兼容
+│       ├── analysis_engine.py
+│       ├── data_provider.py
+│       └── cluster_engine.py
 ├── frontend_client/
 │   ├── package.json
 │   ├── vite.config.js
+│   ├── dist/
 │   └── src/
 │       ├── App.vue
-│       ├── router/index.js
-│       ├── store/dashboard.js    # API 状态与交互动作
-│       ├── views/                # 五层分析页面
+│       ├── router/
+│       ├── store/
+│       ├── assets/
+│       ├── views/
 │       └── components/
-│           ├── auditing/
-│           ├── interaction/
-│           ├── process/
-│           └── targeting/
 ├── raw_data/
-│   ├── i3_new_data.json          # 原始预测主快照
-│   ├── human_corrections.json    # 独立人工校正层
-│   ├── analysis_results.json     # 可重新生成的推断结果
+│   ├── i3_new_data.json
+│   ├── human_corrections.json
+│   ├── analysis_results.json
 │   └── MC2-Image-Data/
 │       ├── Person1 ... Person40
 │       └── TrainingImages/
-└── others/                       # 原始参考/旧版本副本，不参与运行
+└── others/
 ```
 
-## 后端 API
+关键模块：
 
-### `GET /api/model_evaluation`
+| 模块 | 职责 |
+|---|---|
+| `analysis_engine.py` | 模型审计、矩阵、评分、证据与最终推断 |
+| `data_provider.py` | 原始数据读取、校正层持久化和审计日志 |
+| `dashboard.js` | 前端全局状态、API 调用和实时重算链路 |
+| `PersonReviewRadar.vue` | 复核前 Person 优先级 |
+| `ClusterHeatmap.vue` | 原始/校正人物-物品矩阵 |
+| `ClusterSignalMap.vue` | 人数、稳定率和图片证据候选空间 |
+| `CandidateRankingChart.vue` | API 驱动的实时评分拆解 |
+| `EvidencePhotoGallery.vue` | 最终逐人图片证据 |
+| `ExclusionChart.vue` | 非成员模型误检反向验证 |
+
+---
+
+## 9. 后端 API
+
+默认地址：
+
+```text
+http://localhost:5000
+```
+
+### 9.1 模型审计
+
+```http
+GET /api/model_evaluation
+```
 
 返回：
 
-- 每类置信度五数概括；
-- 训练/预测类别覆盖；
-- 人员级 precision 与 recall；
+- 类别置信度统计；
+- 训练类别和实际输出类别；
+- 缺失类别；
+- Precision、Recall 和 F1；
 - 阈值曲线；
-- 真实检测框中心点。
+- 检测框空间分布；
+- 原始假设对照标签。
 
-### `POST /api/distribution_matrix`
+### 9.2 人物-物品矩阵
 
-请求：
+```http
+POST /api/distribution_matrix
+Content-Type: application/json
+```
+
+原始矩阵请求：
 
 ```json
 {
-  "data_source": "corrected",
-  "score_threshold": 0.55,
+  "data_source": "raw",
+  "score_threshold": 0.45,
   "excluded_items": []
 }
 ```
 
-`data_source` 可为：
+校正矩阵请求：
 
-- `raw`：原始预测矩阵；
-- `corrected`：人工校正矩阵。
+```json
+{
+  "data_source": "corrected",
+  "excluded_items": []
+}
+```
 
-### `GET /api/analysis_summary`
+### 9.3 分析摘要与候选排名
 
-返回候选排名、失效假设、最终结果、逐人证据和排除证据。
+```http
+GET /api/analysis_summary?score_threshold=0.45
+```
 
-### `GET /api/review_queue`
+返回：
 
-返回 25 张加拿大铅笔证据图和 12 个黄色包误报样本。状态包括：
+- `raw_hypothesis`
+- `candidate_rankings`
+- `candidate_scoring`
+- `final`
+- `stages`
 
-- `confirmed`：当前图片被模型正确检出；
-- `added`：模型在当前图片漏检，人工补标；
-- `rejected`：原始预测被人工驳回；
-- `unreviewed`：尚未复核。
+`score_threshold` 只影响 `raw_detection_image_count` 和原始模型矩阵，不改变人工核验图片数及其图片贡献分。
 
-### `POST /api/update_label`
+### 9.4 人工复核队列
 
-支持：
+```http
+GET /api/review_queue?label=blueSunglasses&score_threshold=0.45
+```
 
-- `confirm`：确认现有检测；
-- `add`：补录漏检；
-- `modify`：驳回旧框并添加新标签；
-- `reject` / `delete`：驳回原始框或移除人工补标。
+队列按候选动态生成，不再固定为最终候选与 `yellowBag`：
 
-所有操作写入 `human_corrections.json`，不覆盖 `i3_new_data.json`。
+- `verified`：已经写入校正层的具体图片；
+- `model_hit`：当前阈值下该候选的模型命中，等待确认或驳回；
+- `evidence_search`：候选拥有者的其他图片，用于人工寻找模型漏检证据。
 
-### `GET /api/export_analysis`
+第二层可以切换全部候选。确认无检测框图片时会执行人工补标；选择“该图无此物品”会记录 `dismiss` 操作，而不会伪造误报检测框。
 
-重新计算并写入 `raw_data/analysis_results.json`。
+默认使用渐进式“智能批次”，不会要求分析师一次检查 907 张图片：
 
-## 前端五层可视化
+- 已核验图片和当前阈值模型命中始终显示；
+- 直接 caption 命中优先；
+- 低于工作阈值的同类检测其次；
+- 无检测图片和数据异常图片作为漏检搜索候选；
+- 每位候选拥有者每批最多返回 3 张搜索图片；
+- 可通过“上一批 / 下一批”逐步扩大覆盖；
+- “查看全部”仅作为完整审计入口。
 
-### 第一层：模型审计
+当前首批规模示例：
 
-路由：`/task1_auditing`
+| 候选 | 智能首批 | 全量队列 |
+|---|---:|---:|
+| `canadaPencil` | 51 | 134 |
+| `blueSunglasses` | 58 | 211 |
+| `rainbowPens` | 21 | 241 |
+| `rubiksCube` | 24 | 216 |
 
-- 真实置信度箱线图；
-- 43 个训练类别与 22 个预测类别覆盖；
-- 真实检测框空间散点；
-- `canadaPencil` 人员级 precision/recall/F1 阈值曲线；
-- `yellowBag` 假设失效状态。
+### 9.5 复核优先级
 
-这里不展示无法由现有真值计算的全局 Accuracy，也不生成随机密度点。
+```http
+GET /api/review_priorities
+```
 
-### 第二层：人工复核
+返回每位 Person 的：
 
-路由：`/task2_correction`
+- 综合异常分；
+- 优先级；
+- 分项贡献；
+- 推荐图片；
+- 推荐检测框；
+- 可解释原因。
 
-- 直接读取后端复核队列；
-- 展示具体图片、原始标签、校正标签和文本；
-- 区分模型命中、漏检补标、误报驳回；
-- 操作通过 `/api/update_label` 持久化；
-- 展示 Raw prediction、Human correction、Inference usage 三层对照。
+### 9.6 提交人工校正
 
-### 第三层：人物-物品矩阵
+```http
+POST /api/update_label
+Content-Type: application/json
+```
 
-路由：`/task3_clustering`
+示例：
 
-- 可切换原始预测与人工校正矩阵；
-- 原始矩阵受阈值影响；
-- 校正矩阵用于最终分析；
-- 空单元保持 0，不补合成高亮块；
-- 行列使用 Ward 聚类重排；
-- 点击有对应证据的单元可回到复核层。
+```json
+{
+  "person_id": "Person15",
+  "image_id": "Person15_1",
+  "box_id": -1,
+  "action": "add",
+  "new_label": "canadaPencil",
+  "difficult": false,
+  "note": "人工视觉确认模型漏检"
+}
+```
 
-### 第四层：候选评分
+支持的动作：
 
-路由：`/task4_totem`
+| 动作 | 含义 |
+|---|---|
+| `confirm` | 确认原始检测 |
+| `add` | 添加模型漏检标签 |
+| `modify` | 驳回旧标签并写入新标签 |
+| `reject` | 驳回原始预测 |
+| `delete` | 删除校正记录 |
+| `restore` | 恢复被驳回的预测 |
 
-- 候选列表直接来自 `candidate_rankings`；
-- 展示人数、最少出现次数、稳定率、文本支持和综合分；
-- 完整比较 9 个近邻候选；
-- 证据弹窗读取后端最终结果和理由；
-- 勾选排除只影响矩阵观察，不篡改评分依据。
+### 9.7 导出分析结果
 
-### 第五层：最终验证
+```http
+GET /api/export_analysis
+```
 
-路由：`/task5_verdict`
+输出：
 
-- 8 位成员逐人切换；
-- 展示每人的全部证据图片；
-- 每张图标明模型命中或人工补标；
-- 展示重复出现次数、最高模型分和文本片段；
-- 展示最终评分理由；
-- 展示模型误检的非成员排除项。
+```text
+raw_data/analysis_results.json
+```
 
-原项目没有可复算的人际社交边数据，因此当前版本删除了模拟社交树和合成社交矩阵，不再用不存在的数据证明“社交隔离”。
+---
 
-## 环境与安装
+## 10. 环境要求
 
-建议：
+建议环境：
 
 ```text
 Python >= 3.10
@@ -497,7 +919,9 @@ Node.js >= 18
 npm >= 9
 ```
 
-### 安装 Python 依赖
+### 10.1 安装 Python 依赖
+
+Windows PowerShell：
 
 ```powershell
 cd D:\vast-2020-mc2
@@ -506,31 +930,29 @@ python -m venv .venv
 python -m pip install -r backend_service\requirements.txt
 ```
 
-### 安装前端依赖
+macOS / Linux：
+
+```bash
+cd /path/to/vast-2020-mc2
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r backend_service/requirements.txt
+```
+
+### 10.2 安装前端依赖
 
 ```powershell
 cd D:\vast-2020-mc2\frontend_client
 npm install
 ```
 
-## 运行
+---
 
-### 1. 运行完整分析
+## 11. 运行项目
 
-可以从项目根目录直接运行：
+需要分别启动 Flask 后端和 Vite 前端。
 
-```powershell
-cd D:\vast-2020-mc2
-python challenge_analysis\run_pipeline.py
-```
-
-脚本使用绝对项目路径，不依赖当前工作目录。它不会覆盖原始预测快照，最终会写入：
-
-```text
-raw_data\analysis_results.json
-```
-
-### 2. 运行后端
+### 11.1 启动后端
 
 ```powershell
 cd D:\vast-2020-mc2\backend_service
@@ -543,104 +965,260 @@ python app.py
 http://localhost:5000
 ```
 
-### 3. 运行前端
+健康检查可使用：
 
-另开终端：
+```powershell
+Invoke-RestMethod http://localhost:5000/api/analysis_summary
+```
+
+### 11.2 启动前端
+
+另开一个终端：
 
 ```powershell
 cd D:\vast-2020-mc2\frontend_client
-npm run dev
+npm run dev -- --host 0.0.0.0 --port 5173 --strictPort
 ```
 
-默认地址：
+浏览器访问：
 
 ```text
 http://localhost:5173
 ```
 
-可通过环境变量修改 API：
+`--strictPort` 可以避免 Vite 在 5173 被占用时静默切换到其他端口。
+
+### 11.3 修改 API 地址
+
+默认 API：
+
+```text
+http://localhost:5000/api
+```
+
+可通过环境变量覆盖：
 
 ```powershell
 $env:VITE_API_BASE = "http://localhost:5000/api"
 npm run dev
 ```
 
-### 4. 生产构建
+### 11.4 执行离线分析流水线
 
 ```powershell
-cd D:\vast-2020-mc2\frontend_client
-npm run build
+cd D:\vast-2020-mc2
+python challenge_analysis\run_pipeline.py
 ```
 
-输出目录：`frontend_client/dist/`
+流水线依次执行：
 
-## 测试
+1. 模型审计；
+2. 校正矩阵生成；
+3. 候选排名；
+4. 最终结果导出。
 
-### 后端核心回归测试
+它不会覆盖原始预测快照。
+
+---
+
+## 12. 测试与构建
+
+### 12.1 后端回归测试
 
 ```powershell
 cd D:\vast-2020-mc2\backend_service
 python -m unittest test_analysis.py
 ```
 
-测试覆盖：
+当前测试覆盖：
 
-- 12 个 `yellowBag` 高阈值框全部被驳回；
-- 最终候选由规则得到 `canadaPencil`；
-- 最终组为 8 人且每人至少两张证据图；
-- 原始矩阵和校正矩阵 API 均可用。
+- `yellowBag` 原始假设被完整否定；
+- 最终组由候选规则动态生成；
+- 候选四项贡献之和等于综合分；
+- 非最终候选也能动态获取图片证据；
+- 不同阈值会重新计算图片证据和候选分数；
+- 原始与校正矩阵 API 均可用；
+- 复核队列包含真实边界框；
+- Person 复核优先级不使用人工校正答案。
 
-### 前端构建检查
+### 12.2 前端生产构建
 
 ```powershell
 cd D:\vast-2020-mc2\frontend_client
 npm run build
 ```
 
-## 修改数据后的因果链
-
-人工复核一次操作会触发：
+输出：
 
 ```text
-POST /api/update_label
-  -> 更新 human_corrections.json
-  -> 重建 ForensicAnalysisEngine
-  -> 重算校正矩阵
-  -> 重算候选人数、稳定性和分数
-  -> 重选最终物品与 8 人组
-  -> 刷新复核队列、热图和最终证据册
+frontend_client/dist/
 ```
 
-因此系统不是“改了标签但结论仍固定不变”的演示界面。只要校正分布变化到不再满足硬条件，当前结论就会随之变化。
-
-## 已知边界
-
-1. 组织规模 8 来自赛题先验，不是系统自动估计。
-2. `canadaPencil` 已完成逐图核验；其他候选还需要进一步补齐图片级证据。
-3. 文本匹配采用受控别名和关键词，不是完整 NLP 实体链接。
-4. 评分权重是可解释的启发式权重，尚未做统计学习或敏感性优化。
-5. 当前前端包包含 ECharts，生产主包较大，Vite 会提示超过 500 kB；不影响正确性，可后续按路由拆包。
-6. 原始数据中没有可靠的人际社交边，因此系统不再输出社交隔离结论。
-
-## 结论复述
-
-本项目当前可审计的结论是：
+### 12.3 推荐验证顺序
 
 ```text
-yellowBag：
-原始模型阈值产生的 8 人假设，经 12 个检测框逐图复核后失效。
+1. 后端单元测试
+2. 前端生产构建
+3. 打开第一层并切换阈值
+4. 检查第三层原始矩阵是否变化
+5. 检查第四层图片证据和评分是否变化
+6. 在第二层提交一条人工复核
+7. 检查第三、第四、第五层是否同步更新
+```
 
-canadaPencil：
-人工校正后恰好由 8 人持有；
-每人至少有 2 张图片；
-共 25 张图片；
-3 人有直接文本支持；
-综合评分 0.9375；
-因此成为最终暗号物品。
+---
 
-最终 8 人：
+## 13. 如何复现实验结论
+
+### 13.1 复现模型审计
+
+```powershell
+cd D:\vast-2020-mc2
+python challenge_analysis\model_auditor.py
+```
+
+应观察到：
+
+- 43 个训练类别；
+- 22 个实际输出类别；
+- 21 个缺失类别；
+- `yellowBag` 高阈值假设为 `invalidated`。
+
+### 13.2 复现校正矩阵
+
+```powershell
+python challenge_analysis\community_clustering.py
+```
+
+脚本读取 `human_corrections.json`，构造校正矩阵并执行 Ward 重排。
+
+### 13.3 复现候选排名
+
+```powershell
+python challenge_analysis\totem_elimination.py
+```
+
+结果写入：
+
+```text
+raw_data/analysis_results.json
+```
+
+### 13.4 验证结果没有写死
+
+可以采用以下实验：
+
+1. 修改 `human_corrections.json` 中某候选的 `occurrence_count`；
+2. 修改 `candidate_scoring` 权重；
+3. 调整前端阈值；
+4. 重新调用 `/api/analysis_summary`；
+5. 对比候选图片证据、分项贡献、综合分和排名。
+
+前端只消费 API 返回值，不维护一份独立的候选结果常量。
+
+---
+
+## 14. 设计原则
+
+### 14.1 不把模型置信度当作真值
+
+置信度只表示模型内部确信程度。它不能替代图片复核，也不能证明标签正确。
+
+### 14.2 不把“恰好 8 人”当作充分条件
+
+人数匹配只是特异性证据。稳定重复、图片数量和文本支持同样重要。
+
+### 14.3 人工复核必须从未知状态开始
+
+复核优先级只能使用复核前信号，不能使用最终成员或已知误判作为输入。
+
+### 14.4 原始层与校正层必须可对照
+
+所有人工修改写入独立文件，原始预测始终保留，便于解释结论如何发生变化。
+
+### 14.5 正向证据与反向证据同时展示
+
+既要说明成员为什么属于该组，也要说明模型误检的非成员为什么被排除。
+
+### 14.6 图表必须对应真实数据
+
+系统不使用随机点、模拟社交边或前端硬编码分数填充视觉组件。
+
+---
+
+## 15. 已知边界
+
+1. 目标组织规模 8 来自赛题先验，不是系统自动估计结果。
+2. 候选分数是可解释启发式评分，不是经过监督学习拟合的概率。
+3. 当前默认阈值 0.45 是离散测试点中的 F1 最优值，不保证对其他数据集最优。
+4. 文本支持使用受控别名匹配，不是完整的实体链接或语义推理模型。
+5. 部分候选的人工分布只有人员和出现次数，尚未补齐全部人工图片 ID。
+6. 原始模型命中图片会随阈值变化，但只作为对照，不进入图片评分。
+7. 原始数据没有可靠的人际社交边，系统不生成模拟社交网络来证明群体关系。
+8. ECharts 相关生产包较大，Vite 可能提示单个 chunk 超过 500 kB；不影响分析正确性。
+9. Flask 当前为分析开发配置，部署到生产环境时应关闭 `DEBUG` 并使用正式 WSGI 服务。
+
+---
+
+## 16. 后续可扩展方向
+
+- 使用 ROC、PR 曲线或交叉验证自动选择阈值；
+- 对评分权重执行敏感性分析；
+- 为全部候选补齐图片级人工证据；
+- 引入图像嵌入或视觉语言模型辅助复核；
+- 使用更完整的实体链接方法处理文本别名；
+- 增加操作用户、时间戳和校正版本号；
+- 将候选排名和最终结果保存为可比较的分析版本；
+- 为 ECharts 和路由实施更细粒度代码拆分；
+- 增加端到端浏览器测试，覆盖阈值和人工复核联动。
+
+---
+
+## 17. 项目来源与致谢
+
+本项目是对以下开源项目和公开分析思路的重构与扩展：
+
+- [huyen-nguyen/VAST2020mc2](https://github.com/huyen-nguyen/VAST2020mc2)
+- [TTU Nguyen MC2 可视化分析](https://huyen-nguyen.github.io/VAST2020mc2/TTU-Nguyen-MC2/)
+- [VAST Challenge 2020 MC2 社区页面](https://vacommunity.org/VAST+Challenge+2020+MC2)
+
+重构重点包括：
+
+- 前后端数据接口统一；
+- 原始预测与人工校正分层；
+- 复核前 Person 优先级；
+- 可持久化人工复核；
+- 原始/校正矩阵对照；
+- API 驱动的实时候选评分；
+- 逐人图片和文本证据；
+- 非成员反向验证；
+- 可复现测试与分析流水线。
+
+---
+
+## 18. 结论
+
+本项目对赛题的核心判断不是：
+
+```text
+模型在哪 8 个人身上检测到了同一个物品？
+```
+
+而是：
+
+```text
+在模型存在漏检和误报的情况下，
+哪个物品经过人工校正后仍恰好由 8 人稳定共有，
+并且能够由重复图片、文本和非成员排除证据共同支持？
+```
+
+当前数据给出的答案是：
+
+```text
+canadaPencil
+
 Person4, Person7, Person14, Person15,
 Person22, Person25, Person35, Person39
 ```
 
-最重要的是，这份结论能够从 `i3_new_data.json`、`human_corrections.json` 和 `analysis_engine.py` 逐步重算，而不是由前端写死。
+更重要的是，这个答案可以从原始预测、人工校正、候选评分和逐人证据中逐步重算，而不是由前端页面预先写死。

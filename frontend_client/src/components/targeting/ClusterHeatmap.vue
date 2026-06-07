@@ -97,8 +97,10 @@ const render = () => {
       data: suspects.value,
         ...buildAxis({ fontSize: 10 }),
         axisLabel: {
-          color: (value) => store.hackerGroup.includes(value) ? chartPalette.green : chartPalette.muted,
-          fontWeight: (value) => store.hackerGroup.includes(value) ? 800 : 500,
+          color: (value) => value === store.selectedPersonId
+            ? chartPalette.accent
+            : store.hackerGroup.includes(value) ? chartPalette.green : chartPalette.muted,
+          fontWeight: (value) => value === store.selectedPersonId || store.hackerGroup.includes(value) ? 800 : 500,
           fontSize: 10
         }
     },
@@ -155,7 +157,18 @@ const render = () => {
 
 const resize = () => chart?.resize()
 
-watch(() => [store.heatmapMatrixData, store.orderedSuspects, store.orderedItems], render, { deep: true })
+watch(
+  () => [
+    store.heatmapMatrixData,
+    store.orderedSuspects,
+    store.orderedItems,
+    store.selectedCandidateLabel,
+    store.selectedPersonId,
+    store.hackerGroup
+  ],
+  render,
+  { deep: true }
+)
 
 onMounted(() => {
   render()

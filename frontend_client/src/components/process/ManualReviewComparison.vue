@@ -10,7 +10,7 @@
 <script setup>
 import { computed } from 'vue'
 const props=defineProps({caseItem:{type:Object,default:null}})
-const statusLabel=computed(()=>({confirmed:'模型命中',added:'人工补标',rejected:'误报驳回',unreviewed:'待复核'}[props.caseItem?.status]||''))
+const statusLabel=computed(()=>({confirmed:'模型命中',added:'人工补标',rejected:'误报驳回',unreviewed:'待复核',dismissed:'该图未确认'}[props.caseItem?.status]||''))
 </script>
 <style scoped>
 .audit-trace { display:grid; grid-template-columns:1fr 40px 1fr 40px 1fr; align-items:center; gap:8px; padding:14px; border:1px solid var(--border); border-radius:10px; background:#fff; }

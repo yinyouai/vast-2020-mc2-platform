@@ -7,7 +7,7 @@
         <div class="intro-pills"><span class="data-chip">类别覆盖</span><span class="data-chip">置信度分布</span><span class="data-chip">阈值联动</span></div>
       </div>
       <div class="audit-status">
-        <span>当前核验对象</span><strong>{{ audit.reviewed_class || '—' }}</strong><small>人员级真值</small>
+        <span>当前审计范围</span><strong>全部 {{ audit.detected_class_count || 0 }} 类</strong><small>{{ audit.total_predictions || 0 }} 个原始检测框</small>
       </div>
     </div>
 
@@ -23,10 +23,10 @@
         <div class="threshold-ticks"><span v-for="tick in thresholdTicks" :key="tick">{{ tick.toFixed(2) }}</span></div>
       </div>
       <div class="threshold-impact">
-        <article><span>Precision</span><b>{{ percent(currentPoint.precision) }}</b></article>
-        <article><span>Recall</span><b>{{ percent(currentPoint.recall) }}</b></article>
-        <article><span>F1</span><b>{{ percent(currentPoint.f1) }}</b></article>
-        <article><span>预测拥有者</span><b>{{ currentPoint.predicted_owners || 0 }}</b></article>
+        <article><span>检测保留率</span><b>{{ percent(currentPoint.retention_rate) }}</b></article>
+        <article><span>类别覆盖率</span><b>{{ percent(currentPoint.class_coverage) }}</b></article>
+        <article><span>人员覆盖率</span><b>{{ percent(currentPoint.person_coverage) }}</b></article>
+        <article><span>保留检测框</span><b>{{ currentPoint.retained_predictions || 0 }}</b></article>
       </div>
     </section>
 
@@ -40,9 +40,8 @@
 
     <section class="panel threshold-chart-panel">
       <div class="panel-header">
-        <div><span class="section-kicker">人员级验证</span><h4 class="panel-title">阈值变化如何改变 {{ audit.reviewed_class || '候选物品' }} 判断</h4>
-          <p class="visible-subtitle">折线使用左轴，柱形使用右轴；红色工作线对应上方滑块。</p></div>
-        <span :class="['hypothesis-badge', hypothesis.status]">{{ hypothesis.label || '原始假设' }} {{ hypothesis.status === 'invalidated' ? '已否定' : '待复核' }}</span>
+        <div><span class="section-kicker">全类别阈值审计</span><h4 class="panel-title">阈值变化如何影响全部模型输出</h4>
+          <p class="visible-subtitle">折线衡量全类别保留与覆盖情况，柱形表示剩余检测框数量；红色工作线对应上方滑块。</p></div>
       </div>
       <div ref="curveRef" class="threshold-chart"></div>
     </section>
@@ -61,7 +60,6 @@ const store = useDashboardStore()
 const curveRef = ref(null)
 let chart
 const audit = computed(() => store.modelAudit || {})
-const hypothesis = computed(() => store.analysisSummary?.raw_hypothesis || {})
 const thresholdTicks = [.25, .35, .45, .55, .65, .75]
 const rows = computed(() => audit.value.threshold_curve || [])
 const currentPoint = computed(() => rows.value.reduce((best, row) =>
@@ -71,25 +69,25 @@ const render = () => {
   if (!curveRef.value) return
   if (!chart) chart = echarts.init(curveRef.value)
   chart.setOption({
-    color: [chartPalette.accent, chartPalette.green, chartPalette.gold, chartPalette.red],
+    color: [chartPalette.accent, chartPalette.green, chartPalette.gold, chartPalette.muted],
     tooltip: { ...buildTooltip(), trigger: 'axis' },
     legend: { top: 4, left: 6, itemWidth: 18, itemHeight: 8, textStyle: { color: chartPalette.muted, fontSize: 11 },
-      data: ['精确率', '召回率', 'F1', `${audit.value.comparison_class || '原始假设'} 拥有者`] },
+      data: ['检测保留率', '类别覆盖率', '人员覆盖率', '保留检测框'] },
     grid: { left: 56, right: 58, top: 58, bottom: 42 },
     xAxis: { type: 'category', name: '阈值', data: rows.value.map((row) => row.threshold.toFixed(2)),
       axisLabel: { color: chartPalette.muted }, axisLine: { lineStyle: { color: chartPalette.lineStrong } }, axisTick: { show: false } },
     yAxis: [
-      { type: 'value', min: 0, max: 1, name: '人员级指标', axisLabel: { color: chartPalette.muted, formatter: (value) => `${Math.round(value * 100)}%` }, splitLine },
-      { type: 'value', min: 0, name: '拥有者人数', axisLabel: { color: chartPalette.muted }, splitLine: { show: false } }
+      { type: 'value', min: 0, max: 1, name: '全局比例', axisLabel: { color: chartPalette.muted, formatter: (value) => `${Math.round(value * 100)}%` }, splitLine },
+      { type: 'value', min: 0, name: '检测框数量', axisLabel: { color: chartPalette.muted }, splitLine: { show: false } }
     ],
     series: [
-      { name: '精确率', type: 'line', smooth: .25, symbolSize: 8, data: rows.value.map((row) => row.precision) },
-      { name: '召回率', type: 'line', smooth: .25, symbolSize: 8, data: rows.value.map((row) => row.recall) },
-      { name: 'F1', type: 'line', smooth: .25, symbolSize: 8, lineStyle: { width: 3 }, data: rows.value.map((row) => row.f1),
+      { name: '检测保留率', type: 'line', smooth: .25, symbolSize: 8, data: rows.value.map((row) => row.retention_rate) },
+      { name: '类别覆盖率', type: 'line', smooth: .25, symbolSize: 8, data: rows.value.map((row) => row.class_coverage) },
+      { name: '人员覆盖率', type: 'line', smooth: .25, symbolSize: 8, data: rows.value.map((row) => row.person_coverage),
         markLine: { symbol: 'none', label: { formatter: `工作点 ${store.scoreThreshold.toFixed(2)}`, color: chartPalette.red },
           lineStyle: { color: chartPalette.red, type: 'dashed', width: 2 }, data: [{ xAxis: currentPoint.value.threshold?.toFixed(2) }] } },
-      { name: `${audit.value.comparison_class || '原始假设'} 拥有者`, type: 'bar', yAxisIndex: 1, barMaxWidth: 28, data: rows.value.map((row) => row.comparison_owners),
-        itemStyle: { color: 'rgba(207,86,86,.24)', borderColor: chartPalette.red, borderWidth: 1, borderRadius: [4,4,0,0] } }
+      { name: '保留检测框', type: 'bar', yAxisIndex: 1, barMaxWidth: 28, data: rows.value.map((row) => row.retained_predictions),
+        itemStyle: { color: 'rgba(86,112,143,.18)', borderColor: chartPalette.muted, borderWidth: 1, borderRadius: [4,4,0,0] } }
     ]
   }, true)
 }
@@ -109,7 +107,7 @@ onBeforeUnmount(() => { window.removeEventListener('resize', render); chart?.dis
 .threshold-impact span,.threshold-impact b { display:block; }.threshold-impact span { color:var(--subtle); font-size:.7rem; }.threshold-impact b { margin-top:6px; font-size:1.06rem; font-variant-numeric:tabular-nums; }
 .audit-main-grid { display:grid; grid-template-columns:minmax(520px,1.35fr) minmax(330px,.75fr); gap:18px; }.audit-side-stack { display:grid; gap:18px; }
 .audit-main-grid > *, .audit-side-stack > * { padding:var(--panel-padding); border:1px solid var(--border); border-radius:var(--radius); background:#fff; box-shadow:var(--shadow); }
-.threshold-chart { min-height:380px; }.hypothesis-badge { padding:8px 12px; border-radius:999px; font-size:.76rem; font-weight:800; }.hypothesis-badge.invalidated { color:#a94141; background:#fcecec; border:1px solid #efc6c6; }
+  .threshold-chart { min-height:380px; }
 @media(max-width:1180px){.audit-command{grid-template-columns:1fr 1fr}.threshold-impact{grid-column:1/-1}.audit-main-grid{grid-template-columns:1fr}}
 @media(max-width:700px){.audit-command{grid-template-columns:1fr}.threshold-impact{grid-template-columns:repeat(2,1fr)}}
 </style>

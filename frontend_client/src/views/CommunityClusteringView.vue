@@ -16,7 +16,10 @@
         <button @click="$router.push('/task4_totem')">进入候选评分</button></div>
     </section>
 
-    <div class="cluster-overview-grid"><ClusterSignalMap/><MatrixDeltaBars/></div>
+    <div class="cluster-overview-grid">
+      <ClusterSignalMap/>
+      <MatrixDeltaBars/>
+    </div>
     <ClusterHeatmap/>
   </section>
 </template>
@@ -35,6 +38,7 @@ const currentTotal=computed(()=>store.heatmapMatrixData.reduce((sum,item)=>sum+i
 .source-copy span,.selected-signal span{color:var(--subtle);font-size:.7rem;font-weight:800}.source-copy strong,.selected-signal strong{margin:5px 0;font-size:1.05rem}.source-copy small{color:var(--muted)}
 .segmented{display:flex;padding:4px;border:1px solid var(--border);border-radius:8px;background:#eef3f8}.segmented button{min-height:38px;padding:0 14px;border-radius:6px;background:transparent;font-size:.78rem;font-weight:800}.segmented button.active{color:var(--accent);background:#fff;box-shadow:var(--shadow-soft)}
 .selected-signal{text-align:right}.selected-signal button{min-height:34px;padding:0 10px;border:1px solid var(--border);border-radius:6px;color:var(--accent);background:#fff;font-size:.72rem;font-weight:800}
-.cluster-overview-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-@media(max-width:1000px){.cluster-control{grid-template-columns:1fr}.selected-signal{text-align:left}.cluster-overview-grid{grid-template-columns:1fr}}
+.cluster-overview-grid{display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);align-items:stretch;gap:18px}.cluster-overview-grid>*{min-width:0;height:100%}
+@media(max-width:1180px){.cluster-overview-grid{grid-template-columns:1fr}}
+@media(max-width:1000px){.cluster-control{grid-template-columns:1fr}.selected-signal{text-align:left}}
 </style>

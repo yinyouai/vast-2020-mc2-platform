@@ -1,3 +1,6 @@
 __pycache__/
 *.py[cod]
 .tmp_contact_sheets/
+backend_service/runtime-server*.log
+frontend_client/runtime-vite*.log
+frontend_client/vite*.log

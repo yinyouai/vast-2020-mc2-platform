@@ -1,13 +1,13 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 
-export const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:5000/api'
+export const API_BASE = import.meta.env.VITE_API_BASE || '/api'
 export const STATIC_BASE = API_BASE.replace(/\/api$/, '')
 let thresholdTimer
 
 export const useDashboardStore = defineStore('dashboard', {
   state: () => ({
-    scoreThreshold: 0.25,
+    scoreThreshold: 0.45,
     matrixDataSource: 'corrected',
     selectedPersonId: '',
     selectedImageId: '',
@@ -22,10 +22,20 @@ export const useDashboardStore = defineStore('dashboard', {
     modelAudit: {},
     analysisSummary: null,
     reviewQueue: [],
+    reviewCandidateLabel: '',
+    reviewQueueMode: 'focused',
+    reviewQueueBatch: 1,
+    reviewQueueMeta: {},
+    reviewPriorities: [],
+    reviewPrioritySummary: {},
+    reviewPriorityScoring: {},
+    reviewPrioritiesUpdatedAt: '',
     activeTotem: '',
     hackerGroup: [],
     finalEvidence: [],
     candidateRankings: [],
+    candidateScoring: {},
+    candidateRankingsUpdatedAt: '',
     selectedCandidateLabel: '',
     isFourthLayerActive: false,
     isLoading: false,
@@ -50,6 +60,8 @@ export const useDashboardStore = defineStore('dashboard', {
       thresholdTimer = window.setTimeout(() => {
         if (this.matrixDataSource === 'raw') this.fetchHeatmapMatrix()
         this.fetchMatrixSnapshots()
+        this.fetchAnalysisSummary()
+        this.fetchReviewQueue()
       }, 120)
     },
 
@@ -85,7 +97,9 @@ export const useDashboardStore = defineStore('dashboard', {
 
     async fetchAnalysisSummary() {
       try {
-        const response = await axios.get(`${API_BASE}/analysis_summary`)
+        const response = await axios.get(`${API_BASE}/analysis_summary`, {
+          params: { score_threshold: this.scoreThreshold }
+        })
         if (response.data.status !== 'success') return
         const summary = response.data.data
         this.analysisSummary = summary
@@ -93,8 +107,13 @@ export const useDashboardStore = defineStore('dashboard', {
         this.hackerGroup = summary.final.group
         this.finalEvidence = summary.final.evidence
         this.candidateRankings = summary.candidate_rankings
+        this.candidateScoring = summary.candidate_scoring || {}
+        this.candidateRankingsUpdatedAt = new Date().toISOString()
         if (!this.selectedCandidateLabel) {
           this.selectedCandidateLabel = summary.final.totem
+        }
+        if (!this.reviewCandidateLabel) {
+          this.reviewCandidateLabel = summary.final.totem
         }
         if (!this.selectedPersonId && this.hackerGroup.length) {
           this.selectPerson(this.hackerGroup[0])
@@ -107,6 +126,28 @@ export const useDashboardStore = defineStore('dashboard', {
 
     selectCandidate(label) {
       this.selectedCandidateLabel = label
+    },
+
+    async setReviewCandidate(label) {
+      this.reviewCandidateLabel = label
+      this.selectedCandidateLabel = label
+      this.selectedReviewContext = null
+      this.reviewQueueBatch = 1
+      await this.fetchReviewQueue()
+    },
+
+    async setReviewQueueMode(mode) {
+      this.reviewQueueMode = mode === 'all' ? 'all' : 'focused'
+      this.reviewQueueBatch = 1
+      this.selectedReviewContext = null
+      await this.fetchReviewQueue()
+    },
+
+    async setReviewQueueBatch(batch) {
+      const maxBatch = Number(this.reviewQueueMeta.max_batch || 1)
+      this.reviewQueueBatch = Math.max(1, Math.min(maxBatch, Number(batch)))
+      this.selectedReviewContext = null
+      await this.fetchReviewQueue()
     },
 
     async fetchHeatmapMatrix() {
@@ -177,15 +218,44 @@ export const useDashboardStore = defineStore('dashboard', {
 
     async fetchReviewQueue() {
       try {
-        const response = await axios.get(`${API_BASE}/review_queue`)
+        const response = await axios.get(`${API_BASE}/review_queue`, {
+          params: {
+            label: this.reviewCandidateLabel || this.selectedCandidateLabel || undefined,
+            score_threshold: this.scoreThreshold,
+            review_mode: this.reviewQueueMode,
+            batch: this.reviewQueueBatch,
+            search_limit_per_owner: 3
+          }
+        })
         if (response.data.status === 'success') {
           this.reviewQueue = response.data.data
-          if (!this.selectedReviewContext && this.reviewQueue.length) {
-            this.selectReviewTarget(this.reviewQueue[0])
+          this.reviewQueueMeta = response.data.meta || {}
+          this.reviewCandidateLabel = response.data.candidate_label || this.reviewCandidateLabel
+          if (
+            !this.selectedReviewContext
+            || !this.reviewQueue.some((item) => item.id === this.selectedReviewContext.id)
+          ) {
+            if (this.reviewQueue.length) this.selectReviewTarget(this.reviewQueue[0])
+            else this.selectedReviewContext = null
           }
         }
       } catch (error) {
         this.errorMessage = '无法获取人工复核队列'
+        console.error(this.errorMessage, error)
+      }
+    },
+
+    async fetchReviewPriorities() {
+      try {
+        const response = await axios.get(`${API_BASE}/review_priorities`)
+        if (response.data.status === 'success') {
+          this.reviewPriorities = response.data.data.people
+          this.reviewPrioritySummary = response.data.data.summary
+          this.reviewPriorityScoring = response.data.data.scoring
+          this.reviewPrioritiesUpdatedAt = new Date().toISOString()
+        }
+      } catch (error) {
+        this.errorMessage = '无法获取实时复核优先级'
         console.error(this.errorMessage, error)
       }
     },
@@ -200,7 +270,7 @@ export const useDashboardStore = defineStore('dashboard', {
         action = 'restore'
         newLabel = patch.humanLabel || item.predicted_label
       } else if (nextStatus === 'rejected') {
-        action = 'reject'
+        action = item.box_id === -1 && item.status !== 'added' ? 'dismiss' : 'reject'
       } else if (item.box_id === -1 || item.predicted_label === '未检出') {
         action = 'add'
       } else if (newLabel && newLabel !== item.predicted_label) {
@@ -221,6 +291,7 @@ export const useDashboardStore = defineStore('dashboard', {
         await Promise.all([
           this.fetchAnalysisSummary(),
           this.fetchReviewQueue(),
+          this.fetchReviewPriorities(),
           this.fetchHeatmapMatrix(),
           this.fetchMatrixSnapshots(),
           this.fetchModelEvaluation()
@@ -239,6 +310,7 @@ export const useDashboardStore = defineStore('dashboard', {
         this.fetchAnalysisSummary(),
         this.fetchModelEvaluation(),
         this.fetchReviewQueue(),
+        this.fetchReviewPriorities(),
         this.fetchMatrixSnapshots()
       ])
       await this.fetchHeatmapMatrix()

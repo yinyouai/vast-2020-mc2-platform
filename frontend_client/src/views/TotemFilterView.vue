@@ -13,8 +13,9 @@
         <b :class="{winner:selectedCandidate.label===store.activeTotem}">{{ selectedCandidate.label===store.activeTotem?'最终暗号':'对照候选' }}</b></div>
       <div class="candidate-metrics">
         <article><span>拥有者</span><b>{{ selectedCandidate.owner_count }} 人</b></article><article><span>最少出现</span><b>{{ selectedCandidate.min_occurrence }} 次</b></article>
-        <article><span>稳定率</span><b>{{ percent(selectedCandidate.stable_owner_ratio) }}</b></article><article><span>图片证据</span><b>{{ selectedCandidate.evidence_image_count }}</b></article>
-        <article><span>文本支持</span><b>{{ selectedCandidate.text_support_count }}</b></article><article><span>综合分</span><b>{{ selectedCandidate.score.toFixed(4) }}</b></article>
+        <article><span>稳定率</span><b>{{ percent(selectedCandidate.stable_owner_ratio) }}</b></article><article><span>人工核验图片</span><b>{{ selectedCandidate.verified_image_count }} 张</b></article>
+        <article><span>模型命中图片</span><b>{{ selectedCandidate.raw_detection_image_count }} 张</b></article><article><span>直接文本</span><b>{{ selectedCandidate.text_support_count }} 人 / {{ selectedCandidate.text_evidence_count }} 条</b></article>
+        <article><span>综合分</span><b>{{ selectedCandidate.score.toFixed(4) }}</b></article>
       </div>
       <div class="candidate-owners"><span v-for="person in selectedCandidate.owners" :key="person">{{ person }}</span></div>
     </section>
@@ -36,7 +37,7 @@ const excludeNonmatching=()=>store.setExcludedItems(store.candidateRankings.filt
 <style scoped>
 .totem-page{gap:22px}.totem-workspace{display:grid;grid-template-columns:minmax(300px,.62fr) minmax(0,1.38fr);gap:18px}.totem-secondary{display:grid;grid-template-columns:minmax(360px,.8fr) minmax(0,1.2fr);gap:18px}
 .candidate-inspector{display:grid;grid-template-columns:220px 1fr;gap:18px}.candidate-identity span,.candidate-identity strong{display:block}.candidate-identity span{color:var(--subtle);font-size:.7rem;font-weight:800}.candidate-identity strong{margin:7px 0;font-size:1.55rem}.candidate-identity>b{display:inline-flex;padding:6px 9px;border-radius:5px;color:var(--muted);background:#eef2f6;font-size:.7rem}.candidate-identity>b.winner{color:#8a5a0a;background:#fff4d9}
-.candidate-metrics{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}.candidate-metrics article{padding:10px;border:1px solid var(--border);border-radius:7px;background:#fafcff}.candidate-metrics span,.candidate-metrics b{display:block}.candidate-metrics span{color:var(--subtle);font-size:.68rem}.candidate-metrics b{margin-top:5px;font-size:.9rem;font-variant-numeric:tabular-nums}
+.candidate-metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}.candidate-metrics article{padding:10px;border:1px solid var(--border);border-radius:7px;background:#fafcff}.candidate-metrics span,.candidate-metrics b{display:block}.candidate-metrics span{color:var(--subtle);font-size:.68rem}.candidate-metrics b{margin-top:5px;font-size:.9rem;font-variant-numeric:tabular-nums}
 .candidate-owners{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px}.candidate-owners span{padding:6px 8px;border:1px solid var(--border);border-radius:5px;color:var(--muted);background:#fff;font-size:.72rem}
 @media(max-width:1050px){.totem-workspace,.totem-secondary{grid-template-columns:1fr}.candidate-inspector{grid-template-columns:1fr}.candidate-metrics{grid-template-columns:repeat(3,1fr)}}
 </style>
