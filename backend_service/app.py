@@ -41,7 +41,8 @@ def serve_images(filename):
 @app.route("/api/model_evaluation", methods=["GET"])
 def get_model_evaluation():
     try:
-        audit = build_analysis_engine().model_audit()
+        threshold = float(request.args.get("score_threshold", 0.45))
+        audit = build_analysis_engine().model_audit(threshold)
         return jsonify({
             "status": "success",
             "data": audit["confidence_statistics"],

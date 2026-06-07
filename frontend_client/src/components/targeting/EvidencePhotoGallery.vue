@@ -12,9 +12,15 @@
         </button>
       </nav>
       <div class="image-viewer">
-        <div class="primary-image"><img :src="`${STATIC_BASE}${activeImage}`" :alt="`${activeMember.person_id} ${store.activeTotem} 证据`" />
-          <span>{{ activeImageId }}</span></div>
-        <div class="thumbnail-strip">
+        <div v-if="activeImage" class="primary-image">
+          <img :src="`${STATIC_BASE}${activeImage}`" :alt="`${activeMember.person_id} ${store.activeTotem} 证据`" />
+          <span>{{ activeImageId }}</span>
+        </div>
+        <div v-else class="primary-image text-only-placeholder">
+          <span>📝 纯文本证据 / 无图</span>
+          <p>该成员（如 {{ activeMember.person_id }}）仅存在文字描述，或照片未找到有效实体。</p>
+        </div>
+        <div v-if="activeMember.image_paths.length > 0" class="thumbnail-strip">
           <button v-for="(path,index) in activeMember.image_paths" :key="path" :class="{active:path===activeImage}" @click="activeImage=path">
             <img :src="`${STATIC_BASE}${path}`" :alt="`${activeMember.image_ids[index]} 缩略图`" loading="lazy"/>
             <b :class="activeMember.raw_detection_images.includes(activeMember.image_ids[index])?'hit':'added'">
@@ -51,6 +57,8 @@ watch(activeMember,(member)=>{if(member&&!member.image_paths.includes(activeImag
 .section-kicker{color:var(--subtle);font-size:.7rem;font-weight:800}.visible-subtitle{display:block!important;margin:5px 0 0;color:var(--muted);font-size:.76rem}
 .evidence-browser{display:grid;grid-template-columns:210px minmax(0,1fr) 290px;gap:14px}.member-rail{display:grid;gap:6px;align-content:start;max-height:570px;overflow:auto}.member-rail button{display:grid;grid-template-columns:34px 1fr;align-items:center;gap:8px;min-height:58px;padding:7px;border:1px solid var(--border);border-radius:7px;color:inherit;text-align:left;background:#fafcff}.member-rail button.active{border-color:var(--accent);background:#edf5ff}.member-rail button>span{display:grid;place-items:center;width:34px;height:34px;border-radius:6px;color:var(--accent);background:#e7f0ff;font-weight:900}.member-rail strong,.member-rail small{display:block}.member-rail small{margin-top:3px;color:var(--muted);font-size:.68rem}
 .image-viewer{min-width:0}.primary-image{position:relative;display:grid;place-items:center;height:460px;overflow:hidden;border:1px solid var(--border);border-radius:8px;background:#edf1f5}.primary-image img{width:100%;height:100%;object-fit:contain}.primary-image>span{position:absolute;left:10px;bottom:10px;padding:5px 8px;border-radius:5px;color:#fff;background:rgba(23,50,77,.8);font-size:.7rem}
+.text-only-placeholder { display:flex; flex-direction:column; justify-content:center; align-items:center; color:var(--muted); text-align:center; padding: 2rem; }
+.text-only-placeholder span { position:static !important; background:none !important; color:var(--subtle) !important; font-size:1.5rem !important; margin-bottom:10px; }
 .thumbnail-strip{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;margin-top:8px}.thumbnail-strip button{position:relative;overflow:hidden;min-height:70px;padding:0;border:2px solid transparent;border-radius:6px;background:#eef2f6}.thumbnail-strip button.active{border-color:var(--accent)}.thumbnail-strip img{width:100%;height:70px;object-fit:cover}.thumbnail-strip b{position:absolute;right:3px;top:3px;padding:3px 5px;border-radius:4px;color:#fff;font-size:.62rem}.thumbnail-strip .hit{background:#24956f}.thumbnail-strip .added{background:#2f7df6}
 .member-inspector{display:grid;gap:10px;align-content:start}.member-title,.text-evidence,.detection-progress{padding:12px;border:1px solid var(--border);border-radius:7px;background:#fafcff}.member-title span,.member-title strong,.member-title small{display:block}.member-title span,.text-evidence>span{color:var(--subtle);font-size:.68rem;font-weight:800}.member-title strong{margin:6px 0;font-size:1.3rem}.member-title small{color:var(--muted)}
 .fact-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}.fact-grid article{padding:9px;border:1px solid var(--border);border-radius:6px;background:#fff}.fact-grid span,.fact-grid b{display:block}.fact-grid span{color:var(--subtle);font-size:.66rem}.fact-grid b{margin-top:4px;font-variant-numeric:tabular-nums}

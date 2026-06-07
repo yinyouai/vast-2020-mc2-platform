@@ -17,6 +17,10 @@
             </span>
             <span class="score">{{ item.score ? item.score.toFixed(3) : '—' }}</span>
           </button>
+          <div v-if="item.ai_reasoning || item.reason" class="card-reason">
+            <span v-if="item.ai_confidence !== undefined && item.ai_confidence !== null" class="ai-badge">AI置信度: {{ Math.round(item.ai_confidence * 100) }}%</span>
+            <span>{{ item.ai_reasoning || item.reason }}</span>
+          </div>
           <div class="card-actions">
             <button type="button" @click="$emit('select', item.id)">查看证据</button>
             <button v-if="item.status === 'confirmed'" type="button" class="danger"
@@ -93,6 +97,8 @@ const personNumber = (personId = '') => personId.replace('Person', '').padStart(
 .person-avatar { display:grid; place-items:center; width:36px; height:36px; border-radius:7px; color:var(--lane-color); background:var(--lane-soft); font-weight:900; }
 .card-copy { min-width:0; }.card-copy strong,.card-copy small,.card-copy em { display:block; }.card-copy small { margin-top:2px; color:var(--muted); font-size:.72rem; }.card-copy em { margin-top:5px; overflow:hidden; color:var(--subtle); font-size:.68rem; font-style:normal; text-overflow:ellipsis; white-space:nowrap; }
 .score { align-self:start; color:var(--muted); font-size:.7rem; font-variant-numeric:tabular-nums; }
+.card-reason { padding:0 9px 8px; font-size:.72rem; color:var(--subtle); line-height:1.3; }
+.ai-badge { display:inline-block; padding:2px 4px; border-radius:4px; background:#e0f2fe; color:#0284c7; margin-right:6px; font-weight:700; font-size:.65rem; }
 .card-actions { display:grid; grid-template-columns:1fr 1fr; gap:6px; padding:0 8px 8px; }.card-actions button { min-height:34px; padding:0 7px; border:1px solid var(--border); border-radius:6px; color:var(--text); background:#fff; font-size:.7rem; font-weight:700; }
 .card-actions .danger { color:#a94141; background:#fff7f7; }.card-actions .restore { color:#1d65c1; background:#f4f8ff; }.card-actions button:disabled { opacity:.48; cursor:wait; }
 .lane-empty { padding:28px 10px; color:var(--subtle); text-align:center; font-size:.78rem; }

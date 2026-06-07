@@ -392,7 +392,34 @@ class ForensicAnalysisEngine:
             })
         return curves
 
-    def model_audit(self):
+    def force_graph(self, threshold=0.45):
+        nodes = []
+        links = []
+        added_nodes = set()
+
+        for label in sorted({box["label"] for _, _, _, box in self._raw_boxes()}):
+            nodes.append({"id": label, "name": label, "category": 2, "symbolSize": 25})
+            added_nodes.add(label)
+
+        for person_id, person in self.master_data.items():
+            nodes.append({"id": person_id, "name": person_id, "category": 0, "symbolSize": 20})
+            added_nodes.add(person_id)
+            for image_id, image in person.get("images", {}).items():
+                labels_in_image = set()
+                for box in image.get("yolo_boxes", []):
+                    if box.get("label") != "unknown" and float(box.get("score", 0)) >= threshold:
+                        labels_in_image.add(box["label"])
+                
+                if labels_in_image:
+                    nodes.append({"id": image_id, "name": image_id, "category": 1, "symbolSize": 8})
+                    added_nodes.add(image_id)
+                    links.append({"source": person_id, "target": image_id})
+                    for label in labels_in_image:
+                        links.append({"source": image_id, "target": label})
+        
+        return {"nodes": nodes, "links": links}
+
+    def model_audit(self, threshold=0.45):
         raw_labels = sorted({box["label"] for _, _, _, box in self._raw_boxes()})
         missing = sorted(set(self.training_labels) - set(raw_labels))
         return {
@@ -406,6 +433,7 @@ class ForensicAnalysisEngine:
             "threshold_curve": self.threshold_curves(),
             "confidence_statistics": self.confidence_statistics(),
             "density_points": self.detection_density(),
+            "force_graph": self.force_graph(threshold),
         }
 
     def evidence_for(self, label, owners, threshold=0.45):
@@ -641,7 +669,11 @@ class ForensicAnalysisEngine:
                     "text_snippets": self._text_snippets(person_id, label),
                     "difficult": bool(person_node.get("difficult", False)),
                     "review_kind": "verified",
-                    "reason": "人工视觉复核确认；模型漏检时作为新增标签写入纠正层",
+                    "ai_confidence": person_node.get("ai_confidence"),
+                    "ai_source": person_node.get("source", ""),
+                    "ai_reasoning": person_node.get("ai_reasoning", ""),
+                    "human_reviewed": person_node.get("human_reviewed", True),
+                    "reason": person_node.get("ai_reasoning") or "人工视觉复核确认；模型漏检时作为新增标签写入纠正层",
                 })
                 queued_images.add((person_id, image_id))
 

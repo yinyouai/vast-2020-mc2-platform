@@ -45,6 +45,8 @@
       </div>
       <div ref="curveRef" class="threshold-chart"></div>
     </section>
+
+    <ForceDirectedGraph />
   </section>
 </template>
 
@@ -56,6 +58,7 @@ import { buildTooltip, chartPalette, splitLine } from '../utils/chartTheme'
 import ModelEvaluation from '../components/auditing/ModelEvaluation.vue'
 import LabelConfusionMatrix from '../components/auditing/LabelConfusionMatrix.vue'
 import DetectionDensityMap from '../components/auditing/DetectionDensityMap.vue'
+import ForceDirectedGraph from '../components/auditing/ForceDirectedGraph.vue'
 const store = useDashboardStore()
 const curveRef = ref(null)
 let chart
