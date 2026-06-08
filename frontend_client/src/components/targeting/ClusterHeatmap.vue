@@ -107,7 +107,7 @@ const render = () => {
     visualMap: {
       show: false,
       min: 0,
-      max: Math.max(1, ...store.heatmapMatrixData.map((item) => item.count)),
+      max: Math.min(8, Math.max(1, ...store.heatmapMatrixData.map((item) => item.count))),
       calculable: false,
       orient: 'horizontal',
       left: 'center',
