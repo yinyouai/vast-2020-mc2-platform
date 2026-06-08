@@ -101,6 +101,7 @@ const render = () => {
             ? chartPalette.accent
             : store.hackerGroup.includes(value) ? chartPalette.green : chartPalette.muted,
           fontWeight: (value) => value === store.selectedPersonId || store.hackerGroup.includes(value) ? 800 : 500,
+          interval: 0,
           fontSize: 10
         }
     },
