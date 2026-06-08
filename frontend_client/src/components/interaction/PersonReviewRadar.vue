@@ -5,11 +5,6 @@
         <div class="live-label"><i aria-hidden="true"></i>复核前筛选依据</div>
         <h4 id="review-radar-title">人工开始前，优先检查哪些 Person</h4>
         <p>只依据未经人工修正的模型输出排序，不使用已知误报、漏检或最终分组。默认选取异常分数前 25%，点击后由你完成实际判定。</p>
-      </div>
-      <div class="sync-copy" role="status">
-        <span>{{ updatedLabel }}</span>
-        <small>每 10 秒自动更新</small>
-      </div>
     </header>
 
     <div class="radar-summary">
