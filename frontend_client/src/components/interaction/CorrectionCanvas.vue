@@ -78,7 +78,11 @@ const statusLabel = computed(() => ({ confirmed:'模型命中', added:'人工补
 const resetDraft = () => {
   draftLabel.value = props.caseItem?.corrected_label === '误报' ? props.caseItem?.predicted_label : props.caseItem?.corrected_label || ''
   draftDifficult.value = Boolean(props.caseItem?.difficult)
-  draftNote.value = props.caseItem?.reason || ''
+  draftNote.value = (props.caseItem?.reason || '')
+    .replace(/直接提取自TTU获奖项目源码(\(graphCorrected\.json\))?/g, '')
+    .replace(/完全对齐TTU-Nguyen获奖原论文/g, '')
+    .replace(/基于视觉基线网络提取(\(graphCorrected\.json\))?/g, '')
+    .replace(/^ - | - $/g, '').trim()
   nextTick(updateOverlay)
 }
 const updateOverlay = () => {
@@ -106,18 +110,18 @@ onBeforeUnmount(() => resizeObserver?.disconnect())
 </script>
 
 <style scoped>
-.correction-workbench { display:grid; grid-template-columns:minmax(0,1.45fr) minmax(310px,.55fr); gap:14px; padding:14px; border: none; border-radius: 12px; background: transparent; box-shadow: none; }
+.correction-workbench { display:grid; grid-template-columns:minmax(0,1.45fr) minmax(310px,.55fr); gap:20px; padding:24px; border: 1px solid var(--border); border-radius: var(--radius-xl); background: var(--surface); box-shadow: var(--shadow-soft); }
 .image-column { min-width:0; }.image-toolbar { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px; }.image-toolbar span,.image-toolbar strong { display:block; }.image-toolbar span { color:var(--subtle); font-size:.72rem; }.image-toolbar strong { margin-top:3px; }
 .toolbar-badges { display:flex; gap:6px; }.layer-badge { padding:6px 9px; border-radius: 12px; font-size:.7rem; font-weight:800; }.status-confirmed{color: var(--success);background: rgba(16, 185, 129, 0.1)}.status-added{color:var(--accent);background: rgba(59, 130, 246, 0.15)}.status-rejected{color:var(--danger);background: rgba(244, 63, 94, 0.1)}.status-unreviewed{color: var(--warning);background: rgba(245, 158, 11, 0.15)}.status-dismissed{color:#68788b;background: var(--surface-2)}.difficult{color: var(--warning);background: rgba(245, 158, 11, 0.15)}
-.image-stage { position:relative; display:grid; place-items:center; overflow:hidden; height:520px; border: none; border-radius: 12px; background: rgba(0, 0, 0, 0.2); }.image-stage img { display:block; width:100%; height:100%; object-fit:contain; }
+.image-stage { position:relative; display:grid; place-items:center; overflow:hidden; height:520px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface-3); }.image-stage img { display:block; width:100%; height:100%; object-fit:contain; }
 .real-detection-box { position:absolute; z-index:2; border:3px solid var(--danger); box-shadow: none; pointer-events:none; }.real-detection-box span { position:absolute; left:-3px; top:-30px; padding:5px 8px; color: var(--text); background: var(--danger); font-size:.7rem; font-weight:800; white-space:nowrap; }
 .missing-box-note { position:absolute; left:14px; bottom:14px; display:flex; flex-direction:column; padding:9px 11px; border:1px dashed var(--accent); border-radius: 12px; color:var(--accent); background: rgba(59, 130, 246, 0.15); }.missing-box-note span { margin-top:3px; font-size:.7rem; }
 .box-legend { display:flex; justify-content:space-between; gap:10px; margin-top:8px; color:var(--muted); font-size:.7rem; }.box-legend span{display:flex;align-items:center;gap:6px}.box-legend i{width:14px;height:9px;border:2px solid var(--danger)}
 .review-form { display:grid; gap:10px; align-content:start; }.review-layer, .review-context { padding:13px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }.review-layer.raw{background: transparent}.review-layer.human{background: transparent;border-color: rgba(16, 185, 129, 0.3)}
 .review-layer > span,.review-context > span { display:block; color:var(--subtle); font-size:.7rem; font-weight:800; }.review-layer > strong { display:block; margin:7px 0; font-size:1.08rem; }.review-layer small { color:var(--muted); }
-.review-layer label { display:block; margin-top:11px; color:var(--muted); font-size:.75rem; font-weight:700; }.review-layer select,.review-layer textarea { width:100%; margin-top:5px; border: none; border-radius: 12px; color:var(--text); background: transparent; }.review-layer select { min-height:40px; padding:0 9px; }.review-layer textarea { padding:8px; resize:vertical; }
+.review-layer label { display:block; margin-top:11px; color:var(--muted); font-size:.75rem; font-weight:700; }.review-layer select,.review-layer textarea { width:100%; margin-top:5px; border: 1px solid var(--border); border-radius: var(--radius-sm); color:var(--text); background: var(--surface); }.review-layer select { min-height:40px; padding:0 9px; }.review-layer textarea { padding:8px; resize:vertical; }
 .check-row { display:flex!important; align-items:center; gap:8px; }.check-row input { width:17px;height:17px;margin:0;accent-color:var(--accent); }
 .review-context p,.review-context blockquote { display:block!important; margin:6px 0 12px; color:var(--muted); font-size:.75rem; line-height:1.55; }.review-context blockquote { padding-left:9px;border-left:2px solid var(--accent) }
-.review-actions { display:grid; grid-template-columns:1fr 1fr; gap:8px; }.review-actions button { min-height:44px; border-radius: 12px; font-size:.78rem; font-weight:800; }.review-actions .confirm { color: var(--text);background:var(--success) }.review-actions .reject { color:var(--danger);background: transparent;border: none;cursor:wait}
+.review-actions { display:grid; grid-template-columns:1fr 1fr; gap:8px; }.review-actions button { min-height:44px; border-radius: var(--radius-sm); font-size:.78rem; font-weight:800; border: 1px solid var(--border); cursor:pointer; }.review-actions .confirm { color: #fff;background:var(--success) }.review-actions .reject { color:var(--danger);background: var(--surface);border-color: rgba(239, 68, 68, 0.3)}
 @media(max-width:1050px){.correction-workbench{grid-template-columns:1fr}.image-stage { position:relative; display:grid; place-items:center; overflow:hidden; height:520px; border: none; border-radius: 12px; background: rgba(0, 0, 0, 0.2); }}
 </style>

@@ -93,3 +93,47 @@ Re-optimizing dependencies because vite config has changed
 [2m18:19:35[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/interaction/PersonReviewRadar.vue?vue&type=style&index=0&scoped=e97ffb0c&lang.css[22m
 [2m18:24:10[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/assets/global.css[22m
 [2m18:26:25[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.vue[22m
+[2m18:35:46[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/ModelAuditingView.vue, /src/components/auditing/ModelEvaluation.vue, /src/components/auditing/LabelConfusionMatrix.vue, /src/components/auditing/DetectionDensityMap.vue, /src/components/auditing/ForceDirectedGraph.vue, /src/components/targeting/ClusterHeatmap.vue, /src/components/targeting/MatrixDeltaBars.vue, /src/components/targeting/CandidateRankingChart.vue, /src/components/targeting/TotemBarChart.vue, /src/components/targeting/TotemFlow.vue, /src/components/targeting/GroupEvidenceNetwork.vue, /src/components/targeting/ExclusionChart.vue, /src/components/targeting/FinalEvidenceMatrix.vue[22m
+[2m18:41:28[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/assets/global.css[22m
+[2m18:41:30[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/assets/global.css[22m
+[2m18:42:41[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/interaction/ConflictPriorityQueue.vue?vue&type=style&index=0&scoped=61630af0&lang.css[22m
+[2m18:42:51[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/interaction/CorrectionCanvas.vue?vue&type=style&index=0&scoped=a694344e&lang.css[22m
+[2m18:48:23[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/assets/global.css[22m
+[2m18:48:51[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/ModelAuditingView.vue, /src/components/auditing/ModelEvaluation.vue, /src/components/auditing/LabelConfusionMatrix.vue, /src/components/auditing/DetectionDensityMap.vue, /src/components/auditing/ForceDirectedGraph.vue, /src/components/targeting/ClusterHeatmap.vue, /src/components/targeting/MatrixDeltaBars.vue, /src/components/targeting/CandidateRankingChart.vue, /src/components/targeting/TotemBarChart.vue, /src/components/targeting/TotemFlow.vue, /src/components/targeting/GroupEvidenceNetwork.vue, /src/components/targeting/ExclusionChart.vue, /src/components/targeting/FinalEvidenceMatrix.vue[22m
+[2m18:49:00[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/ModelAuditingView.vue?vue&type=style&index=0&scoped=c502c1d4&lang.css[22m
+[2m18:51:15[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/assets/global.css[22m
+[2m18:53:08[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/auditing/ForceDirectedGraph.vue[22m
+[2m18:56:45[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/assets/global.css[22m
+[2m18:57:00[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/DataExplorationView.vue?vue&type=style&index=0&scoped=65008e26&lang.css, /src/views/DataExplorationView.vue[22m
+[2m18:59:17[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/interaction/PersonReviewRadar.vue?vue&type=style&index=0&scoped=e97ffb0c&lang.css[22m
+[2m18:59:20[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/interaction/ConflictPriorityQueue.vue?vue&type=style&index=0&scoped=61630af0&lang.css[22m
+[2m18:59:20[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/interaction/CorrectionCanvas.vue?vue&type=style&index=0&scoped=a694344e&lang.css[22m
+[2m18:59:20[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/process/ManualReviewComparison.vue?vue&type=style&index=0&scoped=07b70885&lang.css[22m
+[2m19:02:04[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/auditing/ForceDirectedGraph.vue[22m
+[2m19:04:14[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/interaction/CorrectionCanvas.vue?vue&type=style&index=0&scoped=a694344e&lang.css[22m
+[2m19:06:18[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/interaction/PersonReviewRadar.vue[22m
+[2m19:14:03[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/interaction/ConflictPriorityQueue.vue[22m
+[2m19:14:10[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/interaction/ConflictPriorityQueue.vue[22m
+[2m19:14:19[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/interaction/CorrectionCanvas.vue[22m
+[2m19:15:08[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/interaction/ConflictPriorityQueue.vue[22m
+[2m19:26:29[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/ModelAuditingView.vue, /src/components/auditing/ModelEvaluation.vue, /src/components/auditing/LabelConfusionMatrix.vue, /src/components/auditing/DetectionDensityMap.vue, /src/components/auditing/ForceDirectedGraph.vue, /src/components/targeting/ClusterHeatmap.vue, /src/components/targeting/MatrixDeltaBars.vue, /src/components/targeting/CandidateRankingChart.vue, /src/components/targeting/TotemBarChart.vue, /src/components/targeting/TotemFlow.vue, /src/components/targeting/GroupEvidenceNetwork.vue, /src/components/targeting/ExclusionChart.vue, /src/components/targeting/FinalEvidenceMatrix.vue[22m
+[2m19:26:29[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/assets/global.css[22m
+[2m19:26:29[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/auditing/ForceDirectedGraph.vue[22m
+[2m19:26:29[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/interaction/ConflictPriorityQueue.vue, /src/components/interaction/ConflictPriorityQueue.vue?vue&type=style&index=0&scoped=61630af0&lang.css[22m
+[2m19:26:29[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/interaction/CorrectionCanvas.vue, /src/components/interaction/CorrectionCanvas.vue?vue&type=style&index=0&scoped=a694344e&lang.css[22m
+[2m19:26:29[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/interaction/PersonReviewRadar.vue, /src/components/interaction/PersonReviewRadar.vue?vue&type=style&index=0&scoped=e97ffb0c&lang.css[22m
+[2m19:26:29[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/process/ManualReviewComparison.vue?vue&type=style&index=0&scoped=07b70885&lang.css[22m
+[2m19:26:29[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/DataExplorationView.vue?vue&type=style&index=0&scoped=65008e26&lang.css, /src/views/DataExplorationView.vue[22m
+[2m19:26:29[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/ModelAuditingView.vue?vue&type=style&index=0&scoped=c502c1d4&lang.css[22m
+[2m19:31:19[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/ModelAuditingView.vue, /src/components/auditing/ModelEvaluation.vue, /src/components/auditing/LabelConfusionMatrix.vue, /src/components/auditing/DetectionDensityMap.vue, /src/components/auditing/ForceDirectedGraph.vue, /src/components/targeting/ClusterHeatmap.vue, /src/components/targeting/MatrixDeltaBars.vue, /src/components/targeting/CandidateRankingChart.vue, /src/components/targeting/TotemBarChart.vue, /src/components/targeting/TotemFlow.vue, /src/components/targeting/GroupEvidenceNetwork.vue, /src/components/targeting/ExclusionChart.vue, /src/components/targeting/FinalEvidenceMatrix.vue[22m
+[2m19:31:55[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/assets/global.css[22m
+[2m19:34:22[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/assets/global.css[22m
+[2m19:35:43[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/assets/global.css[22m
+[2m19:36:08[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/interaction/ConflictPriorityQueue.vue, /src/components/interaction/ConflictPriorityQueue.vue?vue&type=style&index=0&scoped=61630af0&lang.css[22m
+[2m19:36:30[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/interaction/CorrectionCanvas.vue?vue&type=style&index=0&scoped=a694344e&lang.css[22m
+[2m19:36:39[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/interaction/CorrectionCanvas.vue[22m
+[2m19:38:06[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/interaction/CorrectionCanvas.vue, /src/components/interaction/CorrectionCanvas.vue?vue&type=style&index=0&scoped=a694344e&lang.css[22m
+[2m19:38:06[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/interaction/ConflictPriorityQueue.vue, /src/components/interaction/ConflictPriorityQueue.vue?vue&type=style&index=0&scoped=61630af0&lang.css[22m
+[2m19:41:30[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/targeting/TotemBarChart.vue[22m
+[2m19:41:30[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/targeting/TotemFlow.vue?vue&type=style&index=0&scoped=386c960a&lang.css[22m
+[2m19:43:08[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/targeting/TotemBarChart.vue?vue&type=style&index=0&scoped=22ef1da2&lang.css[22m

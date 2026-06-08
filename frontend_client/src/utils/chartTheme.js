@@ -1,22 +1,23 @@
+
 export const chartPalette = {
-  text: '#e0e6ed',
-  muted: '#94a3b8',
-  subtle: '#64748b',
-  line: 'rgba(100, 149, 237, 0.15)',
-  lineStrong: 'rgba(100, 149, 237, 0.3)',
-  accent: '#3b82f6',
-  accentSoft: 'rgba(59, 130, 246, 0.15)',
-  cyan: '#06b6d4',
-  gold: '#f59e0b',
-  red: '#f43f5e',
-  green: '#10b981',
-  panel: 'rgba(13, 22, 43, 0.85)',
-  panelEdge: 'rgba(100, 149, 237, 0.2)'
+  text: '#111827',
+  muted: '#6b7280',
+  subtle: '#9ca3af',
+  line: '#e5e7eb',
+  lineStrong: '#d1d5db',
+  accent: '#2563eb',
+  accentSoft: 'rgba(37, 99, 235, 0.15)',
+  cyan: '#0891b2',
+  gold: '#d97706',
+  red: '#dc2626',
+  green: '#059669',
+  panel: '#ffffff',
+  panelEdge: '#e5e7eb'
 }
 
 export const animationTiming = {
-  duration: 900,
-  delay: (index = 0) => Math.min(index * 40, 320),
+  duration: 800,
+  delay: (index = 0) => Math.min(index * 30, 300),
   easing: 'cubicOut'
 }
 
@@ -31,7 +32,7 @@ export const buildTooltip = (formatter) => ({
     fontSize: 12,
     lineHeight: 18
   },
-  extraCssText: 'box-shadow: 0 18px 42px rgba(48,78,114,0.18); border-radius: 8px;',
+  extraCssText: 'box-shadow: 0 4px 16px rgba(0,0,0,0.08); border-radius: 8px;',
   formatter
 })
 

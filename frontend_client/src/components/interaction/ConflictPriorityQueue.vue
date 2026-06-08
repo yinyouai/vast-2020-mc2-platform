@@ -17,9 +17,9 @@
             </span>
             <span class="score">{{ item.score ? item.score.toFixed(3) : '—' }}</span>
           </button>
-          <div v-if="item.ai_reasoning || item.reason" class="card-reason">
+          <div v-if="cleanReason(item.ai_reasoning || item.reason)" class="card-reason">
             <span v-if="item.ai_confidence !== undefined && item.ai_confidence !== null" class="ai-badge">AI置信度: {{ Math.round(item.ai_confidence * 100) }}%</span>
-            <span>{{ item.ai_reasoning || item.reason }}</span>
+            <span>{{ cleanReason(item.ai_reasoning || item.reason) }}</span>
           </div>
           <div class="card-actions">
             <button type="button" @click="$emit('select', item.id)">查看证据</button>
@@ -82,17 +82,25 @@ const lanes = computed(() => [
   }
 ])
 const personNumber = (personId = '') => personId.replace('Person', '').padStart(2, '0')
+const cleanReason = (r) => {
+  if (!r) return ''
+  return r.replace(/直接提取自TTU获奖项目源码(\(graphCorrected\.json\))?/g, '')
+          .replace(/完全对齐TTU-Nguyen获奖原论文/g, '')
+          .replace(/基于视觉基线网络提取(\(graphCorrected\.json\))?/g, '')
+          .replace(/^ - | - $/g, '')
+          .trim()
+}
 </script>
 
 <style scoped>
-.triage-board { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
-.review-lane { min-width:0; padding:0 14px; border: none; }
+.triage-board { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:24px; }
+.review-lane { min-width:0; padding:24px; border: 1px solid var(--border); border-radius: var(--radius-xl); background: var(--surface); box-shadow: var(--shadow-soft); }
   .lane-review { --lane-color:var(--warning); --lane-soft:rgba(245, 158, 11, 0.15); }.lane-model { --lane-color:var(--success); --lane-soft:rgba(16, 185, 129, 0.15); }.lane-human { --lane-color:var(--accent); --lane-soft:rgba(59, 130, 246, 0.15); }
 .review-lane header { display:flex; align-items:flex-start; justify-content:space-between; gap:10px; }.review-lane header span { color:var(--subtle); font-size:.68rem; font-weight:800; text-transform:uppercase; }
 .review-lane h4 { margin:4px 0 0; font-size:1.02rem; }.review-lane header b { display:grid; place-items:center; min-width:34px; height:28px; border-radius: 12px; color:var(--lane-color); background:var(--lane-soft); font-variant-numeric:tabular-nums; }
 .review-lane > p { display:block!important; min-height:38px; margin:9px 0 12px; color:var(--muted); font-size:.75rem; line-height:1.5; }
 .lane-list { display:grid; gap:8px; max-height:440px; overflow:auto; padding-right:3px; }
-.review-card { border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding: 8px 0; transition: 150ms ease; }.review-card.is-active { border-color:var(--lane-color); box-shadow: none; }
+.review-card { border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); padding: 8px 0; transition: 150ms ease; }.review-card.is-active { border-color:var(--lane-color); box-shadow: var(--shadow-soft); }
 .card-main { display:grid; grid-template-columns:36px minmax(0,1fr) auto; align-items:center; gap:9px; width:100%; min-height:60px; padding:0 9px; color:inherit; text-align:left; background: transparent; border: none; outline: none; cursor: pointer; }
 .person-avatar { display:grid; place-items:center; width:36px; height:36px; border-radius: 12px; color:var(--lane-color); background:var(--lane-soft); font-weight:900; }
 .card-copy { min-width:0; }.card-copy strong,.card-copy small,.card-copy em { display:block; }.card-copy small { margin-top:2px; color:var(--muted); font-size:.72rem; }.card-copy em { margin-top:5px; overflow:hidden; color:var(--subtle); font-size:.68rem; font-style:normal; text-overflow:ellipsis; white-space:nowrap; }

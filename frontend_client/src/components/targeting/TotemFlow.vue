@@ -29,5 +29,5 @@ const render=()=>{if(!chartRef.value)return;if(!chart)chart=echarts.init(chartRe
 watch(()=>[store.candidateRankings,store.excludedItems],render,{deep:true});onMounted(()=>{render();window.addEventListener('resize',render)});onBeforeUnmount(()=>{window.removeEventListener('resize',render);chart?.dispose()})
 </script>
 <style scoped>
-.section-kicker{color:var(--subtle);font-size:.7rem;font-weight:800}.visible-subtitle{display:block!important;margin:5px 0 0;color:var(--muted);font-size:.76rem}.flow-stats{text-align:right}.flow-stats b,.flow-stats span{display:block}.flow-stats b{font-size:1.4rem;color:var(--accent)}.flow-stats span{color:var(--muted);font-size:.7rem}.flow-chart{min-height:390px}
+.section-kicker{color:var(--subtle);font-size:.7rem;font-weight:800}.visible-subtitle{display:block!important;margin:5px 0 0;color:var(--muted);font-size:.76rem}.flow-stats{text-align:right}.flow-stats b,.flow-stats span{display:block}.flow-stats b{font-size:1.4rem;color:var(--accent)}.flow-stats span{color:var(--muted);font-size:.7rem}.flow-chart{height:750px}
 </style>

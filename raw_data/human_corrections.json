@@ -22,7 +22,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - noisemaker",
+          "ai_reasoning": "基于视觉基线网络提取 - noisemaker",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -38,7 +38,7 @@
           "occurrence_count": 6,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - noisemaker",
+          "ai_reasoning": "基于视觉基线网络提取 - noisemaker",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -50,7 +50,7 @@
           "occurrence_count": 2,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - noisemaker",
+          "ai_reasoning": "基于视觉基线网络提取 - noisemaker",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -66,7 +66,7 @@
           "occurrence_count": 6,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - noisemaker",
+          "ai_reasoning": "基于视觉基线网络提取 - noisemaker",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -80,7 +80,7 @@
           "occurrence_count": 4,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - noisemaker",
+          "ai_reasoning": "基于视觉基线网络提取 - noisemaker",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -94,7 +94,7 @@
           "occurrence_count": 4,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - noisemaker",
+          "ai_reasoning": "基于视觉基线网络提取 - noisemaker",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -105,7 +105,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - noisemaker",
+          "ai_reasoning": "基于视觉基线网络提取 - noisemaker",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -121,7 +121,7 @@
           "occurrence_count": 6,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - noisemaker",
+          "ai_reasoning": "基于视觉基线网络提取 - noisemaker",
           "ai_confidence": 1.0,
           "difficult": false
         }
@@ -138,7 +138,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - rainbowPens",
+          "ai_reasoning": "基于视觉基线网络提取 - rainbowPens",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -159,7 +159,7 @@
           "occurrence_count": 11,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - rainbowPens",
+          "ai_reasoning": "基于视觉基线网络提取 - rainbowPens",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -176,7 +176,7 @@
           "occurrence_count": 7,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - rainbowPens",
+          "ai_reasoning": "基于视觉基线网络提取 - rainbowPens",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -211,7 +211,7 @@
           "occurrence_count": 25,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - rainbowPens",
+          "ai_reasoning": "基于视觉基线网络提取 - rainbowPens",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -238,7 +238,7 @@
           "occurrence_count": 17,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - rainbowPens",
+          "ai_reasoning": "基于视觉基线网络提取 - rainbowPens",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -264,7 +264,7 @@
           "occurrence_count": 16,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - rainbowPens",
+          "ai_reasoning": "基于视觉基线网络提取 - rainbowPens",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -277,7 +277,7 @@
           "occurrence_count": 3,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - rainbowPens",
+          "ai_reasoning": "基于视觉基线网络提取 - rainbowPens",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -293,7 +293,7 @@
           "occurrence_count": 6,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - rainbowPens",
+          "ai_reasoning": "基于视觉基线网络提取 - rainbowPens",
           "ai_confidence": 1.0,
           "difficult": false
         }
@@ -310,7 +310,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - miniCards",
+          "ai_reasoning": "基于视觉基线网络提取 - miniCards",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -325,7 +325,7 @@
           "occurrence_count": 5,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - miniCards",
+          "ai_reasoning": "基于视觉基线网络提取 - miniCards",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -336,7 +336,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - miniCards",
+          "ai_reasoning": "基于视觉基线网络提取 - miniCards",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -353,7 +353,7 @@
           "occurrence_count": 7,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - miniCards",
+          "ai_reasoning": "基于视觉基线网络提取 - miniCards",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -376,7 +376,7 @@
           "occurrence_count": 13,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - miniCards",
+          "ai_reasoning": "基于视觉基线网络提取 - miniCards",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -390,7 +390,7 @@
           "occurrence_count": 4,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - miniCards",
+          "ai_reasoning": "基于视觉基线网络提取 - miniCards",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -409,7 +409,7 @@
           "occurrence_count": 9,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - miniCards",
+          "ai_reasoning": "基于视觉基线网络提取 - miniCards",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -425,7 +425,7 @@
           "occurrence_count": 6,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - miniCards",
+          "ai_reasoning": "基于视觉基线网络提取 - miniCards",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -444,7 +444,7 @@
           "occurrence_count": 9,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - miniCards",
+          "ai_reasoning": "基于视觉基线网络提取 - miniCards",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -457,7 +457,7 @@
           "occurrence_count": 3,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - miniCards",
+          "ai_reasoning": "基于视觉基线网络提取 - miniCards",
           "ai_confidence": 1.0,
           "difficult": false
         }
@@ -474,7 +474,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - yellowBalloon",
+          "ai_reasoning": "基于视觉基线网络提取 - yellowBalloon",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -488,7 +488,7 @@
           "occurrence_count": 4,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - yellowBalloon",
+          "ai_reasoning": "基于视觉基线网络提取 - yellowBalloon",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -507,7 +507,7 @@
           "occurrence_count": 9,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - yellowBalloon",
+          "ai_reasoning": "基于视觉基线网络提取 - yellowBalloon",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -521,7 +521,7 @@
           "occurrence_count": 4,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - yellowBalloon",
+          "ai_reasoning": "基于视觉基线网络提取 - yellowBalloon",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -536,7 +536,7 @@
           "occurrence_count": 5,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - yellowBalloon",
+          "ai_reasoning": "基于视觉基线网络提取 - yellowBalloon",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -550,7 +550,7 @@
           "occurrence_count": 4,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - yellowBalloon",
+          "ai_reasoning": "基于视觉基线网络提取 - yellowBalloon",
           "ai_confidence": 1.0,
           "difficult": false
         }
@@ -568,7 +568,7 @@
           "occurrence_count": 2,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - trophy",
+          "ai_reasoning": "基于视觉基线网络提取 - trophy",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -584,7 +584,7 @@
           "occurrence_count": 6,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - trophy",
+          "ai_reasoning": "基于视觉基线网络提取 - trophy",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -595,7 +595,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - trophy",
+          "ai_reasoning": "基于视觉基线网络提取 - trophy",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -608,7 +608,7 @@
           "occurrence_count": 3,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - trophy",
+          "ai_reasoning": "基于视觉基线网络提取 - trophy",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -623,7 +623,7 @@
           "occurrence_count": 5,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - trophy",
+          "ai_reasoning": "基于视觉基线网络提取 - trophy",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -636,7 +636,7 @@
           "occurrence_count": 3,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - trophy",
+          "ai_reasoning": "基于视觉基线网络提取 - trophy",
           "ai_confidence": 1.0,
           "difficult": false
         }
@@ -653,7 +653,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - vancouverCards",
+          "ai_reasoning": "基于视觉基线网络提取 - vancouverCards",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -664,7 +664,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - vancouverCards",
+          "ai_reasoning": "基于视觉基线网络提取 - vancouverCards",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -675,7 +675,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - vancouverCards",
+          "ai_reasoning": "基于视觉基线网络提取 - vancouverCards",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -688,7 +688,7 @@
           "occurrence_count": 3,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - vancouverCards",
+          "ai_reasoning": "基于视觉基线网络提取 - vancouverCards",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -699,7 +699,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - vancouverCards",
+          "ai_reasoning": "基于视觉基线网络提取 - vancouverCards",
           "ai_confidence": 1.0,
           "difficult": false
         }
@@ -716,7 +716,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - pinkEraser",
+          "ai_reasoning": "基于视觉基线网络提取 - pinkEraser",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -739,7 +739,7 @@
           "occurrence_count": 13,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - pinkEraser",
+          "ai_reasoning": "基于视觉基线网络提取 - pinkEraser",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -751,7 +751,7 @@
           "occurrence_count": 2,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - pinkEraser",
+          "ai_reasoning": "基于视觉基线网络提取 - pinkEraser",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -763,7 +763,7 @@
           "occurrence_count": 2,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - pinkEraser",
+          "ai_reasoning": "基于视觉基线网络提取 - pinkEraser",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -775,7 +775,7 @@
           "occurrence_count": 2,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - pinkEraser",
+          "ai_reasoning": "基于视觉基线网络提取 - pinkEraser",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -790,7 +790,7 @@
           "occurrence_count": 5,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - pinkEraser",
+          "ai_reasoning": "基于视觉基线网络提取 - pinkEraser",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -801,7 +801,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - pinkEraser",
+          "ai_reasoning": "基于视觉基线网络提取 - pinkEraser",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -812,7 +812,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - pinkEraser",
+          "ai_reasoning": "基于视觉基线网络提取 - pinkEraser",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -825,7 +825,7 @@
           "occurrence_count": 3,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - pinkEraser",
+          "ai_reasoning": "基于视觉基线网络提取 - pinkEraser",
           "ai_confidence": 1.0,
           "difficult": false
         }
@@ -848,7 +848,7 @@
           "occurrence_count": 7,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - metalKey",
+          "ai_reasoning": "基于视觉基线网络提取 - metalKey",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -859,7 +859,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - metalKey",
+          "ai_reasoning": "基于视觉基线网络提取 - metalKey",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -872,7 +872,7 @@
           "occurrence_count": 3,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - metalKey",
+          "ai_reasoning": "基于视觉基线网络提取 - metalKey",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -883,7 +883,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - metalKey",
+          "ai_reasoning": "基于视觉基线网络提取 - metalKey",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -895,7 +895,7 @@
           "occurrence_count": 2,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - metalKey",
+          "ai_reasoning": "基于视觉基线网络提取 - metalKey",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -910,7 +910,7 @@
           "occurrence_count": 5,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - metalKey",
+          "ai_reasoning": "基于视觉基线网络提取 - metalKey",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -934,7 +934,7 @@
           "occurrence_count": 14,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - metalKey",
+          "ai_reasoning": "基于视觉基线网络提取 - metalKey",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -953,7 +953,7 @@
           "occurrence_count": 9,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - metalKey",
+          "ai_reasoning": "基于视觉基线网络提取 - metalKey",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -964,7 +964,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - metalKey",
+          "ai_reasoning": "基于视觉基线网络提取 - metalKey",
           "ai_confidence": 1.0,
           "difficult": false
         }
@@ -989,7 +989,7 @@
           "occurrence_count": 9,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - blueSunglasses",
+          "ai_reasoning": "基于视觉基线网络提取 - blueSunglasses",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1003,7 +1003,7 @@
           "occurrence_count": 4,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - blueSunglasses",
+          "ai_reasoning": "基于视觉基线网络提取 - blueSunglasses",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1023,7 +1023,7 @@
           "occurrence_count": 10,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - blueSunglasses",
+          "ai_reasoning": "基于视觉基线网络提取 - blueSunglasses",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1047,7 +1047,7 @@
           "occurrence_count": 14,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - blueSunglasses",
+          "ai_reasoning": "基于视觉基线网络提取 - blueSunglasses",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1061,7 +1061,7 @@
           "occurrence_count": 4,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - blueSunglasses",
+          "ai_reasoning": "基于视觉基线网络提取 - blueSunglasses",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1074,7 +1074,7 @@
           "occurrence_count": 3,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - blueSunglasses",
+          "ai_reasoning": "基于视觉基线网络提取 - blueSunglasses",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1088,7 +1088,7 @@
           "occurrence_count": 4,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - blueSunglasses",
+          "ai_reasoning": "基于视觉基线网络提取 - blueSunglasses",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1102,7 +1102,7 @@
           "occurrence_count": 4,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - blueSunglasses",
+          "ai_reasoning": "基于视觉基线网络提取 - blueSunglasses",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1114,7 +1114,7 @@
           "occurrence_count": 2,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - blueSunglasses",
+          "ai_reasoning": "基于视觉基线网络提取 - blueSunglasses",
           "ai_confidence": 1.0,
           "difficult": false
         }
@@ -1137,7 +1137,7 @@
           "occurrence_count": 7,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - brownDie",
+          "ai_reasoning": "基于视觉基线网络提取 - brownDie",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1151,7 +1151,7 @@
           "occurrence_count": 4,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - brownDie",
+          "ai_reasoning": "基于视觉基线网络提取 - brownDie",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1178,7 +1178,7 @@
           "occurrence_count": 17,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - brownDie",
+          "ai_reasoning": "基于视觉基线网络提取 - brownDie",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1191,7 +1191,7 @@
           "occurrence_count": 3,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - brownDie",
+          "ai_reasoning": "基于视觉基线网络提取 - brownDie",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1213,7 +1213,7 @@
           "occurrence_count": 12,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - brownDie",
+          "ai_reasoning": "基于视觉基线网络提取 - brownDie",
           "ai_confidence": 1.0,
           "difficult": false
         }
@@ -1234,7 +1234,7 @@
           "occurrence_count": 5,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - lavenderDie",
+          "ai_reasoning": "基于视觉基线网络提取 - lavenderDie",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1245,7 +1245,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - lavenderDie",
+          "ai_reasoning": "基于视觉基线网络提取 - lavenderDie",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1261,7 +1261,7 @@
           "occurrence_count": 6,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - lavenderDie",
+          "ai_reasoning": "基于视觉基线网络提取 - lavenderDie",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1280,7 +1280,7 @@
           "occurrence_count": 9,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - lavenderDie",
+          "ai_reasoning": "基于视觉基线网络提取 - lavenderDie",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1291,7 +1291,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - lavenderDie",
+          "ai_reasoning": "基于视觉基线网络提取 - lavenderDie",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1304,7 +1304,7 @@
           "occurrence_count": 3,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - lavenderDie",
+          "ai_reasoning": "基于视觉基线网络提取 - lavenderDie",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1315,7 +1315,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - lavenderDie",
+          "ai_reasoning": "基于视觉基线网络提取 - lavenderDie",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1328,7 +1328,7 @@
           "occurrence_count": 3,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - lavenderDie",
+          "ai_reasoning": "基于视觉基线网络提取 - lavenderDie",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1339,7 +1339,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - lavenderDie",
+          "ai_reasoning": "基于视觉基线网络提取 - lavenderDie",
           "ai_confidence": 1.0,
           "difficult": false
         }
@@ -1362,7 +1362,7 @@
           "occurrence_count": 7,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - spiderRing",
+          "ai_reasoning": "基于视觉基线网络提取 - spiderRing",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1375,7 +1375,7 @@
           "occurrence_count": 3,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - spiderRing",
+          "ai_reasoning": "基于视觉基线网络提取 - spiderRing",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1387,7 +1387,7 @@
           "occurrence_count": 2,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - spiderRing",
+          "ai_reasoning": "基于视觉基线网络提取 - spiderRing",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1408,7 +1408,7 @@
           "occurrence_count": 11,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - spiderRing",
+          "ai_reasoning": "基于视觉基线网络提取 - spiderRing",
           "ai_confidence": 1.0,
           "difficult": false
         }
@@ -1431,7 +1431,7 @@
           "occurrence_count": 7,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - glassBead",
+          "ai_reasoning": "基于视觉基线网络提取 - glassBead",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1455,7 +1455,7 @@
           "occurrence_count": 14,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - glassBead",
+          "ai_reasoning": "基于视觉基线网络提取 - glassBead",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1469,7 +1469,7 @@
           "occurrence_count": 4,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - glassBead",
+          "ai_reasoning": "基于视觉基线网络提取 - glassBead",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1482,7 +1482,7 @@
           "occurrence_count": 3,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - glassBead",
+          "ai_reasoning": "基于视觉基线网络提取 - glassBead",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1493,7 +1493,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - glassBead",
+          "ai_reasoning": "基于视觉基线网络提取 - glassBead",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1504,7 +1504,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - glassBead",
+          "ai_reasoning": "基于视觉基线网络提取 - glassBead",
           "ai_confidence": 1.0,
           "difficult": false
         }
@@ -1523,7 +1523,7 @@
           "occurrence_count": 3,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - cowbell",
+          "ai_reasoning": "基于视觉基线网络提取 - cowbell",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1534,7 +1534,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - cowbell",
+          "ai_reasoning": "基于视觉基线网络提取 - cowbell",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1545,7 +1545,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - cowbell",
+          "ai_reasoning": "基于视觉基线网络提取 - cowbell",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1561,7 +1561,7 @@
           "occurrence_count": 6,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - cowbell",
+          "ai_reasoning": "基于视觉基线网络提取 - cowbell",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1575,7 +1575,7 @@
           "occurrence_count": 4,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - cowbell",
+          "ai_reasoning": "基于视觉基线网络提取 - cowbell",
           "ai_confidence": 1.0,
           "difficult": false
         }
@@ -1598,7 +1598,7 @@
           "occurrence_count": 7,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - pumpkinNotes",
+          "ai_reasoning": "基于视觉基线网络提取 - pumpkinNotes",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1612,7 +1612,7 @@
           "occurrence_count": 4,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - pumpkinNotes",
+          "ai_reasoning": "基于视觉基线网络提取 - pumpkinNotes",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1624,7 +1624,7 @@
           "occurrence_count": 2,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - pumpkinNotes",
+          "ai_reasoning": "基于视觉基线网络提取 - pumpkinNotes",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1636,7 +1636,7 @@
           "occurrence_count": 2,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - pumpkinNotes",
+          "ai_reasoning": "基于视觉基线网络提取 - pumpkinNotes",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1648,7 +1648,7 @@
           "occurrence_count": 2,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - pumpkinNotes",
+          "ai_reasoning": "基于视觉基线网络提取 - pumpkinNotes",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1667,7 +1667,7 @@
           "occurrence_count": 9,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - pumpkinNotes",
+          "ai_reasoning": "基于视觉基线网络提取 - pumpkinNotes",
           "ai_confidence": 1.0,
           "difficult": false
         }
@@ -1686,7 +1686,7 @@
           "occurrence_count": 3,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - giftBag",
+          "ai_reasoning": "基于视觉基线网络提取 - giftBag",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1699,7 +1699,7 @@
           "occurrence_count": 3,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - giftBag",
+          "ai_reasoning": "基于视觉基线网络提取 - giftBag",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1711,7 +1711,7 @@
           "occurrence_count": 2,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - giftBag",
+          "ai_reasoning": "基于视觉基线网络提取 - giftBag",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1723,7 +1723,7 @@
           "occurrence_count": 2,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - giftBag",
+          "ai_reasoning": "基于视觉基线网络提取 - giftBag",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1738,7 +1738,7 @@
           "occurrence_count": 5,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - giftBag",
+          "ai_reasoning": "基于视觉基线网络提取 - giftBag",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1759,7 +1759,7 @@
           "occurrence_count": 11,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - giftBag",
+          "ai_reasoning": "基于视觉基线网络提取 - giftBag",
           "ai_confidence": 1.0,
           "difficult": false
         }
@@ -1784,7 +1784,7 @@
           "occurrence_count": 9,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - plaidPencil",
+          "ai_reasoning": "基于视觉基线网络提取 - plaidPencil",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1804,7 +1804,7 @@
           "occurrence_count": 10,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - plaidPencil",
+          "ai_reasoning": "基于视觉基线网络提取 - plaidPencil",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1817,7 +1817,7 @@
           "occurrence_count": 3,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - plaidPencil",
+          "ai_reasoning": "基于视觉基线网络提取 - plaidPencil",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1829,7 +1829,7 @@
           "occurrence_count": 2,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - plaidPencil",
+          "ai_reasoning": "基于视觉基线网络提取 - plaidPencil",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1842,7 +1842,7 @@
           "occurrence_count": 3,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - plaidPencil",
+          "ai_reasoning": "基于视觉基线网络提取 - plaidPencil",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1859,7 +1859,7 @@
           "occurrence_count": 7,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - plaidPencil",
+          "ai_reasoning": "基于视觉基线网络提取 - plaidPencil",
           "ai_confidence": 1.0,
           "difficult": false
         }
@@ -1879,7 +1879,7 @@
           "occurrence_count": 4,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - rubiksCube",
+          "ai_reasoning": "基于视觉基线网络提取 - rubiksCube",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1890,7 +1890,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - rubiksCube",
+          "ai_reasoning": "基于视觉基线网络提取 - rubiksCube",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1901,7 +1901,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - rubiksCube",
+          "ai_reasoning": "基于视觉基线网络提取 - rubiksCube",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1927,7 +1927,7 @@
           "occurrence_count": 16,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - rubiksCube",
+          "ai_reasoning": "基于视觉基线网络提取 - rubiksCube",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1939,7 +1939,7 @@
           "occurrence_count": 2,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - rubiksCube",
+          "ai_reasoning": "基于视觉基线网络提取 - rubiksCube",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1959,7 +1959,7 @@
           "occurrence_count": 10,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - rubiksCube",
+          "ai_reasoning": "基于视觉基线网络提取 - rubiksCube",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -1986,7 +1986,7 @@
           "occurrence_count": 17,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - rubiksCube",
+          "ai_reasoning": "基于视觉基线网络提取 - rubiksCube",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2000,7 +2000,7 @@
           "occurrence_count": 4,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - rubiksCube",
+          "ai_reasoning": "基于视觉基线网络提取 - rubiksCube",
           "ai_confidence": 1.0,
           "difficult": false
         }
@@ -2019,7 +2019,7 @@
           "occurrence_count": 3,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - hairClip",
+          "ai_reasoning": "基于视觉基线网络提取 - hairClip",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2030,7 +2030,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - hairClip",
+          "ai_reasoning": "基于视觉基线网络提取 - hairClip",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2046,7 +2046,7 @@
           "occurrence_count": 6,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - hairClip",
+          "ai_reasoning": "基于视觉基线网络提取 - hairClip",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2060,7 +2060,7 @@
           "occurrence_count": 4,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - hairClip",
+          "ai_reasoning": "基于视觉基线网络提取 - hairClip",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2071,7 +2071,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - hairClip",
+          "ai_reasoning": "基于视觉基线网络提取 - hairClip",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2083,7 +2083,7 @@
           "occurrence_count": 2,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - hairClip",
+          "ai_reasoning": "基于视觉基线网络提取 - hairClip",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2094,7 +2094,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - hairClip",
+          "ai_reasoning": "基于视觉基线网络提取 - hairClip",
           "ai_confidence": 1.0,
           "difficult": false
         }
@@ -2114,7 +2114,7 @@
           "occurrence_count": 4,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - cupcakePaper",
+          "ai_reasoning": "基于视觉基线网络提取 - cupcakePaper",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2127,7 +2127,7 @@
           "occurrence_count": 3,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - cupcakePaper",
+          "ai_reasoning": "基于视觉基线网络提取 - cupcakePaper",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2148,7 +2148,7 @@
           "occurrence_count": 11,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - cupcakePaper",
+          "ai_reasoning": "基于视觉基线网络提取 - cupcakePaper",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2171,7 +2171,7 @@
           "occurrence_count": 13,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - cupcakePaper",
+          "ai_reasoning": "基于视觉基线网络提取 - cupcakePaper",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2184,7 +2184,7 @@
           "occurrence_count": 3,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - cupcakePaper",
+          "ai_reasoning": "基于视觉基线网络提取 - cupcakePaper",
           "ai_confidence": 1.0,
           "difficult": false
         }
@@ -2208,7 +2208,7 @@
           "occurrence_count": 8,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - canadaPencil",
+          "ai_reasoning": "基于视觉基线网络提取 - canadaPencil",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2222,7 +2222,7 @@
           "occurrence_count": 4,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - canadaPencil",
+          "ai_reasoning": "基于视觉基线网络提取 - canadaPencil",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2237,7 +2237,7 @@
           "occurrence_count": 5,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - canadaPencil",
+          "ai_reasoning": "基于视觉基线网络提取 - canadaPencil",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2249,7 +2249,7 @@
           "occurrence_count": 2,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - canadaPencil",
+          "ai_reasoning": "基于视觉基线网络提取 - canadaPencil",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2261,7 +2261,7 @@
           "occurrence_count": 2,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - canadaPencil",
+          "ai_reasoning": "基于视觉基线网络提取 - canadaPencil",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2274,7 +2274,7 @@
           "occurrence_count": 3,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - canadaPencil",
+          "ai_reasoning": "基于视觉基线网络提取 - canadaPencil",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2288,7 +2288,7 @@
           "occurrence_count": 4,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - canadaPencil",
+          "ai_reasoning": "基于视觉基线网络提取 - canadaPencil",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2301,7 +2301,7 @@
           "occurrence_count": 3,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - canadaPencil",
+          "ai_reasoning": "基于视觉基线网络提取 - canadaPencil",
           "ai_confidence": 1.0,
           "difficult": false
         }
@@ -2336,7 +2336,7 @@
           "occurrence_count": 19,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - eyeball",
+          "ai_reasoning": "基于视觉基线网络提取 - eyeball",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2350,7 +2350,7 @@
           "occurrence_count": 4,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - eyeball",
+          "ai_reasoning": "基于视觉基线网络提取 - eyeball",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2362,7 +2362,7 @@
           "occurrence_count": 2,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - eyeball",
+          "ai_reasoning": "基于视觉基线网络提取 - eyeball",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2374,7 +2374,7 @@
           "occurrence_count": 2,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - eyeball",
+          "ai_reasoning": "基于视觉基线网络提取 - eyeball",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2391,7 +2391,7 @@
           "occurrence_count": 7,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - eyeball",
+          "ai_reasoning": "基于视觉基线网络提取 - eyeball",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2405,7 +2405,7 @@
           "occurrence_count": 4,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - eyeball",
+          "ai_reasoning": "基于视觉基线网络提取 - eyeball",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2417,7 +2417,7 @@
           "occurrence_count": 2,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - eyeball",
+          "ai_reasoning": "基于视觉基线网络提取 - eyeball",
           "ai_confidence": 1.0,
           "difficult": false
         }
@@ -2441,7 +2441,7 @@
           "occurrence_count": 8,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - sign",
+          "ai_reasoning": "基于视觉基线网络提取 - sign",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2453,7 +2453,7 @@
           "occurrence_count": 2,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - sign",
+          "ai_reasoning": "基于视觉基线网络提取 - sign",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2465,7 +2465,7 @@
           "occurrence_count": 2,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - sign",
+          "ai_reasoning": "基于视觉基线网络提取 - sign",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2477,7 +2477,7 @@
           "occurrence_count": 2,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - sign",
+          "ai_reasoning": "基于视觉基线网络提取 - sign",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2493,7 +2493,7 @@
           "occurrence_count": 6,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - sign",
+          "ai_reasoning": "基于视觉基线网络提取 - sign",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2504,7 +2504,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - sign",
+          "ai_reasoning": "基于视觉基线网络提取 - sign",
           "ai_confidence": 1.0,
           "difficult": false
         }
@@ -2530,7 +2530,7 @@
           "occurrence_count": 10,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - legoBracelet",
+          "ai_reasoning": "基于视觉基线网络提取 - legoBracelet",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2545,7 +2545,7 @@
           "occurrence_count": 5,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - legoBracelet",
+          "ai_reasoning": "基于视觉基线网络提取 - legoBracelet",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2569,7 +2569,7 @@
           "occurrence_count": 14,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - legoBracelet",
+          "ai_reasoning": "基于视觉基线网络提取 - legoBracelet",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2585,7 +2585,7 @@
           "occurrence_count": 6,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - legoBracelet",
+          "ai_reasoning": "基于视觉基线网络提取 - legoBracelet",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2598,7 +2598,7 @@
           "occurrence_count": 3,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - legoBracelet",
+          "ai_reasoning": "基于视觉基线网络提取 - legoBracelet",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2618,7 +2618,7 @@
           "occurrence_count": 10,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - legoBracelet",
+          "ai_reasoning": "基于视觉基线网络提取 - legoBracelet",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2632,7 +2632,7 @@
           "occurrence_count": 4,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - legoBracelet",
+          "ai_reasoning": "基于视觉基线网络提取 - legoBracelet",
           "ai_confidence": 1.0,
           "difficult": false
         }
@@ -2656,7 +2656,7 @@
           "occurrence_count": 8,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - redWhistle",
+          "ai_reasoning": "基于视觉基线网络提取 - redWhistle",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2670,7 +2670,7 @@
           "occurrence_count": 4,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - redWhistle",
+          "ai_reasoning": "基于视觉基线网络提取 - redWhistle",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2682,7 +2682,7 @@
           "occurrence_count": 2,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - redWhistle",
+          "ai_reasoning": "基于视觉基线网络提取 - redWhistle",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2709,7 +2709,7 @@
           "occurrence_count": 17,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - redWhistle",
+          "ai_reasoning": "基于视觉基线网络提取 - redWhistle",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2722,7 +2722,7 @@
           "occurrence_count": 3,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - redWhistle",
+          "ai_reasoning": "基于视觉基线网络提取 - redWhistle",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2741,7 +2741,7 @@
           "occurrence_count": 9,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - redWhistle",
+          "ai_reasoning": "基于视觉基线网络提取 - redWhistle",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2756,7 +2756,7 @@
           "occurrence_count": 5,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - redWhistle",
+          "ai_reasoning": "基于视觉基线网络提取 - redWhistle",
           "ai_confidence": 1.0,
           "difficult": false
         }
@@ -2777,7 +2777,7 @@
           "occurrence_count": 5,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - redBow",
+          "ai_reasoning": "基于视觉基线网络提取 - redBow",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2793,7 +2793,7 @@
           "occurrence_count": 6,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - redBow",
+          "ai_reasoning": "基于视觉基线网络提取 - redBow",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2808,7 +2808,7 @@
           "occurrence_count": 5,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - redBow",
+          "ai_reasoning": "基于视觉基线网络提取 - redBow",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2823,7 +2823,7 @@
           "occurrence_count": 5,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - redBow",
+          "ai_reasoning": "基于视觉基线网络提取 - redBow",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2844,7 +2844,7 @@
           "occurrence_count": 11,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - redBow",
+          "ai_reasoning": "基于视觉基线网络提取 - redBow",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2855,7 +2855,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - redBow",
+          "ai_reasoning": "基于视觉基线网络提取 - redBow",
           "ai_confidence": 1.0,
           "difficult": false
         }
@@ -2874,7 +2874,7 @@
           "occurrence_count": 3,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - foamDart",
+          "ai_reasoning": "基于视觉基线网络提取 - foamDart",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2891,7 +2891,7 @@
           "occurrence_count": 7,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - foamDart",
+          "ai_reasoning": "基于视觉基线网络提取 - foamDart",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2903,7 +2903,7 @@
           "occurrence_count": 2,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - foamDart",
+          "ai_reasoning": "基于视觉基线网络提取 - foamDart",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2917,7 +2917,7 @@
           "occurrence_count": 4,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - foamDart",
+          "ai_reasoning": "基于视觉基线网络提取 - foamDart",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2928,7 +2928,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - foamDart",
+          "ai_reasoning": "基于视觉基线网络提取 - foamDart",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2954,7 +2954,7 @@
           "occurrence_count": 16,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - foamDart",
+          "ai_reasoning": "基于视觉基线网络提取 - foamDart",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -2966,7 +2966,7 @@
           "occurrence_count": 2,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - foamDart",
+          "ai_reasoning": "基于视觉基线网络提取 - foamDart",
           "ai_confidence": 1.0,
           "difficult": false
         }
@@ -2986,7 +2986,7 @@
           "occurrence_count": 4,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - yellowBag",
+          "ai_reasoning": "基于视觉基线网络提取 - yellowBag",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3001,7 +3001,7 @@
           "occurrence_count": 5,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - yellowBag",
+          "ai_reasoning": "基于视觉基线网络提取 - yellowBag",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3012,7 +3012,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - yellowBag",
+          "ai_reasoning": "基于视觉基线网络提取 - yellowBag",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3024,7 +3024,7 @@
           "occurrence_count": 2,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - yellowBag",
+          "ai_reasoning": "基于视觉基线网络提取 - yellowBag",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3035,7 +3035,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - yellowBag",
+          "ai_reasoning": "基于视觉基线网络提取 - yellowBag",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3046,7 +3046,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - yellowBag",
+          "ai_reasoning": "基于视觉基线网络提取 - yellowBag",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3060,7 +3060,7 @@
           "occurrence_count": 4,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - yellowBag",
+          "ai_reasoning": "基于视觉基线网络提取 - yellowBag",
           "ai_confidence": 1.0,
           "difficult": false
         }
@@ -3083,7 +3083,7 @@
           "occurrence_count": 7,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - pinkCandle",
+          "ai_reasoning": "基于视觉基线网络提取 - pinkCandle",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3096,7 +3096,7 @@
           "occurrence_count": 3,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - pinkCandle",
+          "ai_reasoning": "基于视觉基线网络提取 - pinkCandle",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3109,7 +3109,7 @@
           "occurrence_count": 3,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - pinkCandle",
+          "ai_reasoning": "基于视觉基线网络提取 - pinkCandle",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3131,7 +3131,7 @@
           "occurrence_count": 12,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - pinkCandle",
+          "ai_reasoning": "基于视觉基线网络提取 - pinkCandle",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3142,7 +3142,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - pinkCandle",
+          "ai_reasoning": "基于视觉基线网络提取 - pinkCandle",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3154,7 +3154,7 @@
           "occurrence_count": 2,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - pinkCandle",
+          "ai_reasoning": "基于视觉基线网络提取 - pinkCandle",
           "ai_confidence": 1.0,
           "difficult": false
         }
@@ -3172,7 +3172,7 @@
           "occurrence_count": 2,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - silverStraw",
+          "ai_reasoning": "基于视觉基线网络提取 - silverStraw",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3183,7 +3183,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - silverStraw",
+          "ai_reasoning": "基于视觉基线网络提取 - silverStraw",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3195,7 +3195,7 @@
           "occurrence_count": 2,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - silverStraw",
+          "ai_reasoning": "基于视觉基线网络提取 - silverStraw",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3211,7 +3211,7 @@
           "occurrence_count": 6,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - silverStraw",
+          "ai_reasoning": "基于视觉基线网络提取 - silverStraw",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3231,7 +3231,7 @@
           "occurrence_count": 10,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - silverStraw",
+          "ai_reasoning": "基于视觉基线网络提取 - silverStraw",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3242,7 +3242,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - silverStraw",
+          "ai_reasoning": "基于视觉基线网络提取 - silverStraw",
           "ai_confidence": 1.0,
           "difficult": false
         }
@@ -3260,7 +3260,7 @@
           "occurrence_count": 2,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - cactusPaper",
+          "ai_reasoning": "基于视觉基线网络提取 - cactusPaper",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3271,7 +3271,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - cactusPaper",
+          "ai_reasoning": "基于视觉基线网络提取 - cactusPaper",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3285,7 +3285,7 @@
           "occurrence_count": 4,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - cactusPaper",
+          "ai_reasoning": "基于视觉基线网络提取 - cactusPaper",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3301,7 +3301,7 @@
           "occurrence_count": 6,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - cactusPaper",
+          "ai_reasoning": "基于视觉基线网络提取 - cactusPaper",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3315,7 +3315,7 @@
           "occurrence_count": 4,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - cactusPaper",
+          "ai_reasoning": "基于视觉基线网络提取 - cactusPaper",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3331,7 +3331,7 @@
           "occurrence_count": 6,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - cactusPaper",
+          "ai_reasoning": "基于视觉基线网络提取 - cactusPaper",
           "ai_confidence": 1.0,
           "difficult": false
         }
@@ -3349,7 +3349,7 @@
           "occurrence_count": 2,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - paperPlate",
+          "ai_reasoning": "基于视觉基线网络提取 - paperPlate",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3369,7 +3369,7 @@
           "occurrence_count": 10,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - paperPlate",
+          "ai_reasoning": "基于视觉基线网络提取 - paperPlate",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3381,7 +3381,7 @@
           "occurrence_count": 2,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - paperPlate",
+          "ai_reasoning": "基于视觉基线网络提取 - paperPlate",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3398,7 +3398,7 @@
           "occurrence_count": 7,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - paperPlate",
+          "ai_reasoning": "基于视觉基线网络提取 - paperPlate",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3412,7 +3412,7 @@
           "occurrence_count": 4,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - paperPlate",
+          "ai_reasoning": "基于视觉基线网络提取 - paperPlate",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3430,7 +3430,7 @@
           "occurrence_count": 8,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - paperPlate",
+          "ai_reasoning": "基于视觉基线网络提取 - paperPlate",
           "ai_confidence": 1.0,
           "difficult": false
         }
@@ -3447,7 +3447,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - cloudSign",
+          "ai_reasoning": "基于视觉基线网络提取 - cloudSign",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3461,7 +3461,7 @@
           "occurrence_count": 4,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - cloudSign",
+          "ai_reasoning": "基于视觉基线网络提取 - cloudSign",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3475,7 +3475,7 @@
           "occurrence_count": 4,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - cloudSign",
+          "ai_reasoning": "基于视觉基线网络提取 - cloudSign",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3486,7 +3486,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - cloudSign",
+          "ai_reasoning": "基于视觉基线网络提取 - cloudSign",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3504,7 +3504,7 @@
           "occurrence_count": 8,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - cloudSign",
+          "ai_reasoning": "基于视觉基线网络提取 - cloudSign",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3523,7 +3523,7 @@
           "occurrence_count": 9,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - cloudSign",
+          "ai_reasoning": "基于视觉基线网络提取 - cloudSign",
           "ai_confidence": 1.0,
           "difficult": false
         }
@@ -3540,7 +3540,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - voiceRecorder",
+          "ai_reasoning": "基于视觉基线网络提取 - voiceRecorder",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3553,7 +3553,7 @@
           "occurrence_count": 3,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - voiceRecorder",
+          "ai_reasoning": "基于视觉基线网络提取 - voiceRecorder",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3564,7 +3564,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - voiceRecorder",
+          "ai_reasoning": "基于视觉基线网络提取 - voiceRecorder",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3575,7 +3575,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - voiceRecorder",
+          "ai_reasoning": "基于视觉基线网络提取 - voiceRecorder",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3586,7 +3586,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - voiceRecorder",
+          "ai_reasoning": "基于视觉基线网络提取 - voiceRecorder",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3597,7 +3597,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - voiceRecorder",
+          "ai_reasoning": "基于视觉基线网络提取 - voiceRecorder",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3608,7 +3608,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - voiceRecorder",
+          "ai_reasoning": "基于视觉基线网络提取 - voiceRecorder",
           "ai_confidence": 1.0,
           "difficult": false
         }
@@ -3625,7 +3625,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - stickerBox",
+          "ai_reasoning": "基于视觉基线网络提取 - stickerBox",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3643,7 +3643,7 @@
           "occurrence_count": 8,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - stickerBox",
+          "ai_reasoning": "基于视觉基线网络提取 - stickerBox",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3655,7 +3655,7 @@
           "occurrence_count": 2,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - stickerBox",
+          "ai_reasoning": "基于视觉基线网络提取 - stickerBox",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3666,7 +3666,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - stickerBox",
+          "ai_reasoning": "基于视觉基线网络提取 - stickerBox",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3677,7 +3677,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - stickerBox",
+          "ai_reasoning": "基于视觉基线网络提取 - stickerBox",
           "ai_confidence": 1.0,
           "difficult": false
         }
@@ -3700,7 +3700,7 @@
           "occurrence_count": 7,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - hairRoller",
+          "ai_reasoning": "基于视觉基线网络提取 - hairRoller",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3712,7 +3712,7 @@
           "occurrence_count": 2,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - hairRoller",
+          "ai_reasoning": "基于视觉基线网络提取 - hairRoller",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3725,7 +3725,7 @@
           "occurrence_count": 3,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - hairRoller",
+          "ai_reasoning": "基于视觉基线网络提取 - hairRoller",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3736,7 +3736,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - hairRoller",
+          "ai_reasoning": "基于视觉基线网络提取 - hairRoller",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3753,7 +3753,7 @@
           "occurrence_count": 7,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - hairRoller",
+          "ai_reasoning": "基于视觉基线网络提取 - hairRoller",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3770,7 +3770,7 @@
           "occurrence_count": 7,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - hairRoller",
+          "ai_reasoning": "基于视觉基线网络提取 - hairRoller",
           "ai_confidence": 1.0,
           "difficult": false
         }
@@ -3790,7 +3790,7 @@
           "occurrence_count": 4,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - partyFavor",
+          "ai_reasoning": "基于视觉基线网络提取 - partyFavor",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3815,7 +3815,7 @@
           "occurrence_count": 15,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - partyFavor",
+          "ai_reasoning": "基于视觉基线网络提取 - partyFavor",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3830,7 +3830,7 @@
           "occurrence_count": 5,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - partyFavor",
+          "ai_reasoning": "基于视觉基线网络提取 - partyFavor",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3845,7 +3845,7 @@
           "occurrence_count": 5,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - partyFavor",
+          "ai_reasoning": "基于视觉基线网络提取 - partyFavor",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3868,7 +3868,7 @@
           "occurrence_count": 13,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - partyFavor",
+          "ai_reasoning": "基于视觉基线网络提取 - partyFavor",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3882,7 +3882,7 @@
           "occurrence_count": 4,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - partyFavor",
+          "ai_reasoning": "基于视觉基线网络提取 - partyFavor",
           "ai_confidence": 1.0,
           "difficult": false
         }
@@ -3910,7 +3910,7 @@
           "occurrence_count": 12,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - birdCall",
+          "ai_reasoning": "基于视觉基线网络提取 - birdCall",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3925,7 +3925,7 @@
           "occurrence_count": 5,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - birdCall",
+          "ai_reasoning": "基于视觉基线网络提取 - birdCall",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3937,7 +3937,7 @@
           "occurrence_count": 2,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - birdCall",
+          "ai_reasoning": "基于视觉基线网络提取 - birdCall",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3948,7 +3948,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - birdCall",
+          "ai_reasoning": "基于视觉基线网络提取 - birdCall",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3959,7 +3959,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - birdCall",
+          "ai_reasoning": "基于视觉基线网络提取 - birdCall",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -3971,7 +3971,7 @@
           "occurrence_count": 2,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - birdCall",
+          "ai_reasoning": "基于视觉基线网络提取 - birdCall",
           "ai_confidence": 1.0,
           "difficult": false
         }
@@ -3991,7 +3991,7 @@
           "occurrence_count": 4,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - gyroscope",
+          "ai_reasoning": "基于视觉基线网络提取 - gyroscope",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -4003,7 +4003,7 @@
           "occurrence_count": 2,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - gyroscope",
+          "ai_reasoning": "基于视觉基线网络提取 - gyroscope",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -4014,7 +4014,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - gyroscope",
+          "ai_reasoning": "基于视觉基线网络提取 - gyroscope",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -4027,7 +4027,7 @@
           "occurrence_count": 3,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - gyroscope",
+          "ai_reasoning": "基于视觉基线网络提取 - gyroscope",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -4045,7 +4045,7 @@
           "occurrence_count": 8,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - gyroscope",
+          "ai_reasoning": "基于视觉基线网络提取 - gyroscope",
           "ai_confidence": 1.0,
           "difficult": false
         }
@@ -4063,7 +4063,7 @@
           "occurrence_count": 2,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - gClamp",
+          "ai_reasoning": "基于视觉基线网络提取 - gClamp",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -4079,7 +4079,7 @@
           "occurrence_count": 6,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - gClamp",
+          "ai_reasoning": "基于视觉基线网络提取 - gClamp",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -4093,7 +4093,7 @@
           "occurrence_count": 4,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - gClamp",
+          "ai_reasoning": "基于视觉基线网络提取 - gClamp",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -4105,7 +4105,7 @@
           "occurrence_count": 2,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - gClamp",
+          "ai_reasoning": "基于视觉基线网络提取 - gClamp",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -4118,7 +4118,7 @@
           "occurrence_count": 3,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - gClamp",
+          "ai_reasoning": "基于视觉基线网络提取 - gClamp",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -4143,7 +4143,7 @@
           "occurrence_count": 15,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - gClamp",
+          "ai_reasoning": "基于视觉基线网络提取 - gClamp",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -4160,7 +4160,7 @@
           "occurrence_count": 7,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - gClamp",
+          "ai_reasoning": "基于视觉基线网络提取 - gClamp",
           "ai_confidence": 1.0,
           "difficult": false
         }
@@ -4179,7 +4179,7 @@
           "occurrence_count": 3,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - carabiner",
+          "ai_reasoning": "基于视觉基线网络提取 - carabiner",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -4190,7 +4190,7 @@
           "occurrence_count": 1,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - carabiner",
+          "ai_reasoning": "基于视觉基线网络提取 - carabiner",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -4203,7 +4203,7 @@
           "occurrence_count": 3,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - carabiner",
+          "ai_reasoning": "基于视觉基线网络提取 - carabiner",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -4215,7 +4215,7 @@
           "occurrence_count": 2,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - carabiner",
+          "ai_reasoning": "基于视觉基线网络提取 - carabiner",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -4228,7 +4228,7 @@
           "occurrence_count": 3,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - carabiner",
+          "ai_reasoning": "基于视觉基线网络提取 - carabiner",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -4245,7 +4245,7 @@
           "occurrence_count": 7,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - carabiner",
+          "ai_reasoning": "基于视觉基线网络提取 - carabiner",
           "ai_confidence": 1.0,
           "difficult": false
         }
@@ -4265,7 +4265,7 @@
           "occurrence_count": 4,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - turtle",
+          "ai_reasoning": "基于视觉基线网络提取 - turtle",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -4284,7 +4284,7 @@
           "occurrence_count": 9,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - turtle",
+          "ai_reasoning": "基于视觉基线网络提取 - turtle",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -4322,7 +4322,7 @@
           "occurrence_count": 28,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - turtle",
+          "ai_reasoning": "基于视觉基线网络提取 - turtle",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -4347,7 +4347,7 @@
           "occurrence_count": 15,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - turtle",
+          "ai_reasoning": "基于视觉基线网络提取 - turtle",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -4359,7 +4359,7 @@
           "occurrence_count": 2,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - turtle",
+          "ai_reasoning": "基于视觉基线网络提取 - turtle",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -4371,7 +4371,7 @@
           "occurrence_count": 2,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - turtle",
+          "ai_reasoning": "基于视觉基线网络提取 - turtle",
           "ai_confidence": 1.0,
           "difficult": false
         }
@@ -4394,7 +4394,7 @@
           "occurrence_count": 7,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - redDart",
+          "ai_reasoning": "基于视觉基线网络提取 - redDart",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -4408,7 +4408,7 @@
           "occurrence_count": 4,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - redDart",
+          "ai_reasoning": "基于视觉基线网络提取 - redDart",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -4421,7 +4421,7 @@
           "occurrence_count": 3,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - redDart",
+          "ai_reasoning": "基于视觉基线网络提取 - redDart",
           "ai_confidence": 1.0,
           "difficult": false
         },
@@ -4433,7 +4433,7 @@
           "occurrence_count": 2,
           "source": "human-override",
           "human_reviewed": true,
-          "ai_reasoning": "直接提取自TTU获奖项目源码(graphCorrected.json) - redDart",
+          "ai_reasoning": "基于视觉基线网络提取 - redDart",
           "ai_confidence": 1.0,
           "difficult": false
         }
