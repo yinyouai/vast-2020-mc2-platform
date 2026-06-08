@@ -41,36 +41,6 @@
         </p>
       </div>
 
-      <div class="case-card">
-        <div class="case-card__header">
-          <div>
-            <p class="eyebrow">当前关注对象</p>
-            <strong>{{ store.selectedPersonId }}</strong>
-          </div>
-          <span :class="['risk-pill', isCoreSuspect ? 'risk-high' : 'risk-low']">
-            {{ isCoreSuspect ? '核心嫌疑' : '背景样本' }}
-          </span>
-        </div>
-
-        <div class="case-card__grid">
-          <div>
-            <span>分析进度</span>
-            <b>第 {{ activeLayer }} 层 / 共 5 层</b>
-          </div>
-          <div>
-            <span>阈值设定</span>
-            <b>{{ store.scoreThreshold.toFixed(2) }}</b>
-          </div>
-          <div>
-            <span>已剔除物品</span>
-            <b>{{ store.excludedItems.length }}</b>
-          </div>
-          <div>
-            <span>当前暗号焦点</span>
-            <b>{{ totemLabel }}</b>
-          </div>
-        </div>
-      </div>
     </aside>
 
     <div class="workspace-shell">

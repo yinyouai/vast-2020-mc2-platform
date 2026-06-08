@@ -36,8 +36,8 @@ const store = useDashboardStore()
   border-color: rgba(47, 125, 246, 0.14);
   background:
     linear-gradient(90deg, rgba(47, 125, 246, 0.07), rgba(53, 181, 166, 0.05)),
-    rgba(255, 255, 255, 0.9);
-  box-shadow: var(--shadow-soft);
+    rgba(255, 255, 255, 0.1);
+  box-shadow: none;
 }
 
 .threshold-copy {

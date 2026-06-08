@@ -96,7 +96,7 @@ const render = async () => {
         person_id: item.person_id,
         image_id: item.image_id,
         itemStyle: {
-          color: '#cf5656',
+          color: 'var(--danger)',
           borderRadius: [0, 5, 5, 0]
         }
       })),
@@ -188,8 +188,8 @@ onBeforeUnmount(() => {
 .result-count {
   flex: 0 0 auto;
   padding: 6px 10px;
-  border: 1px solid rgba(207, 86, 86, .22);
-  border-radius: 999px;
+  border: none;
+  border-radius: 12px;
   color: #a64141;
   background: rgba(207, 86, 86, .08);
   font-size: .68rem;
@@ -202,9 +202,9 @@ onBeforeUnmount(() => {
   gap: 7px;
   min-height: 28px;
   padding: 5px 9px;
-  border-radius: 6px;
+  border-radius: 12px;
   color: var(--muted);
-  background: #f7f9fc;
+  background: var(--surface-3);
   font-size: .68rem;
   font-weight: 700;
 }

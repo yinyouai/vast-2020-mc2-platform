@@ -1,17 +1,17 @@
 export const chartPalette = {
-  text: '#17324d',
-  muted: '#56708f',
-  subtle: '#7890ab',
-  line: 'rgba(53, 89, 138, 0.1)',
-  lineStrong: 'rgba(53, 89, 138, 0.2)',
-  accent: '#2f7df6',
-  accentSoft: 'rgba(47, 125, 246, 0.14)',
-  cyan: '#35a8c8',
-  gold: '#d99522',
-  red: '#cf5656',
-  green: '#24956f',
-  panel: 'rgba(255, 255, 255, 0.98)',
-  panelEdge: 'rgba(53, 89, 138, 0.14)'
+  text: '#e0e6ed',
+  muted: '#94a3b8',
+  subtle: '#64748b',
+  line: 'rgba(100, 149, 237, 0.15)',
+  lineStrong: 'rgba(100, 149, 237, 0.3)',
+  accent: '#3b82f6',
+  accentSoft: 'rgba(59, 130, 246, 0.15)',
+  cyan: '#06b6d4',
+  gold: '#f59e0b',
+  red: '#f43f5e',
+  green: '#10b981',
+  panel: 'rgba(13, 22, 43, 0.85)',
+  panelEdge: 'rgba(100, 149, 237, 0.2)'
 }
 
 export const animationTiming = {

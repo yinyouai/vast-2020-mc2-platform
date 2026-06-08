@@ -49,11 +49,11 @@ const suggestion = computed(() => {
   display: grid;
   gap: 10px;
   padding: 12px;
-  border: 1px solid rgba(47, 125, 246, 0.16);
+  border: none;
   border-radius: var(--radius-sm);
   background:
     radial-gradient(circle at top right, rgba(47, 125, 246, 0.1), transparent 28%),
-    rgba(255, 255, 255, 0.88);
+    rgba(255, 255, 255, 0.1);
 }
 
 .semantic-head span,
@@ -81,7 +81,7 @@ const suggestion = computed(() => {
   align-items: center;
   min-height: 24px;
   padding: 0 8px;
-  border-radius: 999px;
+  border-radius: 12px;
   color: #1d58b1;
   background: rgba(47, 125, 246, 0.1);
   font-size: 0.76rem;
@@ -95,8 +95,8 @@ const suggestion = computed(() => {
 
 .semantic-grid div {
   padding: 10px;
-  border: 1px solid var(--border);
-  border-radius: 14px;
+  border: none;
+  border-radius: 12px;
   background: rgba(247, 250, 255, 0.72);
 }
 

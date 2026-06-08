@@ -22,8 +22,8 @@ const render=()=>{if(!chartRef.value)return;if(!chart)chart=echarts.init(chartRe
   chart.setOption({tooltip:buildTooltip(({data:item})=>`<strong>${item.person}</strong><br/>${item.dimension}：${item.display}`),
     grid:{left:82,right:16,top:14,bottom:52},xAxis:{type:'category',data:dimensions,axisLabel:{color:chartPalette.muted,rotate:25,fontSize:10},axisTick:{show:false}},
     yAxis:{type:'category',data:store.finalEvidence.map((item)=>item.person_id),axisLabel:{color:(value)=>value===store.selectedPersonId?chartPalette.accent:chartPalette.muted,fontWeight:(value)=>value===store.selectedPersonId?800:500,fontSize:10},axisTick:{show:false}},
-    visualMap:{show:false,min:0,max:1,inRange:{color:['#edf2f7','#cfe0f7','#73a9e8','#24956f']}},
-    series:[{type:'heatmap',data,label:{show:true,formatter:(params)=>params.data.display,color:'#17324d',fontSize:9},itemStyle:{borderColor:'#fff',borderWidth:3,borderRadius:4},emphasis:{itemStyle:{borderColor:'#17324d',borderWidth:2}}}]},true)
+    visualMap:{show:false,min:0,max:1,inRange:{color:['#edf2f7','#cfe0f7','#73a9e8','var(--success)']}},
+    series:[{type:'heatmap',data,label:{show:true,formatter:(params)=>params.data.display,color:'#17324d',fontSize:9},itemStyle:{borderColor: 'var(--border)',borderWidth:3,borderRadius:4},emphasis:{itemStyle:{borderColor:'#17324d',borderWidth:2}}}]},true)
   chart.off('click');chart.on('click',(params)=>store.selectPerson(params.data.person))}
 watch(()=>[store.finalEvidence,store.selectedPersonId],render,{deep:true});onMounted(()=>{render();window.addEventListener('resize',render)});onBeforeUnmount(()=>{window.removeEventListener('resize',render);chart?.dispose()})
 </script>

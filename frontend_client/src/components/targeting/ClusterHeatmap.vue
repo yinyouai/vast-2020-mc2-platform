@@ -196,9 +196,9 @@ onBeforeUnmount(() => {
 
 .matrix-summary__item {
   padding: 12px 14px;
-  border: 1px solid var(--border);
+  border: none;
   border-radius: var(--radius-sm);
-  background: rgba(255, 255, 255, 0.82);
+  background: var(--surface-2);
 }
 
 .matrix-summary__item span {
@@ -233,8 +233,8 @@ onBeforeUnmount(() => {
 .heatmap-legend i {
   width: 30px;
   height: 10px;
-  border: 1px solid rgba(53, 89, 138, 0.1);
-  border-radius: 999px;
+  border: none;
+  border-radius: 12px;
 }
 
 @media (max-width: 1040px) {

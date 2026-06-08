@@ -5,7 +5,7 @@
         <div class="intro-pills"><span class="data-chip">模型命中 {{ counts.modelHits }}</span><span class="data-chip">建议人工复核 {{ counts.pending }}</span><span class="data-chip">人工修正 {{ counts.corrected }}</span></div></div>
     </div>
     <div v-if="store.correctionMessage" class="save-feedback" role="status">{{ store.correctionMessage }}</div>
-    <section class="review-scope panel">
+    <section class="review-scope">
       <div>
         <span>当前核验候选</span>
         <strong>{{ store.reviewCandidateLabel || store.activeTotem }}</strong>
@@ -26,7 +26,7 @@
         </button>
       </div>
     </section>
-    <section class="review-policy panel">
+    <section class="review-policy">
       <div class="batch-copy">
         <span>最小人工复核集</span>
         <strong>每位候选拥有者仅推荐 1 张最高优先图片</strong>
@@ -94,10 +94,9 @@ onBeforeUnmount(()=>window.clearInterval(refreshTimer))
 </script>
 
 <style scoped>
-.review-page{gap:20px}.save-feedback{padding:10px 13px;border:1px solid #bfe2d4;border-radius:7px;color:#187553;background:#effaf5;font-size:.78rem;font-weight:700}
+.review-page{gap:20px}.save-feedback{padding:10px 13px;border: none;border-radius: 12px;color: var(--success);background: rgba(16, 185, 129, 0.1);font-size:.78rem;font-weight:700}
 .review-scope{display:grid;grid-template-columns:minmax(220px,.35fr) minmax(0,1.65fr);align-items:center;gap:18px}.review-scope>div:first-child span,.review-scope>div:first-child strong,.review-scope>div:first-child small{display:block}.review-scope>div:first-child span{color:var(--subtle);font-size:.68rem;font-weight:800}.review-scope>div:first-child strong{margin:5px 0;font-size:1.08rem}.review-scope>div:first-child small{color:var(--muted);font-size:.7rem;line-height:1.5}
-.candidate-switcher{display:flex;gap:7px;overflow-x:auto;padding:3px}.candidate-switcher button{flex:0 0 auto;min-height:48px;padding:7px 10px;border:1px solid var(--border);border-radius:7px;color:var(--muted);background:#fff;font-size:.7rem;font-weight:800}.candidate-switcher button small{display:block;margin-top:3px;color:var(--subtle);font-size:.6rem}.candidate-switcher button.active{border-color:var(--accent);color:var(--accent);background:#f1f6ff;box-shadow:0 0 0 2px rgba(47,125,246,.1)}
-.review-policy{display:flex;align-items:center;justify-content:space-between;gap:18px}.batch-copy span,.batch-copy strong,.batch-copy small{display:block}.batch-copy span{color:var(--subtle);font-size:.68rem;font-weight:800}.batch-copy strong{margin:4px 0;font-size:.9rem}.batch-copy small{max-width:760px;color:var(--muted);font-size:.68rem;line-height:1.5}.policy-stats{display:flex;gap:8px}.policy-stats span{min-width:112px;padding:10px;border:1px solid var(--border);border-radius:7px;color:var(--muted);background:#f7f9fc;font-size:.68rem}.policy-stats b{display:block;margin-bottom:4px;color:var(--text);font-size:1.05rem}
+.candidate-switcher{display:flex;gap:7px;overflow-x:auto;padding:3px}.candidate-switcher button{flex:0 0 auto;min-height:48px;padding:7px 10px;border: none;border-radius: 12px;color:var(--muted);background: transparent;font-size:.7rem;font-weight:800}.candidate-switcher button small{display:block;margin-top:3px;color:var(--subtle);font-size:.6rem}.candidate-switcher button.active{border-color:var(--accent);color:var(--accent);background: rgba(255, 255, 255, 0.02);box-shadow: none;align-items:center;justify-content:space-between;gap:18px}.batch-copy span,.batch-copy strong,.batch-copy small{display:block}.batch-copy span{color:var(--subtle);font-size:.68rem;font-weight:800}.batch-copy strong{margin:4px 0;font-size:.9rem}.batch-copy small{max-width:760px;color:var(--muted);font-size:.68rem;line-height:1.5}.policy-stats{display:flex;gap:8px}.policy-stats span{min-width:112px;padding:10px;border: none;border-radius: 12px;color:var(--muted);background: rgba(255, 255, 255, 0.02);font-size:.68rem}.policy-stats b{display:block;margin-bottom:4px;color:var(--text);font-size:1.05rem}
 @media(max-width:800px){.review-scope{grid-template-columns:1fr}}
 @media(max-width:950px){.review-policy{align-items:stretch;flex-direction:column}.policy-stats{flex-wrap:wrap}}
 </style>

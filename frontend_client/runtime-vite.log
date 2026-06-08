@@ -1,0 +1,95 @@
+
+> frontend_client@0.0.0 dev
+> vite --host 0.0.0.0 --port 5173 --strictPort
+
+Re-optimizing dependencies because vite config has changed
+
+  [32m[1mVITE[22m v5.4.21[39m  [2mready in [0m[1m533[22m[2m[0m ms[22m
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5173[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://26.139.99.161:[1m5173[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://192.168.81.1:[1m5173[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://192.168.38.1:[1m5173[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://10.234.164.31:[1m5173[22m/[39m
+[2m17:26:34[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/ModelAuditingView.vue, /src/components/auditing/ModelEvaluation.vue, /src/components/auditing/LabelConfusionMatrix.vue, /src/components/auditing/DetectionDensityMap.vue, /src/components/auditing/ForceDirectedGraph.vue, /src/components/targeting/ClusterHeatmap.vue, /src/components/targeting/MatrixDeltaBars.vue, /src/components/targeting/CandidateRankingChart.vue, /src/components/targeting/TotemBarChart.vue, /src/components/targeting/TotemFlow.vue, /src/components/targeting/GroupEvidenceNetwork.vue, /src/components/targeting/ExclusionChart.vue, /src/components/targeting/FinalEvidenceMatrix.vue[22m
+[2m17:26:34[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/assets/global.css[22m
+[2m17:27:56[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/interaction/ConflictPriorityQueue.vue?vue&type=style&index=0&scoped=61630af0&lang.css[22m
+[2m17:27:56[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/interaction/CorrectionCanvas.vue?vue&type=style&index=0&scoped=a694344e&lang.css[22m
+[2m17:27:56[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/interaction/PersonReviewRadar.vue?vue&type=style&index=0&scoped=e97ffb0c&lang.css[22m
+[2m17:27:56[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/process/ManualReviewComparison.vue?vue&type=style&index=0&scoped=07b70885&lang.css[22m
+[2m17:27:56[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/targeting/CandidateRankingChart.vue?vue&type=style&index=0&scoped=907093c3&lang.css[22m
+[2m17:27:56[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/targeting/ClusterSignalMap.vue?vue&type=style&index=0&scoped=af3483d7&lang.css[22m
+[2m17:27:56[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/targeting/ClusterHeatmap.vue?vue&type=style&index=0&scoped=f87f55db&lang.css[22m
+[2m17:27:56[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/targeting/EvidencePhotoGallery.vue?vue&type=style&index=0&scoped=237b2d88&lang.css[22m
+[2m17:27:56[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/targeting/ProvenanceNarrative.vue?vue&type=style&index=0&scoped=f570f32b&lang.css[22m
+[2m17:27:56[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/targeting/TotemEliminationPanel.vue?vue&type=style&index=0&scoped=5a422da3&lang.css[22m
+[2m17:27:56[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/targeting/ExclusionChart.vue?vue&type=style&index=0&scoped=40025b6b&lang.css[22m
+[2m17:27:56[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/targeting/MatrixDeltaBars.vue?vue&type=style&index=0&scoped=e06b3521&lang.css[22m
+[2m17:27:56[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/CommunityClusteringView.vue?vue&type=style&index=0&scoped=f2db5330&lang.css[22m
+[2m17:27:56[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/DataExplorationView.vue?vue&type=style&index=0&scoped=65008e26&lang.css[22m
+[2m17:27:56[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/CyberForensicsView.vue?vue&type=style&index=0&scoped=0de8f2f0&lang.css[22m
+[2m17:27:56[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/ModelAuditingView.vue?vue&type=style&index=0&scoped=c502c1d4&lang.css[22m
+[2m17:27:56[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/TotemFilterView.vue?vue&type=style&index=0&scoped=f4bf4bd5&lang.css[22m
+[2m17:28:34[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/assets/global.css[22m
+[2m17:28:56[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/auditing/LabelConfusionMatrix.vue?vue&type=style&index=0&scoped=0dd0056a&lang.css[22m
+[2m17:28:56[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/interaction/ConflictPriorityQueue.vue?vue&type=style&index=0&scoped=61630af0&lang.css[22m
+[2m17:28:56[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/interaction/CorrectionCanvas.vue?vue&type=style&index=0&scoped=a694344e&lang.css[22m
+[2m17:28:56[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/interaction/PersonReviewRadar.vue?vue&type=style&index=0&scoped=e97ffb0c&lang.css[22m
+[2m17:28:56[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/targeting/CandidateRankingChart.vue?vue&type=style&index=0&scoped=907093c3&lang.css[22m
+[2m17:28:56[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/process/ManualReviewComparison.vue?vue&type=style&index=0&scoped=07b70885&lang.css[22m
+[2m17:28:56[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/targeting/ClusterHeatmap.vue?vue&type=style&index=0&scoped=f87f55db&lang.css[22m
+[2m17:28:56[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/targeting/ClusterSignalMap.vue?vue&type=style&index=0&scoped=af3483d7&lang.css[22m
+[2m17:28:56[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/targeting/EvidencePhotoGallery.vue?vue&type=style&index=0&scoped=237b2d88&lang.css[22m
+[2m17:28:56[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/targeting/ExclusionChart.vue?vue&type=style&index=0&scoped=40025b6b&lang.css[22m
+[2m17:28:56[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/CommunityClusteringView.vue?vue&type=style&index=0&scoped=f2db5330&lang.css[22m
+[2m17:28:56[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/targeting/TotemEliminationPanel.vue?vue&type=style&index=0&scoped=5a422da3&lang.css[22m
+[2m17:28:56[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/targeting/MatrixDeltaBars.vue?vue&type=style&index=0&scoped=e06b3521&lang.css[22m
+[2m17:28:56[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/targeting/ProvenanceNarrative.vue?vue&type=style&index=0&scoped=f570f32b&lang.css[22m
+[2m17:28:56[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/CyberForensicsView.vue?vue&type=style&index=0&scoped=0de8f2f0&lang.css[22m
+[2m17:28:56[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/ModelAuditingView.vue?vue&type=style&index=0&scoped=c502c1d4&lang.css[22m
+[2m17:28:56[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/TotemFilterView.vue?vue&type=style&index=0&scoped=f4bf4bd5&lang.css[22m
+[2m17:28:56[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/DataExplorationView.vue?vue&type=style&index=0&scoped=65008e26&lang.css[22m
+[2m17:29:44[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/assets/global.css[22m
+[2m17:36:04[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/assets/global.css[22m
+[2m17:36:04[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/interaction/ConflictPriorityQueue.vue?vue&type=style&index=0&scoped=61630af0&lang.css[22m
+[2m17:36:04[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/interaction/CorrectionCanvas.vue?vue&type=style&index=0&scoped=a694344e&lang.css[22m
+[2m17:36:04[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/targeting/CandidateRankingChart.vue?vue&type=style&index=0&scoped=907093c3&lang.css[22m
+[2m17:36:04[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/process/ManualReviewComparison.vue?vue&type=style&index=0&scoped=07b70885&lang.css[22m
+[2m17:36:04[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/interaction/PersonReviewRadar.vue?vue&type=style&index=0&scoped=e97ffb0c&lang.css[22m
+[2m17:36:04[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/targeting/EvidencePhotoGallery.vue?vue&type=style&index=0&scoped=237b2d88&lang.css[22m
+[2m17:36:04[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/targeting/ClusterSignalMap.vue?vue&type=style&index=0&scoped=af3483d7&lang.css[22m
+[2m17:36:04[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/targeting/FinalEvidenceMatrix.vue[22m
+[2m17:36:04[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/targeting/GroupEvidenceNetwork.vue[22m
+[2m17:36:04[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/CommunityClusteringView.vue?vue&type=style&index=0&scoped=f2db5330&lang.css[22m
+[2m17:36:04[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/targeting/MatrixDeltaBars.vue?vue&type=style&index=0&scoped=e06b3521&lang.css[22m
+[2m17:36:04[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/targeting/ProvenanceNarrative.vue?vue&type=style&index=0&scoped=f570f32b&lang.css[22m
+[2m17:36:04[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/targeting/TotemEliminationPanel.vue?vue&type=style&index=0&scoped=5a422da3&lang.css[22m
+[2m17:36:04[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/DataExplorationView.vue?vue&type=style&index=0&scoped=65008e26&lang.css[22m
+[2m17:36:04[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/CyberForensicsView.vue?vue&type=style&index=0&scoped=0de8f2f0&lang.css[22m
+[2m17:36:46[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/auditing/LabelConfusionMatrix.vue?vue&type=style&index=0&scoped=0dd0056a&lang.css[22m
+[2m17:36:46[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/interaction/ConflictPriorityQueue.vue?vue&type=style&index=0&scoped=61630af0&lang.css[22m
+[2m17:36:46[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/interaction/CorrectionCanvas.vue?vue&type=style&index=0&scoped=a694344e&lang.css[22m
+[2m17:36:46[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/interaction/PersonReviewRadar.vue?vue&type=style&index=0&scoped=e97ffb0c&lang.css[22m
+[2m17:36:46[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/process/ManualReviewComparison.vue?vue&type=style&index=0&scoped=07b70885&lang.css[22m
+[2m17:36:46[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/targeting/CandidateRankingChart.vue, /src/components/targeting/CandidateRankingChart.vue?vue&type=style&index=0&scoped=907093c3&lang.css[22m
+[2m17:36:46[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/targeting/EvidencePhotoGallery.vue?vue&type=style&index=0&scoped=237b2d88&lang.css[22m
+[2m17:36:46[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/targeting/ExclusionChart.vue, /src/components/targeting/ExclusionChart.vue?vue&type=style&index=0&scoped=40025b6b&lang.css[22m
+[2m17:36:46[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/targeting/FinalEvidenceMatrix.vue[22m
+[2m17:36:46[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/targeting/GroupEvidenceNetwork.vue, /src/components/targeting/GroupEvidenceNetwork.vue?vue&type=style&index=0&scoped=2c5a9a9a&lang.css[22m
+[2m17:36:46[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/targeting/ClusterHeatmap.vue?vue&type=style&index=0&scoped=f87f55db&lang.css[22m
+[2m17:36:46[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/targeting/ClusterSignalMap.vue?vue&type=style&index=0&scoped=af3483d7&lang.css[22m
+[2m17:36:46[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/CommunityClusteringView.vue?vue&type=style&index=0&scoped=f2db5330&lang.css[22m
+[2m17:36:46[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/targeting/MatrixDeltaBars.vue?vue&type=style&index=0&scoped=e06b3521&lang.css[22m
+[2m17:36:46[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/targeting/ProvenanceNarrative.vue?vue&type=style&index=0&scoped=f570f32b&lang.css[22m
+[2m17:36:46[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/targeting/TotemEliminationPanel.vue?vue&type=style&index=0&scoped=5a422da3&lang.css[22m
+[2m17:36:46[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/ModelAuditingView.vue?vue&type=style&index=0&scoped=c502c1d4&lang.css[22m
+[2m17:36:46[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/CyberForensicsView.vue?vue&type=style&index=0&scoped=0de8f2f0&lang.css[22m
+[2m17:36:46[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/TotemFilterView.vue?vue&type=style&index=0&scoped=f4bf4bd5&lang.css[22m
+[2m18:18:47[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/DataExplorationView.vue?vue&type=style&index=0&scoped=65008e26&lang.css, /src/views/DataExplorationView.vue[22m
+[2m18:18:47[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/interaction/ConflictPriorityQueue.vue?vue&type=style&index=0&scoped=61630af0&lang.css[22m
+[2m18:18:47[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/interaction/PersonReviewRadar.vue?vue&type=style&index=0&scoped=e97ffb0c&lang.css[22m
+[2m18:18:47[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/process/ManualReviewComparison.vue?vue&type=style&index=0&scoped=07b70885&lang.css[22m
+[2m18:18:47[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/interaction/CorrectionCanvas.vue?vue&type=style&index=0&scoped=a694344e&lang.css[22m
+[2m18:19:35[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/interaction/PersonReviewRadar.vue?vue&type=style&index=0&scoped=e97ffb0c&lang.css[22m
+[2m18:24:10[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/assets/global.css[22m
+[2m18:26:25[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.vue[22m

@@ -90,8 +90,8 @@ const selectedCandidate = computed(() =>
 )
 
 const factorColors = {
-  specificity: '#2f7df6',
-  stability: '#24956f',
+  specificity: 'var(--accent)',
+  stability: 'var(--success)',
   visual: '#d99522',
   text: '#8d6ccf'
 }
@@ -262,8 +262,8 @@ onBeforeUnmount(() => {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #24956f;
-  box-shadow: 0 0 0 4px rgba(36, 149, 111, .12);
+  background: var(--success);
+  box-shadow: none;
 }
 
 .ranking-chart {
@@ -280,10 +280,10 @@ onBeforeUnmount(() => {
 
 .data-scope span {
   padding: 5px 8px;
-  border: 1px solid var(--border);
-  border-radius: 999px;
+  border: none;
+  border-radius: 12px;
   color: var(--muted);
-  background: #f8fafc;
+  background: var(--surface-3);
   font-size: .62rem;
 }
 
@@ -296,9 +296,9 @@ onBeforeUnmount(() => {
 .candidate-breakdown {
   margin-top: 14px;
   padding: 14px;
-  border: 1px solid var(--border);
-  border-radius: 9px;
-  background: #f9fbfd;
+  border: none;
+  border-radius: 12px;
+  background: var(--surface-3);
 }
 
 .method-heading,
@@ -348,15 +348,15 @@ onBeforeUnmount(() => {
   gap: 9px;
   min-width: 0;
   padding: 9px;
-  border-radius: 7px;
-  background: #fff;
+  border-radius: 12px;
+  background: var(--surface);
 }
 
 .factor-grid i {
   flex: 0 0 auto;
   width: 8px;
   height: 28px;
-  border-radius: 999px;
+  border-radius: 12px;
 }
 
 .factor-grid strong,
@@ -385,18 +385,18 @@ onBeforeUnmount(() => {
 
 .breakdown-title > b {
   padding: 6px 9px;
-  border-radius: 6px;
+  border-radius: 12px;
   color: var(--accent);
-  background: #edf5ff;
+  background: var(--surface-glow);
   font-size: .7rem;
 }
 
 .breakdown-grid article {
   min-width: 0;
   padding: 9px;
-  border: 1px solid var(--border);
-  border-radius: 7px;
-  background: #fff;
+  border: none;
+  border-radius: 12px;
+  background: var(--surface);
 }
 
 .breakdown-grid span,

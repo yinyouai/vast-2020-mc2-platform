@@ -15,9 +15,9 @@ import { useDashboardStore } from '../../store/dashboard'
 import { buildTooltip,chartPalette } from '../../utils/chartTheme'
 const store=useDashboardStore();const chartRef=ref(null);let chart
 const render=()=>{if(!chartRef.value)return;if(!chart)chart=echarts.init(chartRef.value)
-  const center={id:store.activeTotem,name:store.activeTotem,symbolSize:86,itemStyle:{color:chartPalette.gold,borderColor:'#fff',borderWidth:3},label:{fontWeight:800}}
+  const center={id:store.activeTotem,name:store.activeTotem,symbolSize:86,itemStyle:{color:chartPalette.gold,borderColor: 'var(--border)',borderWidth:3},label:{fontWeight:800}}
   const people=store.finalEvidence.map((item)=>({id:item.person_id,name:item.person_id,symbolSize:38+item.occurrence_count*4,value:item,
-    itemStyle:{color:item.raw_detected?chartPalette.green:chartPalette.accent,borderColor:item.text_snippets.length?chartPalette.gold:'#fff',borderWidth:item.text_snippets.length?4:2}}))
+    itemStyle:{color:item.raw_detected?chartPalette.green:chartPalette.accent,borderColor:item.text_snippets.length?chartPalette.gold:'var(--text)',borderWidth:item.text_snippets.length?4:2}}))
   const links=store.finalEvidence.map((item)=>({source:store.activeTotem,target:item.person_id,value:item.occurrence_count,lineStyle:{width:1.5+item.occurrence_count*.9,color:item.raw_detected?chartPalette.green:chartPalette.accent,opacity:.5}}))
   chart.setOption({tooltip:buildTooltip((params)=>{if(params.dataType==='edge')return `${params.data.target}：${params.data.value} 张图片`
       if(params.data.id===store.activeTotem)return `<strong>${store.activeTotem}</strong><br/>最终暗号物品`
@@ -28,5 +28,5 @@ const render=()=>{if(!chartRef.value)return;if(!chart)chart=echarts.init(chartRe
 watch(()=>[store.finalEvidence,store.activeTotem],render,{deep:true});onMounted(()=>{render();window.addEventListener('resize',render)});onBeforeUnmount(()=>{window.removeEventListener('resize',render);chart?.dispose()})
 </script>
 <style scoped>
-.section-kicker{color:var(--subtle);font-size:.7rem;font-weight:800}.visible-subtitle{display:block!important;margin:5px 0 0;color:var(--muted);font-size:.76rem}.network-legend{display:flex;gap:10px;color:var(--muted);font-size:.7rem}.network-legend span{display:flex;align-items:center;gap:5px}.network-legend i{width:10px;height:10px;border-radius:50%}.hit{background:#24956f}.miss{background:#2f7df6}.network-chart{min-height:460px}
+.section-kicker{color:var(--subtle);font-size:.7rem;font-weight:800}.visible-subtitle{display:block!important;margin:5px 0 0;color:var(--muted);font-size:.76rem}.network-legend{display:flex;gap:10px;color:var(--muted);font-size:.7rem}.network-legend span{display:flex;align-items:center;gap:5px}.network-legend i{width:10px;height:10px;border-radius:50%}.hit{background:var(--success)}.miss{background:var(--accent)}.network-chart{min-height:460px}
 </style>

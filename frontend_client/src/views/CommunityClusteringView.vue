@@ -36,8 +36,7 @@ const currentTotal=computed(()=>store.heatmapMatrixData.reduce((sum,item)=>sum+i
 <style scoped>
 .cluster-page{gap:22px}.cluster-control{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:18px}.source-copy span,.source-copy strong,.source-copy small,.selected-signal span,.selected-signal strong{display:block}
 .source-copy span,.selected-signal span{color:var(--subtle);font-size:.7rem;font-weight:800}.source-copy strong,.selected-signal strong{margin:5px 0;font-size:1.05rem}.source-copy small{color:var(--muted)}
-.segmented{display:flex;padding:4px;border:1px solid var(--border);border-radius:8px;background:#eef3f8}.segmented button{min-height:38px;padding:0 14px;border-radius:6px;background:transparent;font-size:.78rem;font-weight:800}.segmented button.active{color:var(--accent);background:#fff;box-shadow:var(--shadow-soft)}
-.selected-signal{text-align:right}.selected-signal button{min-height:34px;padding:0 10px;border:1px solid var(--border);border-radius:6px;color:var(--accent);background:#fff;font-size:.72rem;font-weight:800}
+.segmented{display:flex;padding:4px;border: none;border-radius: 12px;background: var(--surface)}.segmented button{min-height:38px;padding:0 14px;border-radius: 12px;background:transparent;font-size:.78rem;font-weight:800}.segmented button.active{color:var(--accent);background: var(--surface);box-shadow: none;padding:0 10px;border: none;border-radius: 12px;color:var(--accent);background: var(--surface);font-size:.72rem;font-weight:800}
 .cluster-overview-grid{display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);align-items:stretch;gap:18px}.cluster-overview-grid>*{min-width:0;height:100%}
 @media(max-width:1180px){.cluster-overview-grid{grid-template-columns:1fr}}
 @media(max-width:1000px){.cluster-control{grid-template-columns:1fr}.selected-signal{text-align:left}}
