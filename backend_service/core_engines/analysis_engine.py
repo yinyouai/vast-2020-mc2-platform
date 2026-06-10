@@ -784,10 +784,7 @@ class ForensicAnalysisEngine:
                             "优先人工判断"
                         )
                         if best_raw else
-                        (
-                            f"{person_id} 在人工候选分布中属于 {label} 拥有者，"
-                            "该图片用于渐进式漏检搜索"
-                        )
+                        f"{person_id} 在人工候选分布中属于 {label} 拥有者"
                     ),
                 })
             person_candidates.sort(key=lambda item: (

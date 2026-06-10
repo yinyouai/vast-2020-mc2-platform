@@ -91,7 +91,7 @@ const selectedCandidate = computed(() =>
 
 const factorColors = {
   specificity: 'var(--accent)',
-  stability: 'var(--success)',
+  stability: chartPalette.green,
   visual: '#d99522',
   text: '#8d6ccf'
 }
