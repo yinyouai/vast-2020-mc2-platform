@@ -1,6 +1,11 @@
 # VAST Challenge 2020 Mini-Challenge 2: 异常隐蔽通信可视分析平台
 
-## 📖 赛题背景与目标
+[![Framework: Vue 3](https://img.shields.io/badge/Framework-Vue_3-35495e?logo=vue.js)](https://vuejs.org/)
+[![Bundler: Vite](https://img.shields.io/badge/Bundler-Vite-646CFF?logo=vite)](https://vitejs.dev/)
+[![Graphics: ECharts 5](https://img.shields.io/badge/Graphics-ECharts_5-AA344D?logo=apache-echarts)](https://echarts.apache.org/)
+[![State: Pinia](https://img.shields.io/badge/State-Pinia-60B5CC)](https://pinia.vuejs.org/)
+
+## 赛题背景与目标
 
 本系统针对 **VAST Challenge 2020 Mini-Challenge 2 (MC2)** 的复杂社交网络背景开发。故事背景中，Center for Global Cyber Strategy (CGCS) 发现有一组人在使用某种秘密“暗号（Totem）”在图像和社交媒体文本中进行隐蔽通信。
 
@@ -15,7 +20,7 @@
 
 ---
 
-## 🔍 分析思路：从原始杂讯到锁定 8 名嫌疑人的完整过程
+## 分析思路：从原始杂讯到锁定 8 名嫌疑人的完整过程
 
 本系统并非单纯地把图表堆砌在一起，而是提供了一套**层层递进、逻辑闭环**的可视化刑侦流水线。任何人按照以下步骤操作，都能推演出最终真相：
 
@@ -53,7 +58,7 @@
 
 ---
 
-## 🛠 核心图表组件架构与代码映射
+## 核心图表组件架构与代码映射
 
 为了实现上述思路，前端应用（Vue 3 + ECharts + D3.js）与后端服务（Python Flask）进行了深度解耦设计：
 
@@ -70,7 +75,7 @@
 
 ---
 
-## 🚀 部署与使用指南
+## 部署与使用指南
 
 **1. 准备运行环境**
 系统依赖 Python 3.9+ 处理数据服务，依赖 Node.js 16+ 构建前端交互大屏。
@@ -94,4 +99,4 @@ npm run dev
 *(启动成功后，在浏览器中访问 http://localhost:5173 即可进入交互界面)*
 
 ---
-> 💡 **架构愿景**：本平台不仅完美解决了 VAST 2020 MC2 的特定考题，其“宏观统计 -> 误差审计 -> 关系拓扑挖掘 -> 证据链下钻”的多模态关联范式，同样可以直接迁移应用于现实世界中的反洗钱网络侦察、社工库异常行为追踪等高级网络取证场景。
+> **架构愿景**：本平台不仅完美解决了 VAST 2020 MC2 的特定考题，其“宏观统计 -> 误差审计 -> 关系拓扑挖掘 -> 证据链下钻”的多模态关联范式，同样可以直接迁移应用于现实世界中的反洗钱网络侦察、社工库异常行为追踪等高级网络取证场景。
